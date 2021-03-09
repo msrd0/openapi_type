@@ -5,4 +5,4 @@
 .#*
 Cargo.lock
 cobertura.xml
-tarpaulin-report.html
+tarpaulin-report.*

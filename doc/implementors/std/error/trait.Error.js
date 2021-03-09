@@ -1,0 +1,11 @@
+(function() {var implementors = {};
+implementors["chrono"] = [{"text":"impl Error for ParseError","synthetic":false,"types":[]},{"text":"impl Error for RoundingError","synthetic":false,"types":[]}];
+implementors["proc_macro2"] = [{"text":"impl Error for LexError","synthetic":false,"types":[]}];
+implementors["serde"] = [{"text":"impl Error for Error","synthetic":false,"types":[]}];
+implementors["serde_json"] = [{"text":"impl Error for Error","synthetic":false,"types":[]}];
+implementors["serde_yaml"] = [{"text":"impl Error for Error","synthetic":false,"types":[]}];
+implementors["syn"] = [{"text":"impl Error for Error","synthetic":false,"types":[]}];
+implementors["time"] = [{"text":"impl Error for OutOfRangeError","synthetic":false,"types":[]},{"text":"impl Error for ParseError","synthetic":false,"types":[]}];
+implementors["uuid"] = [{"text":"impl Error for Error","synthetic":false,"types":[]}];
+implementors["yaml_rust"] = [{"text":"impl Error for EmitError","synthetic":false,"types":[]},{"text":"impl Error for ScanError","synthetic":false,"types":[]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

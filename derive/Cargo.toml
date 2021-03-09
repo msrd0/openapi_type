@@ -1,0 +1,19 @@
+# -*- eval: (cargo-minor-mode 1) -*-
+
+[package]
+workspace = ".."
+name = "openapi_type_derive"
+version = "0.1.0-dev"
+authors = ["Dominic Meiser <git@msrd0.de>"]
+edition = "2018"
+description = "Implementation detail of the openapi_type crate"
+license = "Apache-2.0"
+repository = "https://gitlab.com/msrd0/gotham-restful/-/tree/master/openapi_type_derive"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+proc-macro2 = "1.0"
+quote = "1.0"
+syn = "1.0"

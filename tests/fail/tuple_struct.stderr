@@ -1,0 +1,5 @@
+error: #[derive(OpenapiType)] does not support tuple structs
+ --> $DIR/tuple_struct.rs:4:11
+  |
+4 | struct Foo(i64, i64);
+  |           ^^^^^^^^^^

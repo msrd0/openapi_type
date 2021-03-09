@@ -34,7 +34,7 @@ jobs:
             ~/.cargo/registry
             target
           key: ${{ runner.os }}-rust-${{ steps.rust-version.outputs.version }}
-      - run: cargo test --workspace
+      - run: cargo test --workspace -- --skip trybuild
         env:
           RUST_BACKTRACE: 1
   

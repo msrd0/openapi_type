@@ -35,12 +35,10 @@ fn parse_named_fields(named_fields: &FieldsNamed) -> syn::Result<ParseData> {
 pub(super) fn parse_struct(strukt: &DataStruct) -> syn::Result<ParseData> {
 	match &strukt.fields {
 		Fields::Named(named_fields) => parse_named_fields(named_fields),
-		Fields::Unnamed(unnamed_fields) => {
-			return Err(syn::Error::new(
-				unnamed_fields.span(),
-				"#[derive(OpenapiType)] does not support tuple structs"
-			))
-		},
+		Fields::Unnamed(unnamed_fields) => Err(syn::Error::new(
+			unnamed_fields.span(),
+			"#[derive(OpenapiType)] does not support tuple structs"
+		)),
 		Fields::Unit => Ok(ParseData::Unit)
 	}
 }

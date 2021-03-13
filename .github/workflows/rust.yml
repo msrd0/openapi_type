@@ -89,6 +89,7 @@ jobs:
       - uses: docker://ghcr.io/msrd0/alpine-cargo-readme
         with:
           entrypoint: ./readme.sh
+          args: --check
   
   coverage:
     runs-on: ubuntu-latest

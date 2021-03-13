@@ -11,7 +11,9 @@ edition = "2018"
 description = "OpenAPI type information for Rust structs and enums"
 keywords = ["openapi", "type"]
 license = "Apache-2.0"
-repository = "https://gitlab.com/msrd0/gotham-restful/-/tree/master/openapi_type"
+repository = "https://github.com/msrd0/openapi_type"
+readme = "crates-io.md"
+include = ["src/**/*", "LICENSE", "crates-io.md"]
 
 [dependencies]
 indexmap = "1.6"
@@ -26,6 +28,3 @@ uuid = { version = "0.8.2" , optional = true }
 [dev-dependencies]
 paste = "1.0"
 trybuild = "1.0"
-
-[patch.crates-io]
-openapi_type_derive = { path = "./derive" }

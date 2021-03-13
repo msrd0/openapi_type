@@ -2,7 +2,68 @@
 #![forbid(unsafe_code)]
 #![cfg_attr(feature = "cargo-clippy", allow(clippy::tabs_in_doc_comments))]
 /*!
-TODO
+This crate gives static type information for primitives and commonly used types from the standard
+library and a few other commonly used libraries like `chrono` and `uuid`. Also, it provides a
+derive macro for structs and enums to gain access to their static type information at runtime.
+
+The core of this crate is the [`OpenapiType`] trait. It has one static function,
+[`schema`](OpenapiType::schema), which returns an [`OpenapiSchema`]. This assembles the static
+type information in a way that is convenient to use for a generated OpenAPI specification, but
+can also be utilized in other use cases as well.
+
+# Custom Types
+To gain access to the static type information of your custom types at runtime, the easiest way
+is to use the derive macro:
+
+```rust
+# use openapi_type::OpenapiType;
+#[derive(OpenapiType)]
+struct FooBar {
+	foo: String,
+	bar: u64
+}
+# let schema = FooBar::schema().into_schema();
+# let schema_json = serde_json::to_value(&schema).unwrap();
+# assert_eq!(schema_json, serde_json::json!({
+#   "type": "object",
+#   "title": "FooBar",
+#   "properties": {
+#     "foo": {
+#       "type": "string"
+#     },
+#     "bar": {
+#       "type": "integer",
+#       "format": "int64",
+#       "minimum": 0
+#     }
+#   },
+#   "required": ["foo", "bar"]
+# }));
+```
+
+# OpenAPI specification
+Using above type, running `FooBar::schema().into_schema()` yields
+
+```yaml
+type: object
+title: FooBar
+properties:
+  foo:
+    type: string
+  bar:
+    type: integer
+    format: int64
+    minimum: 0
+required:
+  - foo
+  - bar
+```
+
+Note, however, that this is not sufficient for more complex types. If one of your structs fields
+is a type that has a name (that is, `Type::schema().name` is not `None`), above schema will contain
+a reference to that schema. Therefore, always remember to put the
+[`dependencies`](OpenapiSchema::dependencies) into the specification alongside the type you are
+interested in.
 */
 
 pub use indexmap;

@@ -82,6 +82,14 @@ jobs:
       - run: cargo fmt --all -- --check
       - run: ./tests/fail/rustfmt.sh --check
   
+  readme:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: docker://ghcr.io/msrd0/alpine-cargo-readme
+        with:
+          entrypoint: ./readme.sh
+  
   coverage:
     runs-on: ubuntu-latest
     steps:

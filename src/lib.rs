@@ -1,7 +1,7 @@
 #![warn(missing_debug_implementations, rust_2018_idioms)]
 #![forbid(unsafe_code)]
 #![cfg_attr(feature = "cargo-clippy", allow(clippy::tabs_in_doc_comments))]
-/*!
+#![doc = r##"
 This crate gives static type information for primitives and commonly used types from the standard
 library and a few other commonly used libraries like `chrono` and `uuid`. Also, it provides a
 derive macro for structs and enums to gain access to their static type information at runtime.
@@ -64,7 +64,7 @@ is a type that has a name (that is, `Type::schema().name` is not `None`), above 
 a reference to that schema. Therefore, always remember to put the
 [`dependencies`](OpenapiSchema::dependencies) into the specification alongside the type you are
 interested in.
-*/
+"##]
 
 pub use indexmap;
 pub use openapi_type_derive::OpenapiType;

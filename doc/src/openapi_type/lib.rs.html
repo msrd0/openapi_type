@@ -152,7 +152,7 @@
 <span class="attribute">#![<span class="ident">warn</span>(<span class="ident">missing_debug_implementations</span>, <span class="ident">rust_2018_idioms</span>)]</span>
 <span class="attribute">#![<span class="ident">forbid</span>(<span class="ident">unsafe_code</span>)]</span>
 <span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cargo-clippy&quot;</span>, <span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">tabs_in_doc_comments</span>))]</span>
-<span class="doccomment">/*!
+<span class="attribute">#![<span class="ident">doc</span> <span class="op">=</span> <span class="string">r##&quot;
 This crate gives static type information for primitives and commonly used types from the standard
 library and a few other commonly used libraries like `chrono` and `uuid`. Also, it provides a
 derive macro for structs and enums to gain access to their static type information at runtime.
@@ -215,7 +215,7 @@ is a type that has a name (that is, `Type::schema().name` is not `None`), above 
 a reference to that schema. Therefore, always remember to put the
 [`dependencies`](OpenapiSchema::dependencies) into the specification alongside the type you are
 interested in.
-*/</span>
+&quot;##</span>]</span>
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">indexmap</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">openapi_type_derive</span>::<span class="ident">OpenapiType</span>;

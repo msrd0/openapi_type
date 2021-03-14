@@ -10,8 +10,9 @@ use syn::{parse_macro_input, Data, DeriveInput, LitStr, TraitBound, TraitBoundMo
 
 #[macro_use]
 mod util;
-//use util::*;
 
+mod attrs;
+use attrs::*;
 mod codegen;
 mod parser;
 use parser::*;

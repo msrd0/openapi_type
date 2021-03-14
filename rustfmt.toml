@@ -12,7 +12,7 @@ match_block_trailing_comma = true
 trailing_comma = "Never"
 
 # misc
-format_code_in_doc_comments = true
+# format_code_in_doc_comments = true # disabled due to https://github.com/rust-lang/rustfmt/issues/4753
 imports_granularity = "Crate"
 overflow_delimited_expr = true
 use_field_init_shorthand = true

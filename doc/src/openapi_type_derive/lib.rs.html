@@ -96,6 +96,7 @@
 <span id="93">93</span>
 <span id="94">94</span>
 <span id="95">95</span>
+<span id="96">96</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="attribute">#![<span class="ident">warn</span>(<span class="ident">missing_debug_implementations</span>, <span class="ident">rust_2018_idioms</span>)]</span>
 <span class="attribute">#![<span class="ident">deny</span>(<span class="ident">broken_intra_doc_links</span>)]</span>
@@ -109,8 +110,9 @@
 
 <span class="attribute">#[<span class="ident">macro_use</span>]</span>
 <span class="kw">mod</span> <span class="ident">util</span>;
-<span class="comment">//use util::*;</span>
 
+<span class="kw">mod</span> <span class="ident">attrs</span>;
+<span class="kw">use</span> <span class="ident">attrs</span>::<span class="kw-2">*</span>;
 <span class="kw">mod</span> <span class="ident">codegen</span>;
 <span class="kw">mod</span> <span class="ident">parser</span>;
 <span class="kw">use</span> <span class="ident">parser</span>::<span class="kw-2">*</span>;

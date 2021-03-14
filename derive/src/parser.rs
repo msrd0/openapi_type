@@ -1,6 +1,7 @@
 use crate::{attrs::ContainerAttributes, util::ToLitStr};
 use proc_macro2::Span;
 use syn::{spanned::Spanned as _, DataEnum, DataStruct, DataUnion, Fields, FieldsNamed, LitStr, Type};
+use heck::{CamelCase, MixedCase, SnakeCase, ShoutySnakeCase, KebabCase, ShoutyKebabCase};
 
 pub(super) enum ParseDataType {
 	Type(Type),
@@ -15,23 +16,37 @@ pub(super) enum ParseData {
 	Unit
 }
 
-fn parse_named_fields(named_fields: &FieldsNamed) -> syn::Result<ParseData> {
+fn parse_named_fields(named_fields: &FieldsNamed, rename_all: Option<&LitStr>) -> syn::Result<ParseData> {
 	let mut fields: Vec<(LitStr, ParseDataType)> = Vec::new();
 	for f in &named_fields.named {
 		let ident = f
 			.ident
 			.as_ref()
 			.ok_or_else(|| syn::Error::new(f.span(), "#[derive(OpenapiType)] does not support fields without an ident"))?;
-		let name = ident.to_lit_str();
+		let mut name = ident.to_lit_str();
+		if let Some(rename_all) = rename_all {
+			let rename = match rename_all.value().as_str() {
+				"lowercase" => name.value().to_lowercase(),
+				"UPPERCASE" => name.value().to_uppercase(),
+				"PascalCase" => name.value().to_camel_case(),
+				"camelCase" => name.value().to_mixed_case(),
+				"snake_case" => name.value().to_snake_case(),
+				"SCREAMING_SNAKE_CASE" => name.value().to_shouty_snake_case(),
+				"kebab-case" => name.value().to_kebab_case(),
+				"SCREAMING-KEBAB-CASE" => name.value().to_shouty_kebab_case(),
+				_ => return Err(syn::Error::new(rename_all.span(), r#"Unknown value for #[openapi(rename_all = "...")] option"#))
+			};
+			name = LitStr::new(&rename, name.span());
+		}
 		let ty = f.ty.to_owned();
 		fields.push((name, ParseDataType::Type(ty)));
 	}
 	Ok(ParseData::Struct(fields))
 }
 
-pub(super) fn parse_struct(strukt: &DataStruct) -> syn::Result<ParseData> {
+pub(super) fn parse_struct(strukt: &DataStruct, attrs: &ContainerAttributes) -> syn::Result<ParseData> {
 	match &strukt.fields {
-		Fields::Named(named_fields) => parse_named_fields(named_fields),
+		Fields::Named(named_fields) => parse_named_fields(named_fields, attrs.rename_all.as_ref()),
 		Fields::Unnamed(unnamed_fields) => Err(syn::Error::new(
 			unnamed_fields.span(),
 			"#[derive(OpenapiType)] does not support tuple structs"
@@ -48,7 +63,7 @@ pub(super) fn parse_enum(inum: &DataEnum, attrs: &ContainerAttributes) -> syn::R
 		let name = v.ident.to_lit_str();
 		match &v.fields {
 			Fields::Named(named_fields) => {
-				types.push((name, parse_named_fields(named_fields)?));
+				types.push((name, parse_named_fields(named_fields, attrs.rename_all.as_ref())?));
 			},
 			Fields::Unnamed(unnamed_fields) => {
 				return Err(syn::Error::new(

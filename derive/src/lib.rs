@@ -63,7 +63,7 @@ fn expand_openapi_type(mut input: DeriveInput) -> syn::Result<TokenStream2> {
 
 	// parse the input data
 	let parsed = match &input.data {
-		Data::Struct(strukt) => parse_struct(strukt)?,
+		Data::Struct(strukt) => parse_struct(strukt, &attrs)?,
 		Data::Enum(inum) => parse_enum(inum, &attrs)?,
 		Data::Union(union) => parse_union(union)?
 	};

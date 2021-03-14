@@ -1,5 +1,5 @@
 #!/bin/busybox ash
-set -eo pipefail
+set -o pipefail
 
 check=n
 if [ "$1" == "--check" ]
@@ -9,6 +9,8 @@ fi
 
 set -u
 
+sed -i -e 's,#!\[doc = r##",/*!,' -e 's,"##\],*/ //doc,' src/lib.rs
+ok=0
 for readme in README crates-io
 do
 	output=$readme.md
@@ -16,7 +18,9 @@ do
 	cargo readme -t $readme.tpl -o $output
 	if [ $check == y ]
 	then
-		diff $readme.md $output
+		diff $readme.md $output || ok=1
 		rm $output
 	fi
 done
+sed -i -e 's,/\*!,#![doc = r##",' -e 's,\*/ //doc,"##],' src/lib.rs
+exit $ok

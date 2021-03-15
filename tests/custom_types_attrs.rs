@@ -26,7 +26,7 @@ test_type!(ContainerRename = {
 });
 
 macro_rules! test_rename_all {
-	(rename_all = $rename_all:literal, foo_bar = $foo_bar:literal, faa_bor = $faa_bor:literal) => {
+	(rename_all = $rename_all:literal, foo_bar = $foo_bar:literal) => {
 		paste::paste! {
 			#[derive(OpenapiType, serde::Serialize)]
 			#[openapi(rename = "FooBar")]
@@ -34,7 +34,6 @@ macro_rules! test_rename_all {
 			#[allow(non_camel_case_types, non_snake_case)]
 			struct [< ContainerRenameAll_ $rename_all >] {
 				foo_bar: Option<&'static str>,
-				FaaBor: Option<&'static str>
 			}
 			test_type!([< ContainerRenameAll_ $rename_all >] = {
 				"type": "object",
@@ -43,21 +42,16 @@ macro_rules! test_rename_all {
 					$foo_bar: {
 						"type": "string"
 					},
-					$faa_bor: {
-						"type": "string"
-					}
 				}
 			});
 			#[test]
 			fn [< containerrenameall_ $rename_all:lower _serde >]() {
 				let value = [< ContainerRenameAll_ $rename_all >] {
 					foo_bar: Some("foo_bar"),
-					FaaBor: Some("faa_bor")
 				};
 				let _json = serde_json::to_value(&value).unwrap();
 				let _expected = serde_json::json!({
 					$foo_bar: "foo_bar",
-					$faa_bor: "faa_bor"
 				});
 				// assert_eq!(json, expected);
 				// TODO serde does not do this conversion properly but rather assumes
@@ -68,11 +62,11 @@ macro_rules! test_rename_all {
 	};
 }
 
-test_rename_all!(rename_all = "lowercase", foo_bar = "foo_bar", faa_bor = "faabor");
-test_rename_all!(rename_all = "UPPERCASE", foo_bar = "FOO_BAR", faa_bor = "FAABOR");
-test_rename_all!(rename_all = "PascalCase", foo_bar = "FooBar", faa_bor = "FaaBor");
-test_rename_all!(rename_all = "camelCase", foo_bar = "fooBar", faa_bor = "faaBor");
-test_rename_all!(rename_all = "snake_case", foo_bar = "foo_bar", faa_bor = "faa_bor");
-test_rename_all!(rename_all = "SCREAMING_SNAKE_CASE", foo_bar = "FOO_BAR", faa_bor = "FAA_BOR");
-test_rename_all!(rename_all = "kebab-case", foo_bar = "foo-bar", faa_bor = "faa-bor");
-test_rename_all!(rename_all = "SCREAMING-KEBAB-CASE", foo_bar = "FOO-BAR", faa_bor = "FAA-BOR");
+test_rename_all!(rename_all = "lowercase", foo_bar = "foo_bar");
+test_rename_all!(rename_all = "UPPERCASE", foo_bar = "FOO_BAR");
+test_rename_all!(rename_all = "PascalCase", foo_bar = "FooBar");
+test_rename_all!(rename_all = "camelCase", foo_bar = "fooBar");
+test_rename_all!(rename_all = "snake_case", foo_bar = "foo_bar");
+test_rename_all!(rename_all = "SCREAMING_SNAKE_CASE", foo_bar = "FOO_BAR");
+test_rename_all!(rename_all = "kebab-case", foo_bar = "foo-bar");
+test_rename_all!(rename_all = "SCREAMING-KEBAB-CASE", foo_bar = "FOO-BAR");

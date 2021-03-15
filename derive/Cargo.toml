@@ -14,7 +14,6 @@ repository = "https://github.com/msrd0/openapi_type"
 proc-macro = true
 
 [dependencies]
-heck = "0.3.2"
 proc-macro2 = "1.0"
 quote = "1.0"
 syn = "1.0"

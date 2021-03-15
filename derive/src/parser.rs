@@ -1,7 +1,6 @@
-use crate::{attrs::ContainerAttributes, util::ToLitStr};
+use crate::{attrs::ContainerAttributes, serde_derive_internals::case::RenameRule, util::ToLitStr};
 use proc_macro2::Span;
 use syn::{spanned::Spanned as _, DataEnum, DataStruct, DataUnion, Fields, FieldsNamed, LitStr, Type};
-use heck::{CamelCase, MixedCase, SnakeCase, ShoutySnakeCase, KebabCase, ShoutyKebabCase};
 
 pub(super) enum ParseDataType {
 	Type(Type),
@@ -25,17 +24,11 @@ fn parse_named_fields(named_fields: &FieldsNamed, rename_all: Option<&LitStr>) -
 			.ok_or_else(|| syn::Error::new(f.span(), "#[derive(OpenapiType)] does not support fields without an ident"))?;
 		let mut name = ident.to_lit_str();
 		if let Some(rename_all) = rename_all {
-			let rename = match rename_all.value().as_str() {
-				"lowercase" => name.value().to_lowercase(),
-				"UPPERCASE" => name.value().to_uppercase(),
-				"PascalCase" => name.value().to_camel_case(),
-				"camelCase" => name.value().to_mixed_case(),
-				"snake_case" => name.value().to_snake_case(),
-				"SCREAMING_SNAKE_CASE" => name.value().to_shouty_snake_case(),
-				"kebab-case" => name.value().to_kebab_case(),
-				"SCREAMING-KEBAB-CASE" => name.value().to_shouty_kebab_case(),
-				_ => return Err(syn::Error::new(rename_all.span(), r#"Unknown value for #[openapi(rename_all = "...")] option"#))
-			};
+			let rule: RenameRule = rename_all
+				.value()
+				.parse()
+				.map_err(|_| syn::Error::new(rename_all.span(), "Unknown rename_all rule"))?;
+			let rename = rule.apply_to_field(&name.value());
 			name = LitStr::new(&rename, name.span());
 		}
 		let ty = f.ty.to_owned();

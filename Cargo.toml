@@ -27,4 +27,5 @@ uuid = { version = "0.8.2" , optional = true }
 
 [dev-dependencies]
 paste = "1.0"
+serde = { version = "1.0", features = ["derive"] }
 trybuild = "1.0"

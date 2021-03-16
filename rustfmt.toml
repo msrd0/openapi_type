@@ -1,3 +1,5 @@
+ignore = ["serde", "derive/src/serde_derive_internals"]
+
 edition = "2018"
 max_width = 125
 newline_style = "Unix"

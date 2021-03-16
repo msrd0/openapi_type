@@ -21,6 +21,8 @@ jobs:
     continue-on-error: ${{ matrix.nightly }}
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: recursive
       - uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ matrix.toolchain }}
@@ -42,6 +44,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: recursive
       - uses: dtolnay/rust-toolchain@1.50.0
       - uses: actions/cache@v2
         with:
@@ -57,6 +61,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: recursive
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy
@@ -76,6 +82,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: recursive
       - uses: dtolnay/rust-toolchain@nightly
         with:
           components: rustfmt
@@ -86,6 +94,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: recursive
       - uses: docker://ghcr.io/msrd0/alpine-cargo-readme
         with:
           entrypoint: ./readme.sh
@@ -95,6 +105,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: recursive
       - uses: dtolnay/rust-toolchain@stable
       - name: Get Rust Version
         id: rust-version
@@ -137,6 +149,8 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: recursive
       - uses: dtolnay/rust-toolchain@stable
       - uses: actions/cache@v2
         with:

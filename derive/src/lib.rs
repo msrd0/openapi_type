@@ -8,6 +8,10 @@ use proc_macro2::TokenStream as TokenStream2;
 use quote::quote;
 use syn::{parse_macro_input, Data, DeriveInput, LitStr, TraitBound, TraitBoundModifier, TypeParamBound};
 
+// unfortunately, the serde_derive_internals crate does not make
+// `case::RenameRule` available
+mod serde_derive_internals;
+
 #[macro_use]
 mod util;
 
@@ -63,7 +67,7 @@ fn expand_openapi_type(mut input: DeriveInput) -> syn::Result<TokenStream2> {
 
 	// parse the input data
 	let parsed = match &input.data {
-		Data::Struct(strukt) => parse_struct(strukt)?,
+		Data::Struct(strukt) => parse_struct(strukt, &attrs)?,
 		Data::Enum(inum) => parse_enum(inum, &attrs)?,
 		Data::Union(union) => parse_union(union)?
 	};

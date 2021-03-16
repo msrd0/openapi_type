@@ -49,14 +49,11 @@ macro_rules! test_rename_all {
 				let value = [< ContainerRenameAll_ $rename_all >] {
 					foo_bar: Some("foo_bar"),
 				};
-				let _json = serde_json::to_value(&value).unwrap();
-				let _expected = serde_json::json!({
+				let json = serde_json::to_value(&value).unwrap();
+				let expected = serde_json::json!({
 					$foo_bar: "foo_bar",
 				});
-				// assert_eq!(json, expected);
-				// TODO serde does not do this conversion properly but rather assumes
-				// that all fields are snake_case and all variants are TitleCase to begin
-				// with
+				assert_eq!(json, expected);
 			}
 		}
 	};

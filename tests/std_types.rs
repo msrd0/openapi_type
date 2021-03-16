@@ -19,7 +19,7 @@ macro_rules! test_type {
 				let schema = openapi_type::OpenapiSchema::into_schema(schema);
 				let schema_json = serde_json::to_value(&schema).unwrap();
 				let expected = serde_json::json!($json);
-				assert_eq!(schema_json, expected);
+				pretty_assertions::assert_eq!(schema_json, expected);
 			}
 		)* }
 	};

@@ -148,8 +148,16 @@
 <span id="145">145</span>
 <span id="146">146</span>
 <span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">attrs</span>::<span class="ident">ContainerAttributes</span>, <span class="ident">util</span>::<span class="ident">ToLitStr</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">attrs</span>::<span class="ident">ContainerAttributes</span>, <span class="ident">serde_derive_internals</span>::<span class="ident">case</span>::<span class="ident">RenameRule</span>, <span class="ident">util</span>::<span class="ident">ToLitStr</span>};
 <span class="kw">use</span> <span class="ident">proc_macro2</span>::<span class="ident">Span</span>;
 <span class="kw">use</span> <span class="ident">syn</span>::{<span class="ident">spanned</span>::<span class="ident">Spanned</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">DataEnum</span>, <span class="ident">DataStruct</span>, <span class="ident">DataUnion</span>, <span class="ident">Fields</span>, <span class="ident">FieldsNamed</span>, <span class="ident">LitStr</span>, <span class="ident">Type</span>};
 
@@ -166,23 +174,31 @@
 	<span class="ident">Unit</span>
 }
 
-<span class="kw">fn</span> <span class="ident">parse_named_fields</span>(<span class="ident">named_fields</span>: <span class="kw-2">&amp;</span><span class="ident">FieldsNamed</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">syn</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ParseData</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">parse_named_fields</span>(<span class="ident">named_fields</span>: <span class="kw-2">&amp;</span><span class="ident">FieldsNamed</span>, <span class="ident">rename_all</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">LitStr</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">syn</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ParseData</span><span class="op">&gt;</span> {
 	<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">fields</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">LitStr</span>, <span class="ident">ParseDataType</span>)<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
 	<span class="kw">for</span> <span class="ident">f</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">named_fields</span>.<span class="ident">named</span> {
 		<span class="kw">let</span> <span class="ident">ident</span> <span class="op">=</span> <span class="ident">f</span>
 			.<span class="ident">ident</span>
 			.<span class="ident">as_ref</span>()
 			.<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">syn</span>::<span class="ident">Error</span>::<span class="ident">new</span>(<span class="ident">f</span>.<span class="ident">span</span>(), <span class="string">&quot;#[derive(OpenapiType)] does not support fields without an ident&quot;</span>))<span class="question-mark">?</span>;
-		<span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">ident</span>.<span class="ident">to_lit_str</span>();
+		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">ident</span>.<span class="ident">to_lit_str</span>();
+		<span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">rename_all</span>) <span class="op">=</span> <span class="ident">rename_all</span> {
+			<span class="kw">let</span> <span class="ident">rule</span>: <span class="ident">RenameRule</span> <span class="op">=</span> <span class="ident">rename_all</span>
+				.<span class="ident">value</span>()
+				.<span class="ident">parse</span>()
+				.<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">syn</span>::<span class="ident">Error</span>::<span class="ident">new</span>(<span class="ident">rename_all</span>.<span class="ident">span</span>(), <span class="string">&quot;Unknown rename_all rule&quot;</span>))<span class="question-mark">?</span>;
+			<span class="kw">let</span> <span class="ident">rename</span> <span class="op">=</span> <span class="ident">rule</span>.<span class="ident">apply_to_field</span>(<span class="kw-2">&amp;</span><span class="ident">name</span>.<span class="ident">value</span>());
+			<span class="ident">name</span> <span class="op">=</span> <span class="ident">LitStr</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">rename</span>, <span class="ident">name</span>.<span class="ident">span</span>());
+		}
 		<span class="kw">let</span> <span class="ident">ty</span> <span class="op">=</span> <span class="ident">f</span>.<span class="ident">ty</span>.<span class="ident">to_owned</span>();
 		<span class="ident">fields</span>.<span class="ident">push</span>((<span class="ident">name</span>, <span class="ident">ParseDataType</span>::<span class="ident">Type</span>(<span class="ident">ty</span>)));
 	}
 	<span class="prelude-val">Ok</span>(<span class="ident">ParseData</span>::<span class="ident">Struct</span>(<span class="ident">fields</span>))
 }
 
-<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">parse_struct</span>(<span class="ident">strukt</span>: <span class="kw-2">&amp;</span><span class="ident">DataStruct</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">syn</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ParseData</span><span class="op">&gt;</span> {
+<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">parse_struct</span>(<span class="ident">strukt</span>: <span class="kw-2">&amp;</span><span class="ident">DataStruct</span>, <span class="ident">attrs</span>: <span class="kw-2">&amp;</span><span class="ident">ContainerAttributes</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">syn</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ParseData</span><span class="op">&gt;</span> {
 	<span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">strukt</span>.<span class="ident">fields</span> {
-		<span class="ident">Fields</span>::<span class="ident">Named</span>(<span class="ident">named_fields</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">parse_named_fields</span>(<span class="ident">named_fields</span>),
+		<span class="ident">Fields</span>::<span class="ident">Named</span>(<span class="ident">named_fields</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">parse_named_fields</span>(<span class="ident">named_fields</span>, <span class="ident">attrs</span>.<span class="ident">rename_all</span>.<span class="ident">as_ref</span>()),
 		<span class="ident">Fields</span>::<span class="ident">Unnamed</span>(<span class="ident">unnamed_fields</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">syn</span>::<span class="ident">Error</span>::<span class="ident">new</span>(
 			<span class="ident">unnamed_fields</span>.<span class="ident">span</span>(),
 			<span class="string">&quot;#[derive(OpenapiType)] does not support tuple structs&quot;</span>
@@ -199,7 +215,7 @@
 		<span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">v</span>.<span class="ident">ident</span>.<span class="ident">to_lit_str</span>();
 		<span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">v</span>.<span class="ident">fields</span> {
 			<span class="ident">Fields</span>::<span class="ident">Named</span>(<span class="ident">named_fields</span>) <span class="op">=</span><span class="op">&gt;</span> {
-				<span class="ident">types</span>.<span class="ident">push</span>((<span class="ident">name</span>, <span class="ident">parse_named_fields</span>(<span class="ident">named_fields</span>)<span class="question-mark">?</span>));
+				<span class="ident">types</span>.<span class="ident">push</span>((<span class="ident">name</span>, <span class="ident">parse_named_fields</span>(<span class="ident">named_fields</span>, <span class="ident">attrs</span>.<span class="ident">rename_all</span>.<span class="ident">as_ref</span>())<span class="question-mark">?</span>));
 			},
 			<span class="ident">Fields</span>::<span class="ident">Unnamed</span>(<span class="ident">unnamed_fields</span>) <span class="op">=</span><span class="op">&gt;</span> {
 				<span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">syn</span>::<span class="ident">Error</span>::<span class="ident">new</span>(

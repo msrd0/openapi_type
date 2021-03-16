@@ -132,6 +132,7 @@ jobs:
           	--workspace \
           	--all-features \
           	--exclude-files 'derive/*' \
+            --exclude-files 'serde/*' \
           	--exclude-files 'target/*' \
           	--ignore-panics --ignore-tests \
           	--out Html --out Json \

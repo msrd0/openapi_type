@@ -16,9 +16,7 @@ C's <code>strftime</code> format</a>.</p>
 <table><tr><td><code>pub use self::strftime::<a class="struct" href="../../chrono/format/strftime/struct.StrftimeItems.html" title="struct chrono::format::strftime::StrftimeItems">StrftimeItems</a>;</code></td></tr></table><h2 id="modules" class="section-header"><a href="#modules">Modules</a></h2>
 <table><tr class="module-item"><td><a class="mod" href="strftime/index.html" title="chrono::format::strftime mod">strftime</a></td><td class="docblock-short"><p><code>strftime</code>/<code>strptime</code>-inspired date and time formatting syntax.</p>
 </td></tr></table><h2 id="structs" class="section-header"><a href="#structs">Structs</a></h2>
-<table><tr class="module-item"><td><a class="struct" href="struct.DelayedFormat.html" title="chrono::format::DelayedFormat struct">DelayedFormat</a></td><td class="docblock-short"><p>A <em>temporary</em> object which can be used as an argument to <code>format!</code> or others.
-This is normally constructed via <code>format</code> methods of each date and time type.</p>
-</td></tr><tr class="module-item"><td><a class="struct" href="struct.InternalFixed.html" title="chrono::format::InternalFixed struct">InternalFixed</a></td><td class="docblock-short"><p>An opaque type representing fixed-format item types for internal uses only.</p>
+<table><tr class="module-item"><td><a class="struct" href="struct.InternalFixed.html" title="chrono::format::InternalFixed struct">InternalFixed</a></td><td class="docblock-short"><p>An opaque type representing fixed-format item types for internal uses only.</p>
 </td></tr><tr class="module-item"><td><a class="struct" href="struct.InternalNumeric.html" title="chrono::format::InternalNumeric struct">InternalNumeric</a></td><td class="docblock-short"><p>An opaque type representing numeric item types for internal uses only.</p>
 </td></tr><tr class="module-item"><td><a class="struct" href="struct.ParseError.html" title="chrono::format::ParseError struct">ParseError</a></td><td class="docblock-short"><p>An error from the <code>parse</code> function.</p>
 </td></tr><tr class="module-item"><td><a class="struct" href="struct.Parsed.html" title="chrono::format::Parsed struct">Parsed</a></td><td class="docblock-short"><p>Parsed parts of date and time. There are two classes of methods:</p>
@@ -29,10 +27,7 @@ This is normally constructed via <code>format</code> methods of each date and ti
 They have associated formatting width (FW) and parsing width (PW).</p>
 </td></tr><tr class="module-item"><td><a class="enum" href="enum.Pad.html" title="chrono::format::Pad enum">Pad</a></td><td class="docblock-short"><p>Padding characters for numeric items.</p>
 </td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
-<table><tr class="module-item"><td><a class="fn" href="fn.format.html" title="chrono::format::format fn">format</a></td><td class="docblock-short"><p>Tries to format given arguments with given formatting items.
-Internally used by <code>DelayedFormat</code>.</p>
-</td></tr><tr class="module-item"><td><a class="fn" href="fn.format_item.html" title="chrono::format::format_item fn">format_item</a></td><td class="docblock-short"><p>Formats single formatting item</p>
-</td></tr><tr class="module-item"><td><a class="fn" href="fn.parse.html" title="chrono::format::parse fn">parse</a></td><td class="docblock-short"><p>Tries to parse given string into <code>parsed</code> with given formatting items.
+<table><tr class="module-item"><td><a class="fn" href="fn.parse.html" title="chrono::format::parse fn">parse</a></td><td class="docblock-short"><p>Tries to parse given string into <code>parsed</code> with given formatting items.
 Returns <code>Ok</code> when the entire string has been parsed (otherwise <code>parsed</code> should not be used).
 There should be no trailing string after parsing;
 use a stray <a href="./enum.Item.html#variant.Space"><code>Item::Space</code></a> to trim whitespaces.</p>

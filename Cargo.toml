@@ -18,7 +18,7 @@ include = ["src/**/*", "LICENSE", "crates-io.md"]
 [dependencies]
 indexmap = "1.6"
 openapi_type_derive = { path = "./derive", version = "0.1.0-dev" }
-openapiv3 = "=0.3.2"
+openapiv3 = "=0.4.0"
 serde_json = "1.0"
 
 # optional dependencies / features

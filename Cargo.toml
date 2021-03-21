@@ -22,7 +22,7 @@ openapiv3 = "=0.3.2"
 serde_json = "1.0"
 
 # optional dependencies / features
-chrono = { version = "0.4.19", optional = true }
+chrono = { version = "0.4.19", default-features = false, optional = true }
 uuid = { version = "0.8.2" , optional = true }
 
 [dev-dependencies]

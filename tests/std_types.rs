@@ -1,5 +1,5 @@
 #[cfg(feature = "chrono")]
-use chrono::{Date, DateTime, FixedOffset, Local, NaiveDate, NaiveDateTime, Utc};
+use chrono::{Date, DateTime, FixedOffset, NaiveDate, NaiveDateTime, Utc};
 use indexmap::{IndexMap, IndexSet};
 use openapi_type::OpenapiType;
 use serde_json::Value;
@@ -169,13 +169,13 @@ test_type!(Uuid = {
 // ### date/time
 
 #[cfg(feature = "chrono")]
-test_type!(Date<FixedOffset>, Date<Local>, Date<Utc>, NaiveDate = {
+test_type!(Date<FixedOffset>, Date<Utc>, NaiveDate = {
 	"type": "string",
 	"format": "date"
 });
 
 #[cfg(feature = "chrono")]
-test_type!(DateTime<FixedOffset>, DateTime<Local>, DateTime<Utc>, NaiveDateTime = {
+test_type!(DateTime<FixedOffset>, DateTime<Utc>, NaiveDateTime = {
 	"type": "string",
 	"format": "date-time"
 });

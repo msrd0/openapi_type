@@ -46,13 +46,13 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: recursive
-      - uses: dtolnay/rust-toolchain@1.50.0
+      - uses: dtolnay/rust-toolchain@1.51.0
       - uses: actions/cache@v2
         with:
           path: |
             ~/.cargo
             target
-          key: ${{ runner.os }}-cargo-1.50 }}
+          key: ${{ runner.os }}-cargo-1.51 }}
       - run: cargo test -- trybuild
         env:
           RUST_BACKTRACE: 1

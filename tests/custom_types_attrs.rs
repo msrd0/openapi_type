@@ -16,6 +16,16 @@ macro_rules! test_type {
 	};
 }
 
+/// Very cool struct!
+#[derive(OpenapiType)]
+struct ContainerDoc;
+test_type!(ContainerDoc = {
+	"type": "object",
+	"title": "ContainerDoc",
+	"description": "Very cool struct!",
+	"additionalProperties": false
+});
+
 #[derive(OpenapiType)]
 #[openapi(rename = "FooBar")]
 struct ContainerRename;

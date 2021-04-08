@@ -148,6 +148,12 @@
 <span id="145">145</span>
 <span id="146">146</span>
 <span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="attribute">#![<span class="ident">warn</span>(<span class="ident">missing_debug_implementations</span>, <span class="ident">rust_2018_idioms</span>)]</span>
 <span class="attribute">#![<span class="ident">forbid</span>(<span class="ident">unsafe_code</span>)]</span>
@@ -228,16 +234,20 @@ interested in.
 <span class="kw">use</span> <span class="ident">indexmap</span>::<span class="ident">IndexMap</span>;
 <span class="kw">use</span> <span class="ident">openapi</span>::{<span class="ident">Schema</span>, <span class="ident">SchemaData</span>, <span class="ident">SchemaKind</span>};
 
-<span class="comment">// TODO update the documentation</span>
-<span class="doccomment">/**
-This struct needs to be available for every type that can be part of an OpenAPI Spec. It is
-already implemented for primitive types, String, Vec, Option and the like. To have it available
-for your type, simply derive from [OpenapiType].
-*/</span>
+<span class="doccomment">/// This struct is used to generate the OpenAPI specification for a particular type. It is already</span>
+<span class="doccomment">/// made available for all primitives and some other types from the rust standard library, and</span>
+<span class="doccomment">/// you can also make your own types provide one through the [OpenapiType] trait and derive macro.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Note that this struct is marked non-exhaustive. This means that new attributes might be added</span>
+<span class="doccomment">/// at any point in time without a breaking change. The only way to obtain a value is through the</span>
+<span class="doccomment">/// [OpenapiSchema::new] method.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>)]</span>
+<span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">OpenapiSchema</span> {
 	<span class="doccomment">/// The name of this schema. If it is None, the schema will be inlined.</span>
 	<span class="kw">pub</span> <span class="ident">name</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+	<span class="doccomment">/// The description of this schema. Optional and only makes sense when a [name] is set as well.</span>
+	<span class="kw">pub</span> <span class="ident">description</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
 	<span class="doccomment">/// Whether this particular schema is nullable. Note that there is no guarantee that this will</span>
 	<span class="doccomment">/// make it into the final specification, it might just be interpreted as a hint to make it</span>
 	<span class="doccomment">/// an optional parameter.</span>
@@ -254,6 +264,7 @@ for your type, simply derive from [OpenapiType].
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">schema</span>: <span class="ident">SchemaKind</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
 		<span class="self">Self</span> {
 			<span class="ident">name</span>: <span class="prelude-val">None</span>,
+			<span class="ident">description</span>: <span class="prelude-val">None</span>,
 			<span class="ident">nullable</span>: <span class="bool-val">false</span>,
 			<span class="ident">schema</span>,
 			<span class="ident">dependencies</span>: <span class="ident">IndexMap</span>::<span class="ident">new</span>()
@@ -266,6 +277,7 @@ for your type, simply derive from [OpenapiType].
 			<span class="ident">schema_data</span>: <span class="ident">SchemaData</span> {
 				<span class="ident">nullable</span>: <span class="self">self</span>.<span class="ident">nullable</span>,
 				<span class="ident">title</span>: <span class="self">self</span>.<span class="ident">name</span>,
+				<span class="ident">description</span>: <span class="self">self</span>.<span class="ident">description</span>,
 				..<span class="ident">Default</span>::<span class="ident">default</span>()
 			},
 			<span class="ident">schema_kind</span>: <span class="self">self</span>.<span class="ident">schema</span>
@@ -297,4 +309,5 @@ struct MyResponse {
 	}
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "openapi_type";</script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="openapi_type"></div>
+    <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>

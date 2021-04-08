@@ -1,4 +1,3 @@
 (function() {var implementors = {};
-implementors["chrono"] = [{"text":"impl Div&lt;i32&gt; for Duration","synthetic":false,"types":[]}];
-implementors["time"] = [{"text":"impl Div&lt;i32&gt; for Duration","synthetic":false,"types":[]}];
+implementors["chrono"] = [{"text":"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/ops/arith/trait.Div.html\" title=\"trait core::ops::arith::Div\">Div</a>&lt;i32&gt; for <a class=\"struct\" href=\"chrono/struct.Duration.html\" title=\"struct chrono::Duration\">Duration</a>","synthetic":false,"types":["chrono::oldtime::Duration"]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

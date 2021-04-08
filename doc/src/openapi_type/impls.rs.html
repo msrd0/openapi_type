@@ -225,6 +225,10 @@
 <span id="222">222</span>
 <span id="223">223</span>
 <span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">OpenapiSchema</span>, <span class="ident">OpenapiType</span>};
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;chrono&quot;</span>)]</span>
@@ -266,6 +270,7 @@
 <span class="macro">impl_openapi_type</span><span class="macro">!</span>(<span class="ident">Value</span> <span class="op">=</span><span class="op">&gt;</span> {
 	<span class="ident">OpenapiSchema</span> {
 		<span class="ident">nullable</span>: <span class="bool-val">true</span>,
+		<span class="ident">description</span>: <span class="prelude-val">None</span>,
 		<span class="ident">name</span>: <span class="prelude-val">None</span>,
 		<span class="ident">schema</span>: <span class="ident">SchemaKind</span>::<span class="ident">Any</span>(<span class="ident">Default</span>::<span class="ident">default</span>()),
 		<span class="ident">dependencies</span>: <span class="ident">Default</span>::<span class="ident">default</span>()
@@ -359,6 +364,7 @@
 	<span class="ident">OpenapiSchema</span> {
 		<span class="ident">nullable</span>: <span class="bool-val">true</span>,
 		<span class="ident">name</span>: <span class="prelude-val">None</span>,
+		<span class="ident">description</span>: <span class="prelude-val">None</span>,
 		<span class="ident">schema</span>,
 		<span class="ident">dependencies</span>
 	}
@@ -383,6 +389,7 @@
 	<span class="ident">OpenapiSchema</span> {
 		<span class="ident">nullable</span>: <span class="bool-val">false</span>,
 		<span class="ident">name</span>: <span class="prelude-val">None</span>,
+		<span class="ident">description</span>: <span class="prelude-val">None</span>,
 		<span class="ident">schema</span>: <span class="ident">SchemaKind</span>::<span class="ident">Type</span>(<span class="ident">Type</span>::<span class="ident">Array</span>(<span class="ident">ArrayType</span> {
 			<span class="ident">items</span>,
 			<span class="ident">min_items</span>: <span class="prelude-val">None</span>,
@@ -434,6 +441,7 @@
 	<span class="ident">OpenapiSchema</span> {
 		<span class="ident">nullable</span>: <span class="bool-val">false</span>,
 		<span class="ident">name</span>: <span class="prelude-val">None</span>,
+		<span class="ident">description</span>: <span class="prelude-val">None</span>,
 		<span class="ident">schema</span>: <span class="ident">SchemaKind</span>::<span class="ident">Type</span>(<span class="ident">Type</span>::<span class="ident">Object</span>(<span class="ident">ObjectType</span> {
 			<span class="ident">properties</span>,
 			<span class="ident">required</span>: <span class="macro">vec</span><span class="macro">!</span>[<span class="string">&quot;default&quot;</span>.<span class="ident">to_owned</span>()],
@@ -451,4 +459,5 @@
 	<span class="op">=</span><span class="op">&gt;</span> <span class="ident">map_schema</span>::<span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">T</span><span class="op">&gt;</span>()
 );
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "openapi_type";</script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="openapi_type"></div>
+    <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>

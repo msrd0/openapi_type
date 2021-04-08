@@ -1,4 +1,4 @@
-error[E0599]: no function or associated item named `schema` found for struct `Foo<Bar>` in the current scope
+error[E0599]: the function or associated item `schema` exists for struct `Foo<Bar>`, but its trait bounds were not satisfied
   --> $DIR/not_openapitype_generics.rs:11:14
    |
 4  | struct Foo<T> {
@@ -11,9 +11,9 @@ error[E0599]: no function or associated item named `schema` found for struct `Fo
    | ----------- doesn't satisfy `Bar: OpenapiType`
 ...
 11 |     <Foo<Bar>>::schema();
-   |                 ^^^^^^ function or associated item not found in `Foo<Bar>`
+   |                 ^^^^^^ function or associated item cannot be called on `Foo<Bar>` due to unsatisfied trait bounds
    |
-   = note: the method `schema` exists but the following trait bounds were not satisfied:
+   = note: the following trait bounds were not satisfied:
            `Bar: OpenapiType`
            which is required by `Foo<Bar>: OpenapiType`
            `Foo<Bar>: OpenapiType`

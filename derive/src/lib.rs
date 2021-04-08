@@ -42,6 +42,23 @@ fn expand_openapi_type(mut input: DeriveInput) -> syn::Result<TokenStream2> {
 		}
 	}
 
+	// parse #[doc] attributes
+	let mut doc: Vec<String> = Vec::new();
+	for attr in &input.attrs {
+		if attr.path.is_ident("doc") {
+			if let Some(lit) = parse_doc_attr(attr)? {
+				doc.push(lit.value());
+			}
+		}
+	}
+	let doc = doc.join("\n");
+	let doc = doc.trim();
+	let doc = if doc.is_empty() {
+		quote!(::core::option::Option::None)
+	} else {
+		quote!(::core::option::Option::Some(#doc))
+	};
+
 	// prepare impl block for codegen
 	let ident = &input.ident;
 	let name = ident.to_string();
@@ -80,20 +97,20 @@ fn expand_openapi_type(mut input: DeriveInput) -> syn::Result<TokenStream2> {
 		#[allow(unused_mut)]
 		impl #impl_generics ::openapi_type::OpenapiType for #ident #ty_generics #where_clause {
 			fn schema() -> ::openapi_type::OpenapiSchema {
-				// prepare the dependencies
+				// this will be used by the schema code
 				let mut dependencies = ::openapi_type::private::Dependencies::new();
 
-				// create the schema
-				let schema = #schema_code;
+				let mut schema = ::openapi_type::OpenapiSchema::new(#schema_code);
+				schema.nullable = false;
+				schema.dependencies = dependencies;
 
-				// return everything
 				const NAME: &::core::primitive::str = #name;
-				::openapi_type::OpenapiSchema {
-					name: ::std::option::Option::Some(::std::string::String::from(NAME)),
-					nullable: false,
-					schema,
-					dependencies
-				}
+				schema.name = ::std::option::Option::Some(::std::string::String::from(NAME));
+
+				const DESCRIPTION: ::core::option::Option<&'static core::primitive::str> = #doc;
+				schema.description = DESCRIPTION.map(|desc| ::std::string::String::from(desc));
+
+				schema
 			}
 		}
 	})

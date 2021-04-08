@@ -1,6 +1,15 @@
 use crate::util::ExpectLit;
 use syn::{punctuated::Punctuated, spanned::Spanned as _, Attribute, LitStr, Meta, Token};
 
+pub(super) fn parse_doc_attr(input: &Attribute) -> syn::Result<Option<LitStr>> {
+	input.parse_meta().and_then(|meta| {
+		Ok(match meta {
+			Meta::NameValue(kv) => Some(kv.lit.expect_str()?),
+			_ => None
+		})
+	})
+}
+
 #[derive(Default)]
 pub(super) struct ContainerAttributes {
 	pub(super) rename: Option<LitStr>,

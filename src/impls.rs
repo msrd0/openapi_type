@@ -38,6 +38,7 @@ impl_openapi_type!(Unit => {
 impl_openapi_type!(Value => {
 	OpenapiSchema {
 		nullable: true,
+		description: None,
 		name: None,
 		schema: SchemaKind::Any(Default::default()),
 		dependencies: Default::default()
@@ -131,6 +132,7 @@ impl_openapi_type!(Option<T: OpenapiType> => {
 	OpenapiSchema {
 		nullable: true,
 		name: None,
+		description: None,
 		schema,
 		dependencies
 	}
@@ -155,6 +157,7 @@ fn array_schema<T: OpenapiType>(unique_items: bool) -> OpenapiSchema {
 	OpenapiSchema {
 		nullable: false,
 		name: None,
+		description: None,
 		schema: SchemaKind::Type(Type::Array(ArrayType {
 			items,
 			min_items: None,
@@ -206,6 +209,7 @@ fn map_schema<K: OpenapiType, T: OpenapiType>() -> OpenapiSchema {
 	OpenapiSchema {
 		nullable: false,
 		name: None,
+		description: None,
 		schema: SchemaKind::Type(Type::Object(ObjectType {
 			properties,
 			required: vec!["default".to_owned()],

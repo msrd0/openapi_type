@@ -77,16 +77,20 @@ pub mod private;
 use indexmap::IndexMap;
 use openapi::{Schema, SchemaData, SchemaKind};
 
-// TODO update the documentation
-/**
-This struct needs to be available for every type that can be part of an OpenAPI Spec. It is
-already implemented for primitive types, String, Vec, Option and the like. To have it available
-for your type, simply derive from [OpenapiType].
-*/
+/// This struct is used to generate the OpenAPI specification for a particular type. It is already
+/// made available for all primitives and some other types from the rust standard library, and
+/// you can also make your own types provide one through the [OpenapiType] trait and derive macro.
+///
+/// Note that this struct is marked non-exhaustive. This means that new attributes might be added
+/// at any point in time without a breaking change. The only way to obtain a value is through the
+/// [OpenapiSchema::new] method.
 #[derive(Debug, Clone, PartialEq)]
+#[non_exhaustive]
 pub struct OpenapiSchema {
 	/// The name of this schema. If it is None, the schema will be inlined.
 	pub name: Option<String>,
+	/// The description of this schema. Optional and only makes sense when a [name] is set as well.
+	pub description: Option<String>,
 	/// Whether this particular schema is nullable. Note that there is no guarantee that this will
 	/// make it into the final specification, it might just be interpreted as a hint to make it
 	/// an optional parameter.
@@ -103,6 +107,7 @@ impl OpenapiSchema {
 	pub fn new(schema: SchemaKind) -> Self {
 		Self {
 			name: None,
+			description: None,
 			nullable: false,
 			schema,
 			dependencies: IndexMap::new()
@@ -115,6 +120,7 @@ impl OpenapiSchema {
 			schema_data: SchemaData {
 				nullable: self.nullable,
 				title: self.name,
+				description: self.description,
 				..Default::default()
 			},
 			schema_kind: self.schema

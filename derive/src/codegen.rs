@@ -1,7 +1,17 @@
-use crate::parser::{ParseData, ParseDataType};
+use crate::parser::{ParseData, ParseDataField, TypeOrInline};
 use proc_macro2::TokenStream;
 use quote::quote;
 use syn::LitStr;
+
+pub(super) fn gen_doc_option(doc: &[String]) -> TokenStream {
+	let doc = doc.join("\n");
+	let doc = doc.trim();
+	if doc.is_empty() {
+		quote!(::core::option::Option::None)
+	} else {
+		quote!(::core::option::Option::Some(#doc))
+	}
+}
 
 impl ParseData {
 	pub(super) fn gen_schema(&self) -> TokenStream {
@@ -14,13 +24,14 @@ impl ParseData {
 	}
 }
 
-fn gen_struct(fields: &[(LitStr, ParseDataType)]) -> TokenStream {
-	let field_name = fields.iter().map(|(name, _)| name);
-	let field_schema = fields.iter().map(|(_, ty)| match ty {
-		ParseDataType::Type(ty) => {
+fn gen_struct(fields: &[ParseDataField]) -> TokenStream {
+	let field_name = fields.iter().map(|f| &f.name);
+	let field_doc = fields.iter().map(|f| gen_doc_option(&f.doc));
+	let field_schema = fields.iter().map(|f| match &f.ty {
+		TypeOrInline::Type(ty) => {
 			quote!(<#ty as ::openapi_type::OpenapiType>::schema())
 		},
-		ParseDataType::Inline(data) => {
+		TypeOrInline::Inline(data) => {
 			let code = data.gen_schema();
 			quote!(::openapi_type::OpenapiSchema::new(#code))
 		}
@@ -37,6 +48,8 @@ fn gen_struct(fields: &[(LitStr, ParseDataType)]) -> TokenStream {
 
 			#({
 					const FIELD_NAME: &::core::primitive::str = #field_name;
+					const FIELD_DOC: ::core::option::Option<&'static ::core::primitive::str> = #field_doc;
+
 					let mut field_schema = #field_schema;
 					::openapi_type::private::add_dependencies(
 						&mut dependencies,
@@ -63,14 +76,17 @@ fn gen_struct(fields: &[(LitStr, ParseDataType)]) -> TokenStream {
 								field_schema
 							);
 						},
+
 						// inline the field schema
 						::std::option::Option::None => {
+							let mut schema = field_schema.into_schema();
+							schema.schema_data.description = FIELD_DOC.map(|desc| {
+								::std::string::String::from(desc)
+							});
 							properties.insert(
 								::std::string::String::from(FIELD_NAME),
 								#openapi::ReferenceOr::Item(
-									::std::boxed::Box::new(
-										field_schema.into_schema()
-									)
+									::std::boxed::Box::new(schema)
 								)
 							);
 						}

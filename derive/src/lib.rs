@@ -18,6 +18,7 @@ mod util;
 mod attrs;
 use attrs::*;
 mod codegen;
+use codegen::*;
 mod parser;
 use parser::*;
 
@@ -51,13 +52,7 @@ fn expand_openapi_type(mut input: DeriveInput) -> syn::Result<TokenStream2> {
 			}
 		}
 	}
-	let doc = doc.join("\n");
-	let doc = doc.trim();
-	let doc = if doc.is_empty() {
-		quote!(::core::option::Option::None)
-	} else {
-		quote!(::core::option::Option::Some(#doc))
-	};
+	let doc = gen_doc_option(&doc);
 
 	// prepare impl block for codegen
 	let ident = &input.ident;

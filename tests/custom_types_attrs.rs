@@ -18,12 +18,21 @@ macro_rules! test_type {
 
 /// Very cool struct!
 #[derive(OpenapiType)]
-struct ContainerDoc;
+struct ContainerDoc {
+	/// Very important!
+	foo: String
+}
 test_type!(ContainerDoc = {
 	"type": "object",
 	"title": "ContainerDoc",
 	"description": "Very cool struct!",
-	"additionalProperties": false
+	"properties": {
+		"foo": {
+			"type": "string",
+			"description": "Very important!"
+		}
+	},
+	"required": ["foo"]
 });
 
 #[derive(OpenapiType)]

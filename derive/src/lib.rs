@@ -34,12 +34,12 @@ fn expand_openapi_type(mut input: DeriveInput) -> syn::Result<TokenStream2> {
 	let mut attrs = ContainerAttributes::default();
 	for attr in &input.attrs {
 		if attr.path.is_ident("serde") {
-			parse_container_attrs(attr, &mut attrs, false)?;
+			attrs.parse_from(attr, false)?;
 		}
 	}
 	for attr in &input.attrs {
 		if attr.path.is_ident("openapi") {
-			parse_container_attrs(attr, &mut attrs, true)?;
+			attrs.parse_from(attr, true)?;
 		}
 	}
 

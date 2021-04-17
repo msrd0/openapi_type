@@ -1,10 +1,13 @@
 use crate::{
-	attrs::{parse_doc_attr, ContainerAttributes},
+	attrs::{parse_doc_attr, ContainerAttributes, FieldAttributes},
 	serde_derive_internals::case::RenameRule,
 	util::ToLitStr
 };
 use proc_macro2::Span;
-use syn::{spanned::Spanned as _, DataEnum, DataStruct, DataUnion, Fields, FieldsNamed, LitStr, Type};
+use syn::{
+	punctuated::Punctuated, spanned::Spanned as _, AngleBracketedGenericArguments, DataEnum, DataStruct, DataUnion, Fields,
+	FieldsNamed, GenericArgument, LitStr, PathArguments, Type, TypePath
+};
 
 pub(super) enum TypeOrInline {
 	Type(Type),
@@ -28,6 +31,25 @@ pub(super) enum ParseData {
 fn parse_named_fields(named_fields: &FieldsNamed, rename_all: Option<&LitStr>) -> syn::Result<ParseData> {
 	let mut fields: Vec<ParseDataField> = Vec::new();
 	for f in &named_fields.named {
+		// parse #[serde] and #[openapi] attributes
+		let mut attrs = FieldAttributes::default();
+		for attr in &f.attrs {
+			if attr.path.is_ident("serde") {
+				attrs.parse_from(attr, false)?;
+			}
+		}
+		for attr in &f.attrs {
+			if attr.path.is_ident("openapi") {
+				attrs.parse_from(attr, true)?;
+			}
+		}
+
+		// skip this field if desired
+		if attrs.skip_serializing && attrs.skip_deserializing {
+			continue;
+		}
+
+		// parse #[doc] attributes
 		let mut doc = Vec::new();
 		for attr in &f.attrs {
 			if attr.path.is_ident("doc") {
@@ -37,12 +59,15 @@ fn parse_named_fields(named_fields: &FieldsNamed, rename_all: Option<&LitStr>) -
 			}
 		}
 
+		// get the name of the field
 		let ident = f
 			.ident
 			.as_ref()
 			.ok_or_else(|| syn::Error::new(f.span(), "#[derive(OpenapiType)] does not support fields without an ident"))?;
 		let mut name = ident.to_lit_str();
-		if let Some(rename_all) = rename_all {
+		if let Some(rename) = attrs.rename {
+			name = rename;
+		} else if let Some(rename_all) = rename_all {
 			let rule: RenameRule = rename_all
 				.value()
 				.parse()
@@ -50,7 +75,23 @@ fn parse_named_fields(named_fields: &FieldsNamed, rename_all: Option<&LitStr>) -
 			let rename = rule.apply_to_field(&name.value());
 			name = LitStr::new(&rename, name.span());
 		}
-		let ty = f.ty.to_owned();
+
+		// get the type of the field
+		let mut ty = f.ty.to_owned();
+		if attrs.nullable {
+			let mut args = Punctuated::new();
+			args.push(GenericArgument::Type(ty));
+			let mut path = path!(::core::option::Option);
+			let last = path.segments.last_mut().unwrap();
+			last.arguments = PathArguments::AngleBracketed(AngleBracketedGenericArguments {
+				colon2_token: None,
+				lt_token: Default::default(),
+				args,
+				gt_token: Default::default()
+			});
+			ty = Type::Path(TypePath { qself: None, path })
+		}
+
 		fields.push(ParseDataField {
 			name,
 			doc,

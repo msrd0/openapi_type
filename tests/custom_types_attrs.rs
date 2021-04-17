@@ -18,13 +18,13 @@ macro_rules! test_type {
 
 /// Very cool struct!
 #[derive(OpenapiType)]
-struct ContainerDoc {
+struct StructDoc {
 	/// Very important!
 	foo: String
 }
-test_type!(ContainerDoc = {
+test_type!(StructDoc = {
 	"type": "object",
-	"title": "ContainerDoc",
+	"title": "StructDoc",
 	"description": "Very cool struct!",
 	"properties": {
 		"foo": {
@@ -33,6 +33,42 @@ test_type!(ContainerDoc = {
 		}
 	},
 	"required": ["foo"]
+});
+
+/// Very cool enum!
+#[derive(OpenapiType)]
+enum EnumDoc {
+	/// Look, a message!
+	Message {
+		/// The text of the message in markdown format.
+		text: String
+	},
+	/// Oops
+	Error
+}
+// TODO the variant doc isn't currently included
+test_type!(EnumDoc = {
+	"title": "EnumDoc",
+	"description": "Very cool enum!",
+	"oneOf": [{
+		"type": "object",
+		"properties": {
+			"Message": {
+				"type": "object",
+				"properties": {
+					"text": {
+						"type": "string",
+						"description": "The text of the message in markdown format."
+					}
+				},
+				"required": ["text"]
+			}
+		},
+		"required": ["Message"]
+	}, {
+		"type": "string",
+		"enum": ["Error"]
+	}]
 });
 
 #[derive(OpenapiType)]

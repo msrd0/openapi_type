@@ -80,6 +80,70 @@ test_type!(ContainerRename = {
 	"additionalProperties": false
 });
 
+#[derive(OpenapiType)]
+#[openapi(rename_all = "UPPERCASE")]
+struct FieldRename {
+	#[openapi(rename = "bar")]
+	foo: String
+}
+test_type!(FieldRename = {
+	"type": "object",
+	"title": "FieldRename",
+	"properties": {
+		"bar": {
+			"type": "string"
+		}
+	},
+	"required": ["bar"]
+});
+
+#[derive(OpenapiType)]
+struct FieldSkip {
+	#[openapi(skip_serializing, skip_deserializing)]
+	foo: String,
+	#[openapi(skip)]
+	bar: String
+}
+test_type!(FieldSkip = {
+	"type": "object",
+	"title": "FieldSkip"
+});
+
+#[derive(OpenapiType)]
+struct FieldNullable {
+	#[openapi(skip_serializing)]
+	foo0: String,
+	#[openapi(skip_deserializing)]
+	foo1: String,
+	#[openapi(default)]
+	foo2: String,
+	#[openapi(default = "String::new")]
+	foo3: String,
+	#[openapi(skip_serializing_if = "String::is_empty")]
+	foo4: String
+}
+test_type!(FieldNullable = {
+	"type": "object",
+	"title": "FieldNullable",
+	"properties": {
+		"foo0": {
+			"type": "string"
+		},
+		"foo1": {
+			"type": "string"
+		},
+		"foo2": {
+			"type": "string"
+		},
+		"foo3": {
+			"type": "string"
+		},
+		"foo4": {
+			"type": "string"
+		}
+	}
+});
+
 macro_rules! test_rename_all {
 	(rename_all = $rename_all:literal, foo_bar = $foo_bar:literal) => {
 		paste::paste! {

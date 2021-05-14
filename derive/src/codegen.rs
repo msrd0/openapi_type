@@ -29,7 +29,7 @@ fn gen_struct(name: Option<&LitStr>, fields: &[ParseDataField]) -> TokenStream {
 	let option = path!(::core::option::Option);
 
 	let name = match name {
-		Some(name) => quote!(#option::Some(#name)),
+		Some(name) => quote!(#option::Some(::std::string::String::from(#name))),
 		None => quote!(#option::None)
 	};
 
@@ -109,7 +109,7 @@ fn gen_struct(name: Option<&LitStr>, fields: &[ParseDataField]) -> TokenStream {
 					)
 				)
 			);
-			schema.name = #name.map(|name: &::core::primitive::str| ::std::string::String::from(name));
+			schema.name = #name;
 			schema
 		}
 	}

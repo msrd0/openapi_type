@@ -102,7 +102,7 @@ fn expand_openapi_type(mut input: DeriveInput) -> syn::Result<TokenStream2> {
 				const NAME: &::core::primitive::str = #name;
 				schema.name = ::std::option::Option::Some(::std::string::String::from(NAME));
 
-				const DESCRIPTION: ::core::option::Option<&'static core::primitive::str> = #doc;
+				const DESCRIPTION: ::core::option::Option<&'static ::core::primitive::str> = #doc;
 				schema.description = DESCRIPTION.map(|desc| ::std::string::String::from(desc));
 
 				schema

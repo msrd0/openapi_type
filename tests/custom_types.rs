@@ -95,6 +95,7 @@ enum EnumWithFields {
 test_type!(EnumWithFields = {
 	"title": "EnumWithFields",
 	"oneOf": [{
+		"title": "EnumWithFields::Success",
 		"type": "object",
 		"properties": {
 			"Success": {
@@ -109,6 +110,7 @@ test_type!(EnumWithFields = {
 		},
 		"required": ["Success"]
 	}, {
+		"title": "EnumWithFields::Error",
 		"type": "object",
 		"properties": {
 			"Error": {
@@ -137,6 +139,7 @@ test_type!(EnumExternallyTagged = {
 		"type": "object",
 		"properties": {
 			"Success": {
+				"title": "EnumExternallyTagged::Success",
 				"type": "object",
 				"properties": {
 					"value": {
@@ -163,6 +166,7 @@ enum EnumInternallyTagged {
 test_type!(EnumInternallyTagged = {
 	"title": "EnumInternallyTagged",
 	"oneOf": [{
+		"title": "EnumInternallyTagged::Success",
 		"type": "object",
 		"properties": {
 			"value": {
@@ -203,6 +207,7 @@ test_type!(EnumAdjacentlyTagged = {
 				"enum": ["Success"]
 			},
 			"ct": {
+				"title": "EnumAdjacentlyTagged::Success",
 				"type": "object",
 				"properties": {
 					"value": {
@@ -235,6 +240,7 @@ enum EnumUntagged {
 test_type!(EnumUntagged = {
 	"title": "EnumUntagged",
 	"oneOf": [{
+		"title": "EnumUntagged::Success",
 		"type": "object",
 		"properties": {
 			"value": {

@@ -124,17 +124,30 @@ fn gen_enum(variants: &[LitStr]) -> TokenStream {
 	}
 }
 
-fn gen_alt(alt: &[ParseData]) -> TokenStream {
+fn gen_alt(alt: &[(Option<LitStr>, ParseData)]) -> TokenStream {
 	let openapi = path!(::openapi_type::openapi);
-	let schema = alt.iter().map(|data| data.gen_schema());
+	let option = path!(::core::option::Option);
+	let variant_name = alt.iter().map(|data| {
+		data.0
+			.as_ref()
+			.map(|name| quote!(#option::Some(#name)))
+			.unwrap_or_else(|| quote!(#option::None))
+	});
+	let schema = alt.iter().map(|data| data.1.gen_schema());
 	quote! {
 		{
 			let mut alternatives = <::std::vec::Vec<
 				#openapi::ReferenceOr<#openapi::Schema>
 			>>::new();
-			#(alternatives.push(#openapi::ReferenceOr::Item(
-				::openapi_type::OpenapiSchema::new(#schema).into_schema()
-			));)*
+			#(alternatives.push(#openapi::ReferenceOr::Item({
+				let mut variant_schema = ::openapi_type::OpenapiSchema::new(#schema).into_schema();
+				const VARIANT_NAME: #option<&'static ::core::primitive::str> = #variant_name;
+				if let #option::Some(variant_name) = VARIANT_NAME {
+					let variant_title = #option::Some(format!("{}::{}", NAME, variant_name));
+					variant_schema.schema_data.title = variant_title;
+				}
+				variant_schema
+			}));)*
 			#openapi::SchemaKind::OneOf {
 				one_of: alternatives
 			}

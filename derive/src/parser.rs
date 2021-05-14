@@ -24,7 +24,7 @@ pub(super) struct ParseDataField {
 pub(super) enum ParseData {
 	Struct(Vec<ParseDataField>),
 	Enum(Vec<LitStr>),
-	Alternatives(Vec<ParseData>),
+	Alternatives(Vec<(Option<LitStr>, ParseData)>),
 	Unit
 }
 
@@ -159,7 +159,7 @@ pub(super) fn parse_enum(inum: &DataEnum, attrs: &ContainerAttributes) -> syn::R
 				types
 					.into_iter()
 					.map(|(name, mut data)| {
-						Ok(match (&attrs.tag, &attrs.content, attrs.untagged) {
+						Ok((Some(name.clone()), match (&attrs.tag, &attrs.content, attrs.untagged) {
 							// externally tagged (default)
 							(None, None, false) => ParseData::Struct(vec![ParseDataField {
 								name,
@@ -198,7 +198,7 @@ pub(super) fn parse_enum(inum: &DataEnum, attrs: &ContainerAttributes) -> syn::R
 							(None, None, true) => data,
 							// unknown
 							_ => return Err(syn::Error::new(Span::call_site(), "Unknown enum representation"))
-						})
+						}))
 					})
 					.collect::<syn::Result<Vec<_>>>()?
 			))
@@ -208,12 +208,12 @@ pub(super) fn parse_enum(inum: &DataEnum, attrs: &ContainerAttributes) -> syn::R
 		// only variants without fields
 		(Some(data), None) => Ok(data),
 		// only one variant with fields
-		(None, Some(ParseData::Alternatives(mut alt))) if alt.len() == 1 => Ok(alt.remove(0)),
+		(None, Some(ParseData::Alternatives(mut alt))) if alt.len() == 1 => Ok(alt.remove(0).1),
 		// only variants with fields
 		(None, Some(data)) => Ok(data),
 		// variants with and without fields
 		(Some(data), Some(ParseData::Alternatives(mut alt))) => {
-			alt.push(data);
+			alt.push((None, data));
 			Ok(ParseData::Alternatives(alt))
 		},
 		// no variants

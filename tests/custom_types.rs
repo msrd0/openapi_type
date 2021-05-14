@@ -1,20 +1,7 @@
 #![allow(dead_code)]
 use openapi_type::OpenapiType;
 
-macro_rules! test_type {
-	($ty:ty = $json:tt) => {
-		paste::paste! {
-			#[test]
-			fn [< $ty:lower >]() {
-				let schema = <$ty as OpenapiType>::schema();
-				let schema = openapi_type::OpenapiSchema::into_schema(schema);
-				let schema_json = serde_json::to_value(&schema).unwrap();
-				let expected = serde_json::json!($json);
-				pretty_assertions::assert_eq!(schema_json, expected);
-			}
-		}
-	};
-}
+include!("util/test_type.rs");
 
 #[derive(OpenapiType)]
 struct UnitStruct;
@@ -75,16 +62,21 @@ test_type!(EnumWithOneField = {
 	"title": "EnumWithOneField",
 	"properties": {
 		"Success": {
-			"type": "object",
-			"properties": {
-				"value": {
-					"type": "integer"
-				}
-			},
-			"required": ["value"]
+			"$ref": "#/components/schemas/EnumWithOneField__Success"
 		}
 	},
 	"required": ["Success"]
+}, {
+	"EnumWithOneField__Success": {
+		"title": "EnumWithOneField::Success",
+		"type": "object",
+		"properties": {
+			"value": {
+				"type": "integer"
+			}
+		},
+		"required": ["value"]
+	}
 });
 
 #[derive(OpenapiType)]
@@ -98,13 +90,7 @@ test_type!(EnumWithFields = {
 		"type": "object",
 		"properties": {
 			"Success": {
-				"type": "object",
-				"properties": {
-					"value": {
-						"type": "integer"
-					}
-				},
-				"required": ["value"]
+				"$ref": "#/components/schemas/EnumWithFields__Success"
 			}
 		},
 		"required": ["Success"]
@@ -112,17 +98,32 @@ test_type!(EnumWithFields = {
 		"type": "object",
 		"properties": {
 			"Error": {
-				"type": "object",
-				"properties": {
-					"msg": {
-						"type": "string"
-					}
-				},
-				"required": ["msg"]
+				"$ref": "#/components/schemas/EnumWithFields__Error"
 			}
 		},
 		"required": ["Error"]
 	}]
+}, {
+	"EnumWithFields__Success": {
+		"title": "EnumWithFields::Success",
+		"type": "object",
+		"properties": {
+			"value": {
+				"type": "integer"
+			}
+		},
+		"required": ["value"]
+	},
+	"EnumWithFields__Error": {
+		"title": "EnumWithFields::Error",
+		"type": "object",
+		"properties": {
+			"msg": {
+				"type": "string"
+			}
+		},
+		"required": ["msg"]
+	}
 });
 
 #[derive(OpenapiType)]
@@ -137,13 +138,7 @@ test_type!(EnumExternallyTagged = {
 		"type": "object",
 		"properties": {
 			"Success": {
-				"type": "object",
-				"properties": {
-					"value": {
-						"type": "integer"
-					}
-				},
-				"required": ["value"]
+				"$ref": "#/components/schemas/EnumExternallyTagged__Success"
 			}
 		},
 		"required": ["Success"]
@@ -151,6 +146,17 @@ test_type!(EnumExternallyTagged = {
 		"type": "string",
 		"enum": ["Empty", "Error"]
 	}]
+}, {
+	"EnumExternallyTagged__Success": {
+		"title": "EnumExternallyTagged::Success",
+		"type": "object",
+		"properties": {
+			"value": {
+				"type": "integer"
+			}
+		},
+		"required": ["value"]
+	}
 });
 
 #[derive(OpenapiType)]
@@ -160,9 +166,11 @@ enum EnumInternallyTagged {
 	Empty,
 	Error
 }
+// TODO the Success variant should probably be $ref-ed
 test_type!(EnumInternallyTagged = {
 	"title": "EnumInternallyTagged",
 	"oneOf": [{
+		"title": "EnumInternallyTagged::Success",
 		"type": "object",
 		"properties": {
 			"value": {
@@ -203,13 +211,7 @@ test_type!(EnumAdjacentlyTagged = {
 				"enum": ["Success"]
 			},
 			"ct": {
-				"type": "object",
-				"properties": {
-					"value": {
-						"type": "integer"
-					}
-				},
-				"required": ["value"]
+				"$ref": "#/components/schemas/EnumAdjacentlyTagged__Success"
 			}
 		},
 		"required": ["ty", "ct"]
@@ -223,6 +225,17 @@ test_type!(EnumAdjacentlyTagged = {
 		},
 		"required": ["ty"]
 	}]
+}, {
+	"EnumAdjacentlyTagged__Success": {
+		"title": "EnumAdjacentlyTagged::Success",
+		"type": "object",
+		"properties": {
+			"value": {
+				"type": "integer"
+			}
+		},
+		"required": ["value"]
+	}
 });
 
 #[derive(OpenapiType)]
@@ -232,9 +245,11 @@ enum EnumUntagged {
 	Empty,
 	Error
 }
+// TODO the Success variant should probably be $ref-ed
 test_type!(EnumUntagged = {
 	"title": "EnumUntagged",
 	"oneOf": [{
+		"title": "EnumUntagged::Success",
 		"type": "object",
 		"properties": {
 			"value": {

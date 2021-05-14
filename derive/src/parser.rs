@@ -3,7 +3,7 @@ use crate::{
 	serde_derive_internals::case::RenameRule,
 	util::ToLitStr
 };
-use proc_macro2::Span;
+use proc_macro2::{Ident, Span};
 use syn::{
 	punctuated::Punctuated, spanned::Spanned as _, AngleBracketedGenericArguments, DataEnum, DataStruct, DataUnion, Fields,
 	FieldsNamed, GenericArgument, LitStr, PathArguments, Type, TypePath
@@ -22,13 +22,16 @@ pub(super) struct ParseDataField {
 
 #[allow(dead_code)]
 pub(super) enum ParseData {
-	Struct(Vec<ParseDataField>),
+	Struct {
+		name: Option<LitStr>,
+		fields: Vec<ParseDataField>
+	},
 	Enum(Vec<LitStr>),
 	Alternatives(Vec<ParseData>),
 	Unit
 }
 
-fn parse_named_fields(named_fields: &FieldsNamed, rename_all: Option<&LitStr>) -> syn::Result<ParseData> {
+fn parse_named_fields(named_fields: &FieldsNamed, rename_all: Option<&LitStr>) -> syn::Result<Vec<ParseDataField>> {
 	let mut fields: Vec<ParseDataField> = Vec::new();
 	for f in &named_fields.named {
 		// parse #[serde] and #[openapi] attributes
@@ -98,12 +101,18 @@ fn parse_named_fields(named_fields: &FieldsNamed, rename_all: Option<&LitStr>) -
 			ty: TypeOrInline::Type(ty)
 		});
 	}
-	Ok(ParseData::Struct(fields))
+	Ok(fields)
 }
 
-pub(super) fn parse_struct(strukt: &DataStruct, attrs: &ContainerAttributes) -> syn::Result<ParseData> {
+pub(super) fn parse_struct(ident: &Ident, strukt: &DataStruct, attrs: &ContainerAttributes) -> syn::Result<ParseData> {
 	match &strukt.fields {
-		Fields::Named(named_fields) => parse_named_fields(named_fields, attrs.rename_all.as_ref()),
+		Fields::Named(named_fields) => {
+			let fields = parse_named_fields(named_fields, attrs.rename_all.as_ref())?;
+			Ok(ParseData::Struct {
+				name: Some(ident.to_lit_str()),
+				fields
+			})
+		},
 		Fields::Unnamed(unnamed_fields) => Err(syn::Error::new(
 			unnamed_fields.span(),
 			"#[derive(OpenapiType)] does not support tuple structs"
@@ -112,7 +121,7 @@ pub(super) fn parse_struct(strukt: &DataStruct, attrs: &ContainerAttributes) -> 
 	}
 }
 
-pub(super) fn parse_enum(inum: &DataEnum, attrs: &ContainerAttributes) -> syn::Result<ParseData> {
+pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttributes) -> syn::Result<ParseData> {
 	let mut strings: Vec<LitStr> = Vec::new();
 	let mut types: Vec<(LitStr, ParseData)> = Vec::new();
 
@@ -120,7 +129,12 @@ pub(super) fn parse_enum(inum: &DataEnum, attrs: &ContainerAttributes) -> syn::R
 		let name = v.ident.to_lit_str();
 		match &v.fields {
 			Fields::Named(named_fields) => {
-				types.push((name, parse_named_fields(named_fields, attrs.rename_all.as_ref())?));
+				let fields = parse_named_fields(named_fields, attrs.rename_all.as_ref())?;
+				let struct_name = format!("{}::{}", ident, name.value());
+				types.push((name, ParseData::Struct {
+					name: Some(LitStr::new(&struct_name, Span::call_site())),
+					fields
+				}));
 			},
 			Fields::Unnamed(unnamed_fields) => {
 				return Err(syn::Error::new(
@@ -139,11 +153,14 @@ pub(super) fn parse_enum(inum: &DataEnum, attrs: &ContainerAttributes) -> syn::R
 			// externally tagged (default)
 			(None, None, false) => Some(ParseData::Enum(strings)),
 			// internally tagged or adjacently tagged
-			(Some(tag), _, false) => Some(ParseData::Struct(vec![ParseDataField {
-				name: tag.clone(),
-				doc: Vec::new(),
-				ty: TypeOrInline::Inline(ParseData::Enum(strings))
-			}])),
+			(Some(tag), _, false) => Some(ParseData::Struct {
+				name: None,
+				fields: vec![ParseDataField {
+					name: tag.clone(),
+					doc: Vec::new(),
+					ty: TypeOrInline::Inline(ParseData::Enum(strings))
+				}]
+			}),
 			// untagged
 			(None, None, true) => Some(ParseData::Unit),
 			// unknown
@@ -161,15 +178,18 @@ pub(super) fn parse_enum(inum: &DataEnum, attrs: &ContainerAttributes) -> syn::R
 					.map(|(name, mut data)| {
 						Ok(match (&attrs.tag, &attrs.content, attrs.untagged) {
 							// externally tagged (default)
-							(None, None, false) => ParseData::Struct(vec![ParseDataField {
-								name,
-								doc: Vec::new(),
-								ty: TypeOrInline::Inline(data)
-							}]),
+							(None, None, false) => ParseData::Struct {
+								name: None,
+								fields: vec![ParseDataField {
+									name,
+									doc: Vec::new(),
+									ty: TypeOrInline::Inline(data)
+								}]
+							},
 							// internally tagged
 							(Some(tag), None, false) => {
 								match &mut data {
-									ParseData::Struct(fields) => fields.push(ParseDataField {
+									ParseData::Struct { fields, .. } => fields.push(ParseDataField {
 										name: tag.clone(),
 										doc: Vec::new(),
 										ty: TypeOrInline::Inline(ParseData::Enum(vec![name]))
@@ -182,18 +202,21 @@ pub(super) fn parse_enum(inum: &DataEnum, attrs: &ContainerAttributes) -> syn::R
 								data
 							},
 							// adjacently tagged
-							(Some(tag), Some(content), false) => ParseData::Struct(vec![
-								ParseDataField {
-									name: tag.clone(),
-									doc: Vec::new(),
-									ty: TypeOrInline::Inline(ParseData::Enum(vec![name]))
-								},
-								ParseDataField {
-									name: content.clone(),
-									doc: Vec::new(),
-									ty: TypeOrInline::Inline(data)
-								},
-							]),
+							(Some(tag), Some(content), false) => ParseData::Struct {
+								name: None,
+								fields: vec![
+									ParseDataField {
+										name: tag.clone(),
+										doc: Vec::new(),
+										ty: TypeOrInline::Inline(ParseData::Enum(vec![name]))
+									},
+									ParseDataField {
+										name: content.clone(),
+										doc: Vec::new(),
+										ty: TypeOrInline::Inline(data)
+									},
+								]
+							},
 							// untagged
 							(None, None, true) => data,
 							// unknown

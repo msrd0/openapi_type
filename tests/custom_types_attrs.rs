@@ -1,20 +1,7 @@
 #![allow(dead_code)]
 use openapi_type::OpenapiType;
 
-macro_rules! test_type {
-	($ty:ty = $json:tt) => {
-		paste::paste! {
-			#[test]
-			fn [< $ty:lower >]() {
-				let schema = <$ty as OpenapiType>::schema();
-				let schema = openapi_type::OpenapiSchema::into_schema(schema);
-				let schema_json = serde_json::to_value(&schema).unwrap();
-				let expected = serde_json::json!($json);
-				pretty_assertions::assert_eq!(schema_json, expected);
-			}
-		}
-	};
-}
+include!("util/test_type.rs");
 
 /// Very cool struct!
 #[derive(OpenapiType)]
@@ -54,14 +41,7 @@ test_type!(EnumDoc = {
 		"type": "object",
 		"properties": {
 			"Message": {
-				"type": "object",
-				"properties": {
-					"text": {
-						"type": "string",
-						"description": "The text of the message in markdown format."
-					}
-				},
-				"required": ["text"]
+				"$ref": "#/components/schemas/EnumDoc__Message"
 			}
 		},
 		"required": ["Message"]
@@ -69,6 +49,18 @@ test_type!(EnumDoc = {
 		"type": "string",
 		"enum": ["Error"]
 	}]
+}, {
+	"EnumDoc__Message": {
+		"title": "EnumDoc::Message",
+		"type": "object",
+		"properties": {
+			"text": {
+				"type": "string",
+				"description": "The text of the message in markdown format."
+			}
+		},
+		"required": ["text"]
+	}
 });
 
 #[derive(OpenapiType)]

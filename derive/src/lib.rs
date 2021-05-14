@@ -79,8 +79,8 @@ fn expand_openapi_type(mut input: DeriveInput) -> syn::Result<TokenStream2> {
 
 	// parse the input data
 	let parsed = match &input.data {
-		Data::Struct(strukt) => parse_struct(strukt, &attrs)?,
-		Data::Enum(inum) => parse_enum(inum, &attrs)?,
+		Data::Struct(strukt) => parse_struct(ident, strukt, &attrs)?,
+		Data::Enum(inum) => parse_enum(ident, inum, &attrs)?,
 		Data::Union(union) => parse_union(union)?
 	};
 
@@ -95,7 +95,7 @@ fn expand_openapi_type(mut input: DeriveInput) -> syn::Result<TokenStream2> {
 				// this will be used by the schema code
 				let mut dependencies = ::openapi_type::private::Dependencies::new();
 
-				let mut schema = ::openapi_type::OpenapiSchema::new(#schema_code);
+				let mut schema: ::openapi_type::OpenapiSchema = #schema_code;
 				schema.nullable = false;
 				schema.dependencies = dependencies;
 

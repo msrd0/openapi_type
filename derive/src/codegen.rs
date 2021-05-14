@@ -16,7 +16,7 @@ pub(super) fn gen_doc_option(doc: &[String]) -> TokenStream {
 impl ParseData {
 	pub(super) fn gen_schema(&self) -> TokenStream {
 		match self {
-			Self::Struct(fields) => gen_struct(fields),
+			Self::Struct { name, fields } => gen_struct(name.as_ref(), fields),
 			Self::Enum(variants) => gen_enum(variants),
 			Self::Alternatives(alt) => gen_alt(alt),
 			Self::Unit => gen_unit()
@@ -24,20 +24,24 @@ impl ParseData {
 	}
 }
 
-fn gen_struct(fields: &[ParseDataField]) -> TokenStream {
+fn gen_struct(name: Option<&LitStr>, fields: &[ParseDataField]) -> TokenStream {
+	let openapi = path!(::openapi_type::openapi);
+	let option = path!(::core::option::Option);
+
+	let name = match name {
+		Some(name) => quote!(#option::Some(#name)),
+		None => quote!(#option::None)
+	};
+
 	let field_name = fields.iter().map(|f| &f.name);
 	let field_doc = fields.iter().map(|f| gen_doc_option(&f.doc));
 	let field_schema = fields.iter().map(|f| match &f.ty {
 		TypeOrInline::Type(ty) => {
 			quote!(<#ty as ::openapi_type::OpenapiType>::schema())
 		},
-		TypeOrInline::Inline(data) => {
-			let code = data.gen_schema();
-			quote!(::openapi_type::OpenapiSchema::new(#code))
-		}
+		TypeOrInline::Inline(data) => data.gen_schema()
 	});
 
-	let openapi = path!(::openapi_type::openapi);
 	quote! {
 		{
 			let mut properties = <::openapi_type::indexmap::IndexMap<
@@ -48,7 +52,7 @@ fn gen_struct(fields: &[ParseDataField]) -> TokenStream {
 
 			#({
 					const FIELD_NAME: &::core::primitive::str = #field_name;
-					const FIELD_DOC: ::core::option::Option<&'static ::core::primitive::str> = #field_doc;
+					const FIELD_DOC: #option<&'static ::core::primitive::str> = #field_doc;
 
 					let mut field_schema = #field_schema;
 					::openapi_type::private::add_dependencies(
@@ -64,21 +68,22 @@ fn gen_struct(fields: &[ParseDataField]) -> TokenStream {
 
 					match field_schema.name.as_ref() {
 						// include the field schema as reference
-						::std::option::Option::Some(schema_name) => {
+						#option::Some(schema_name) => {
 							let mut reference = ::std::string::String::from("#/components/schemas/");
-							reference.push_str(schema_name);
+							let ref_name = schema_name.replace(|c: ::core::primitive::char| !c.is_alphanumeric(), "_");
+							reference.push_str(&ref_name);
 							properties.insert(
 								::std::string::String::from(FIELD_NAME),
 								#openapi::ReferenceOr::Reference { reference }
 							);
 							dependencies.insert(
-								::std::string::String::from(schema_name),
+								ref_name,
 								field_schema
 							);
 						},
 
 						// inline the field schema
-						::std::option::Option::None => {
+						#option::None => {
 							let mut schema = field_schema.into_schema();
 							schema.schema_data.description = FIELD_DOC.map(|desc| {
 								::std::string::String::from(desc)
@@ -90,18 +95,22 @@ fn gen_struct(fields: &[ParseDataField]) -> TokenStream {
 								)
 							);
 						}
-					}
+					};
 			})*
 
-			#openapi::SchemaKind::Type(
-				#openapi::Type::Object(
-					#openapi::ObjectType {
-						properties,
-						required,
-						.. ::std::default::Default::default()
-					}
+			let mut schema = ::openapi_type::OpenapiSchema::new(
+				#openapi::SchemaKind::Type(
+					#openapi::Type::Object(
+						#openapi::ObjectType {
+							properties,
+							required,
+							.. ::std::default::Default::default()
+						}
+					)
 				)
-			)
+			);
+			schema.name = #name.map(|name: &::core::primitive::str| ::std::string::String::from(name));
+			schema
 		}
 	}
 }
@@ -112,45 +121,35 @@ fn gen_enum(variants: &[LitStr]) -> TokenStream {
 		{
 			let mut enumeration = <::std::vec::Vec<::std::string::String>>::new();
 			#(enumeration.push(::std::string::String::from(#variants));)*
-			#openapi::SchemaKind::Type(
-				#openapi::Type::String(
-					#openapi::StringType {
-						enumeration,
-						.. ::std::default::Default::default()
-					}
+			::openapi_type::OpenapiSchema::new(
+				#openapi::SchemaKind::Type(
+					#openapi::Type::String(
+						#openapi::StringType {
+							enumeration,
+							.. ::std::default::Default::default()
+						}
+					)
 				)
 			)
 		}
 	}
 }
 
-fn gen_alt(alt: &[(Option<LitStr>, ParseData)]) -> TokenStream {
+fn gen_alt(alt: &[ParseData]) -> TokenStream {
 	let openapi = path!(::openapi_type::openapi);
-	let option = path!(::core::option::Option);
-	let variant_name = alt.iter().map(|data| {
-		data.0
-			.as_ref()
-			.map(|name| quote!(#option::Some(#name)))
-			.unwrap_or_else(|| quote!(#option::None))
-	});
-	let schema = alt.iter().map(|data| data.1.gen_schema());
+	let schema = alt.iter().map(|data| data.gen_schema());
 	quote! {
 		{
 			let mut alternatives = <::std::vec::Vec<
 				#openapi::ReferenceOr<#openapi::Schema>
 			>>::new();
-			#(alternatives.push(#openapi::ReferenceOr::Item({
-				let mut variant_schema = ::openapi_type::OpenapiSchema::new(#schema).into_schema();
-				const VARIANT_NAME: #option<&'static ::core::primitive::str> = #variant_name;
-				if let #option::Some(variant_name) = VARIANT_NAME {
-					let variant_title = #option::Some(format!("{}::{}", NAME, variant_name));
-					variant_schema.schema_data.title = variant_title;
+			#(alternatives.push(#openapi::ReferenceOr::Item(#schema.into_schema()));)*
+
+			::openapi_type::OpenapiSchema::new(
+				#openapi::SchemaKind::OneOf {
+					one_of: alternatives
 				}
-				variant_schema
-			}));)*
-			#openapi::SchemaKind::OneOf {
-				one_of: alternatives
-			}
+			)
 		}
 	}
 }
@@ -158,14 +157,16 @@ fn gen_alt(alt: &[(Option<LitStr>, ParseData)]) -> TokenStream {
 fn gen_unit() -> TokenStream {
 	let openapi = path!(::openapi_type::openapi);
 	quote! {
-		#openapi::SchemaKind::Type(
-			#openapi::Type::Object(
-				#openapi::ObjectType {
-					additional_properties: ::std::option::Option::Some(
-						#openapi::AdditionalProperties::Any(false)
-					),
-					.. ::std::default::Default::default()
-				}
+		::openapi_type::OpenapiSchema::new(
+			#openapi::SchemaKind::Type(
+				#openapi::Type::Object(
+					#openapi::ObjectType {
+						additional_properties: ::std::option::Option::Some(
+							#openapi::AdditionalProperties::Any(false)
+						),
+						.. ::std::default::Default::default()
+					}
+				)
 			)
 		)
 	}

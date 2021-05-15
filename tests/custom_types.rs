@@ -87,21 +87,9 @@ enum EnumWithFields {
 test_type!(EnumWithFields = {
 	"title": "EnumWithFields",
 	"oneOf": [{
-		"type": "object",
-		"properties": {
-			"Success": {
-				"$ref": "#/components/schemas/EnumWithFields__Success"
-			}
-		},
-		"required": ["Success"]
+		"$ref": "#/components/schemas/EnumWithFields__Success__ExtTagWrapper"
 	}, {
-		"type": "object",
-		"properties": {
-			"Error": {
-				"$ref": "#/components/schemas/EnumWithFields__Error"
-			}
-		},
-		"required": ["Error"]
+		"$ref": "#/components/schemas/EnumWithFields__Error__ExtTagWrapper"
 	}]
 }, {
 	"EnumWithFields__Success": {
@@ -114,6 +102,16 @@ test_type!(EnumWithFields = {
 		},
 		"required": ["value"]
 	},
+	"EnumWithFields__Success__ExtTagWrapper": {
+		"title": "EnumWithFields::Success::ExtTagWrapper",
+		"type": "object",
+		"properties": {
+			"Success": {
+				"$ref": "#/components/schemas/EnumWithFields__Success"
+			}
+		},
+		"required": ["Success"]
+	},
 	"EnumWithFields__Error": {
 		"title": "EnumWithFields::Error",
 		"type": "object",
@@ -123,6 +121,16 @@ test_type!(EnumWithFields = {
 			}
 		},
 		"required": ["msg"]
+	},
+	"EnumWithFields__Error__ExtTagWrapper": {
+		"title": "EnumWithFields::Error::ExtTagWrapper",
+		"type": "object",
+		"properties": {
+			"Error": {
+				"$ref": "#/components/schemas/EnumWithFields__Error"
+			}
+		},
+		"required": ["Error"]
 	}
 });
 
@@ -135,13 +143,7 @@ enum EnumExternallyTagged {
 test_type!(EnumExternallyTagged = {
 	"title": "EnumExternallyTagged",
 	"oneOf": [{
-		"type": "object",
-		"properties": {
-			"Success": {
-				"$ref": "#/components/schemas/EnumExternallyTagged__Success"
-			}
-		},
-		"required": ["Success"]
+		"$ref": "#/components/schemas/EnumExternallyTagged__Success__ExtTagWrapper"
 	}, {
 		"type": "string",
 		"enum": ["Empty", "Error"]
@@ -156,6 +158,16 @@ test_type!(EnumExternallyTagged = {
 			}
 		},
 		"required": ["value"]
+	},
+	"EnumExternallyTagged__Success__ExtTagWrapper": {
+		"title": "EnumExternallyTagged::Success::ExtTagWrapper",
+		"type": "object",
+		"properties": {
+			"Success": {
+				"$ref": "#/components/schemas/EnumExternallyTagged__Success"
+			}
+		},
+		"required": ["Success"]
 	}
 });
 
@@ -170,6 +182,19 @@ enum EnumInternallyTagged {
 test_type!(EnumInternallyTagged = {
 	"title": "EnumInternallyTagged",
 	"oneOf": [{
+		"$ref": "#/components/schemas/EnumInternallyTagged__Success"
+	}, {
+		"type": "object",
+		"properties": {
+			"ty": {
+				"type": "string",
+				"enum": ["Empty", "Error"]
+			}
+		},
+		"required": ["ty"]
+	}]
+}, {
+	"EnumInternallyTagged__Success": {
 		"title": "EnumInternallyTagged::Success",
 		"type": "object",
 		"properties": {
@@ -182,16 +207,7 @@ test_type!(EnumInternallyTagged = {
 			}
 		},
 		"required": ["value", "ty"]
-	}, {
-		"type": "object",
-		"properties": {
-			"ty": {
-				"type": "string",
-				"enum": ["Empty", "Error"]
-			}
-		},
-		"required": ["ty"]
-	}]
+	}
 });
 
 #[derive(OpenapiType)]
@@ -204,17 +220,7 @@ enum EnumAdjacentlyTagged {
 test_type!(EnumAdjacentlyTagged = {
 	"title": "EnumAdjacentlyTagged",
 	"oneOf": [{
-		"type": "object",
-		"properties": {
-			"ty": {
-				"type": "string",
-				"enum": ["Success"]
-			},
-			"ct": {
-				"$ref": "#/components/schemas/EnumAdjacentlyTagged__Success"
-			}
-		},
-		"required": ["ty", "ct"]
+		"$ref": "#/components/schemas/EnumAdjacentlyTagged__Success__AdjTagWrapper"
 	}, {
 		"type": "object",
 		"properties": {
@@ -235,6 +241,20 @@ test_type!(EnumAdjacentlyTagged = {
 			}
 		},
 		"required": ["value"]
+	},
+	"EnumAdjacentlyTagged__Success__AdjTagWrapper": {
+		"title": "EnumAdjacentlyTagged::Success::AdjTagWrapper",
+		"type": "object",
+		"properties": {
+			"ty": {
+				"type": "string",
+				"enum": ["Success"]
+			},
+			"ct": {
+				"$ref": "#/components/schemas/EnumAdjacentlyTagged__Success"
+			}
+		},
+		"required": ["ty", "ct"]
 	}
 });
 
@@ -249,6 +269,13 @@ enum EnumUntagged {
 test_type!(EnumUntagged = {
 	"title": "EnumUntagged",
 	"oneOf": [{
+		"$ref": "#/components/schemas/EnumUntagged__Success"
+	}, {
+		"type": "object",
+		"additionalProperties": false
+	}]
+}, {
+	"EnumUntagged__Success": {
 		"title": "EnumUntagged::Success",
 		"type": "object",
 		"properties": {
@@ -257,8 +284,5 @@ test_type!(EnumUntagged = {
 			}
 		},
 		"required": ["value"]
-	}, {
-		"type": "object",
-		"additionalProperties": false
-	}]
+	}
 });

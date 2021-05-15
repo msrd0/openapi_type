@@ -55,10 +55,6 @@ fn gen_struct(name: Option<&LitStr>, fields: &[ParseDataField]) -> TokenStream {
 					const FIELD_DOC: #option<&'static ::core::primitive::str> = #field_doc;
 
 					let mut field_schema = #field_schema;
-					::openapi_type::private::add_dependencies(
-						&mut dependencies,
-						&mut field_schema.dependencies
-					);
 
 					// fields in OpenAPI are nullable by default
 					match field_schema.nullable {
@@ -66,36 +62,19 @@ fn gen_struct(name: Option<&LitStr>, fields: &[ParseDataField]) -> TokenStream {
 						false => required.push(::std::string::String::from(FIELD_NAME))
 					};
 
-					match field_schema.name.as_ref() {
-						// include the field schema as reference
-						#option::Some(schema_name) => {
-							let mut reference = ::std::string::String::from("#/components/schemas/");
-							let ref_name = schema_name.replace(|c: ::core::primitive::char| !c.is_alphanumeric(), "_");
-							reference.push_str(&ref_name);
-							properties.insert(
-								::std::string::String::from(FIELD_NAME),
-								#openapi::ReferenceOr::Reference { reference }
-							);
-							dependencies.insert(
-								ref_name,
-								field_schema
-							);
-						},
-
-						// inline the field schema
-						#option::None => {
-							let mut schema = field_schema.into_schema();
-							schema.schema_data.description = FIELD_DOC.map(|desc| {
-								::std::string::String::from(desc)
-							});
-							properties.insert(
-								::std::string::String::from(FIELD_NAME),
-								#openapi::ReferenceOr::Item(
-									::std::boxed::Box::new(schema)
-								)
-							);
-						}
+					let field_schema = match ::openapi_type::private::inline_if_unnamed(
+						&mut dependencies, field_schema, FIELD_DOC
+					) {
+						#openapi::ReferenceOr::Item(schema) =>
+							#openapi::ReferenceOr::Item(::std::boxed::Box::new(schema)),
+						#openapi::ReferenceOr::Reference { reference } =>
+							#openapi::ReferenceOr::Reference { reference }
 					};
+
+					properties.insert(
+						::std::string::String::from(FIELD_NAME),
+						field_schema
+					);
 			})*
 
 			let mut schema = ::openapi_type::OpenapiSchema::new(
@@ -143,7 +122,10 @@ fn gen_alt(alt: &[ParseData]) -> TokenStream {
 			let mut alternatives = <::std::vec::Vec<
 				#openapi::ReferenceOr<#openapi::Schema>
 			>>::new();
-			#(alternatives.push(#openapi::ReferenceOr::Item(#schema.into_schema()));)*
+			#(alternatives.push({
+				let alt_schema = #schema;
+				::openapi_type::private::inline_if_unnamed(&mut dependencies, alt_schema, None)
+			});)*
 
 			::openapi_type::OpenapiSchema::new(
 				#openapi::SchemaKind::OneOf {

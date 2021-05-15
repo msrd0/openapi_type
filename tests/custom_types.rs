@@ -184,14 +184,7 @@ test_type!(EnumInternallyTagged = {
 	"oneOf": [{
 		"$ref": "#/components/schemas/EnumInternallyTagged__Success"
 	}, {
-		"type": "object",
-		"properties": {
-			"ty": {
-				"type": "string",
-				"enum": ["Empty", "Error"]
-			}
-		},
-		"required": ["ty"]
+		"$ref": "#/components/schemas/EnumInternallyTagged_oneOf_1"
 	}]
 }, {
 	"EnumInternallyTagged__Success": {
@@ -207,6 +200,16 @@ test_type!(EnumInternallyTagged = {
 			}
 		},
 		"required": ["value", "ty"]
+	},
+	"EnumInternallyTagged_oneOf_1": {
+		"type": "object",
+		"properties": {
+			"ty": {
+				"type": "string",
+				"enum": ["Empty", "Error"]
+			}
+		},
+		"required": ["ty"]
 	}
 });
 
@@ -222,14 +225,7 @@ test_type!(EnumAdjacentlyTagged = {
 	"oneOf": [{
 		"$ref": "#/components/schemas/EnumAdjacentlyTagged__Success__AdjTagWrapper"
 	}, {
-		"type": "object",
-		"properties": {
-			"ty": {
-				"type": "string",
-				"enum": ["Empty", "Error"]
-			}
-		},
-		"required": ["ty"]
+		"$ref": "#/components/schemas/EnumAdjacentlyTagged_oneOf_1"
 	}]
 }, {
 	"EnumAdjacentlyTagged__Success": {
@@ -255,6 +251,16 @@ test_type!(EnumAdjacentlyTagged = {
 			}
 		},
 		"required": ["ty", "ct"]
+	},
+	"EnumAdjacentlyTagged_oneOf_1": {
+		"type": "object",
+		"properties": {
+			"ty": {
+				"type": "string",
+				"enum": ["Empty", "Error"]
+			}
+		},
+		"required": ["ty"]
 	}
 });
 

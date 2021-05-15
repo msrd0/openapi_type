@@ -117,6 +117,7 @@ fn gen_enum(variants: &[LitStr]) -> TokenStream {
 fn gen_alt(alt: &[ParseData]) -> TokenStream {
 	let openapi = path!(::openapi_type::openapi);
 	let schema = alt.iter().map(|data| data.gen_schema());
+	let index = alt.iter().enumerate().map(|(i, _)| i);
 	quote! {
 		{
 			let mut alternatives = <::std::vec::Vec<
@@ -124,7 +125,24 @@ fn gen_alt(alt: &[ParseData]) -> TokenStream {
 			>>::new();
 			#(alternatives.push({
 				let alt_schema = #schema;
-				::openapi_type::private::inline_if_unnamed(&mut dependencies, alt_schema, None)
+				let alt_prop_len = match &alt_schema.schema {
+					#openapi::SchemaKind::Type(#openapi::Type::Object(obj)) => obj.properties.len(),
+					_ => 0
+				};
+				// $ref-erence all non-trivial objects
+				if alt_prop_len > 0 {
+					::openapi_type::private::reference(
+						&mut dependencies,
+						alt_schema,
+						|| ::std::format!("{}_oneOf_{}", NAME, #index)
+					)
+				} else {
+					::openapi_type::private::inline_if_unnamed(
+						&mut dependencies,
+						alt_schema,
+						None
+					)
+				}
 			});)*
 
 			::openapi_type::OpenapiSchema::new(

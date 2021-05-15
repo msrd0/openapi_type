@@ -132,7 +132,7 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 				let fields = parse_named_fields(named_fields, attrs.rename_all.as_ref())?;
 				let struct_name = format!("{}::{}", ident, name.value());
 				types.push((name, ParseData::Struct {
-					name: Some(LitStr::new(&struct_name, Span::call_site())),
+					name: Some(struct_name.to_lit_str()),
 					fields
 				}));
 			},
@@ -178,13 +178,16 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 					.map(|(name, mut data)| {
 						Ok(match (&attrs.tag, &attrs.content, attrs.untagged) {
 							// externally tagged (default)
-							(None, None, false) => ParseData::Struct {
-								name: None,
-								fields: vec![ParseDataField {
-									name,
-									doc: Vec::new(),
-									ty: TypeOrInline::Inline(data)
-								}]
+							(None, None, false) => {
+								let struct_name = format!("{}::{}::ExtTagWrapper", ident, name.value());
+								ParseData::Struct {
+									name: Some(struct_name.to_lit_str()),
+									fields: vec![ParseDataField {
+										name,
+										doc: Vec::new(),
+										ty: TypeOrInline::Inline(data)
+									}]
+								}
 							},
 							// internally tagged
 							(Some(tag), None, false) => {
@@ -202,20 +205,23 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 								data
 							},
 							// adjacently tagged
-							(Some(tag), Some(content), false) => ParseData::Struct {
-								name: None,
-								fields: vec![
-									ParseDataField {
-										name: tag.clone(),
-										doc: Vec::new(),
-										ty: TypeOrInline::Inline(ParseData::Enum(vec![name]))
-									},
-									ParseDataField {
-										name: content.clone(),
-										doc: Vec::new(),
-										ty: TypeOrInline::Inline(data)
-									},
-								]
+							(Some(tag), Some(content), false) => {
+								let struct_name = format!("{}::{}::AdjTagWrapper", ident, name.value());
+								ParseData::Struct {
+									name: Some(struct_name.to_lit_str()),
+									fields: vec![
+										ParseDataField {
+											name: tag.clone(),
+											doc: Vec::new(),
+											ty: TypeOrInline::Inline(ParseData::Enum(vec![name]))
+										},
+										ParseDataField {
+											name: content.clone(),
+											doc: Vec::new(),
+											ty: TypeOrInline::Inline(data)
+										},
+									]
+								}
 							},
 							// untagged
 							(None, None, true) => data,

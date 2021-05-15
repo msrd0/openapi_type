@@ -38,13 +38,7 @@ test_type!(EnumDoc = {
 	"title": "EnumDoc",
 	"description": "Very cool enum!",
 	"oneOf": [{
-		"type": "object",
-		"properties": {
-			"Message": {
-				"$ref": "#/components/schemas/EnumDoc__Message"
-			}
-		},
-		"required": ["Message"]
+		"$ref": "#/components/schemas/EnumDoc__Message__ExtTagWrapper"
 	}, {
 		"type": "string",
 		"enum": ["Error"]
@@ -60,6 +54,16 @@ test_type!(EnumDoc = {
 			}
 		},
 		"required": ["text"]
+	},
+	"EnumDoc__Message__ExtTagWrapper": {
+		"title": "EnumDoc::Message::ExtTagWrapper",
+		"type": "object",
+		"properties": {
+			"Message": {
+				"$ref": "#/components/schemas/EnumDoc__Message"
+			}
+		},
+		"required": ["Message"]
 	}
 });
 

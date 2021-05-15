@@ -18,7 +18,11 @@ impl ParseData {
 		match self {
 			Self::Struct { name, fields } => gen_struct(name.as_ref(), fields),
 			Self::Enum(variants) => gen_enum(variants),
-			Self::Alternatives(alt) => gen_alt(alt),
+			Self::Alternatives {
+				alternatives,
+				discriminator,
+				mapping
+			} => gen_alt(alternatives, discriminator.as_ref(), mapping),
 			Self::Unit => gen_unit()
 		}
 	}
@@ -114,8 +118,16 @@ fn gen_enum(variants: &[LitStr]) -> TokenStream {
 	}
 }
 
-fn gen_alt(alt: &[ParseData]) -> TokenStream {
+fn gen_alt(alt: &[ParseData], discriminator: Option<&LitStr>, mapping: &[(LitStr, LitStr)]) -> TokenStream {
 	let openapi = path!(::openapi_type::openapi);
+
+	let discriminator = match discriminator {
+		Some(prop) => quote!(::core::option::Option::Some(#prop)),
+		None => quote!(::core::option::Option::None)
+	};
+	let mapping_key = mapping.iter().map(|(key, _)| key);
+	let mapping_val = mapping.iter().map(|(_, val)| val);
+
 	let schema = alt.iter().map(|data| data.gen_schema());
 	let index = alt.iter().enumerate().map(|(i, _)| i);
 	quote! {
@@ -145,11 +157,26 @@ fn gen_alt(alt: &[ParseData]) -> TokenStream {
 				}
 			});)*
 
-			::openapi_type::OpenapiSchema::new(
+			let mut schema = ::openapi_type::OpenapiSchema::new(
 				#openapi::SchemaKind::OneOf {
 					one_of: alternatives
 				}
-			)
+			);
+			schema.discriminator = #discriminator.map(|prop_name: &::core::primitive::str| {
+				let mut mapping = <::openapi_type::indexmap::IndexMap<
+					::std::string::String, ::std::string::String
+				>>::new();
+				#(mapping.insert(
+					::std::string::String::from(#mapping_key),
+					::std::string::String::from(#mapping_val)
+				);)*
+				#openapi::Discriminator {
+					property_name: ::std::string::String::from(prop_name),
+					mapping,
+					extensions: ::std::default::Default::default()
+				}
+			});
+			schema
 		}
 	}
 }

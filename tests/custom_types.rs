@@ -181,10 +181,18 @@ enum EnumInternallyTagged {
 // TODO the Success variant should probably be $ref-ed
 test_type!(EnumInternallyTagged = {
 	"title": "EnumInternallyTagged",
+	"discriminator": {
+		"propertyName": "ty",
+		"mapping": {
+			"Success": "EnumInternallyTagged__Success",
+			"Empty": "EnumInternallyTagged_unit_variants",
+			"Error": "EnumInternallyTagged_unit_variants"
+		}
+	},
 	"oneOf": [{
 		"$ref": "#/components/schemas/EnumInternallyTagged__Success"
 	}, {
-		"$ref": "#/components/schemas/EnumInternallyTagged_oneOf_1"
+		"$ref": "#/components/schemas/EnumInternallyTagged_unit_variants"
 	}]
 }, {
 	"EnumInternallyTagged__Success": {
@@ -201,7 +209,8 @@ test_type!(EnumInternallyTagged = {
 		},
 		"required": ["value", "ty"]
 	},
-	"EnumInternallyTagged_oneOf_1": {
+	"EnumInternallyTagged_unit_variants": {
+		"title": "EnumInternallyTagged_unit_variants",
 		"type": "object",
 		"properties": {
 			"ty": {
@@ -222,10 +231,18 @@ enum EnumAdjacentlyTagged {
 }
 test_type!(EnumAdjacentlyTagged = {
 	"title": "EnumAdjacentlyTagged",
+	"discriminator": {
+		"propertyName": "ty",
+		"mapping": {
+			"Success": "EnumAdjacentlyTagged__Success__AdjTagWrapper",
+			"Empty": "EnumAdjacentlyTagged_unit_variants",
+			"Error": "EnumAdjacentlyTagged_unit_variants"
+		}
+	},
 	"oneOf": [{
 		"$ref": "#/components/schemas/EnumAdjacentlyTagged__Success__AdjTagWrapper"
 	}, {
-		"$ref": "#/components/schemas/EnumAdjacentlyTagged_oneOf_1"
+		"$ref": "#/components/schemas/EnumAdjacentlyTagged_unit_variants"
 	}]
 }, {
 	"EnumAdjacentlyTagged__Success": {
@@ -252,7 +269,8 @@ test_type!(EnumAdjacentlyTagged = {
 		},
 		"required": ["ty", "ct"]
 	},
-	"EnumAdjacentlyTagged_oneOf_1": {
+	"EnumAdjacentlyTagged_unit_variants": {
+		"title": "EnumAdjacentlyTagged_unit_variants",
 		"type": "object",
 		"properties": {
 			"ty": {

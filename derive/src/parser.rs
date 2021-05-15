@@ -27,7 +27,11 @@ pub(super) enum ParseData {
 		fields: Vec<ParseDataField>
 	},
 	Enum(Vec<LitStr>),
-	Alternatives(Vec<ParseData>),
+	Alternatives {
+		alternatives: Vec<ParseData>,
+		discriminator: Option<LitStr>,
+		mapping: Vec<(LitStr, LitStr)>
+	},
 	Unit
 }
 
@@ -151,16 +155,19 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 	} else {
 		match (&attrs.tag, &attrs.content, attrs.untagged) {
 			// externally tagged (default)
-			(None, None, false) => Some(ParseData::Enum(strings)),
+			(None, None, false) => Some(ParseData::Enum(strings.clone())),
 			// internally tagged or adjacently tagged
-			(Some(tag), _, false) => Some(ParseData::Struct {
-				name: None,
-				fields: vec![ParseDataField {
-					name: tag.clone(),
-					doc: Vec::new(),
-					ty: TypeOrInline::Inline(ParseData::Enum(strings))
-				}]
-			}),
+			(Some(tag), _, false) => {
+				let struct_name = format!("{}_unit_variants", ident);
+				Some(ParseData::Struct {
+					name: Some(struct_name.to_lit_str()),
+					fields: vec![ParseDataField {
+						name: tag.clone(),
+						doc: Vec::new(),
+						ty: TypeOrInline::Inline(ParseData::Enum(strings.clone()))
+					}]
+				})
+			},
 			// untagged
 			(None, None, true) => Some(ParseData::Unit),
 			// unknown
@@ -168,82 +175,149 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 		}
 	};
 
-	let data_types =
-		if types.is_empty() {
-			None
-		} else {
-			Some(ParseData::Alternatives(
-				types
-					.into_iter()
-					.map(|(name, mut data)| {
-						Ok(match (&attrs.tag, &attrs.content, attrs.untagged) {
-							// externally tagged (default)
-							(None, None, false) => {
-								let struct_name = format!("{}::{}::ExtTagWrapper", ident, name.value());
-								ParseData::Struct {
-									name: Some(struct_name.to_lit_str()),
-									fields: vec![ParseDataField {
-										name,
-										doc: Vec::new(),
-										ty: TypeOrInline::Inline(data)
-									}]
-								}
-							},
-							// internally tagged
-							(Some(tag), None, false) => {
-								match &mut data {
-									ParseData::Struct { fields, .. } => fields.push(ParseDataField {
-										name: tag.clone(),
-										doc: Vec::new(),
-										ty: TypeOrInline::Inline(ParseData::Enum(vec![name]))
-									}),
-									_ => return Err(syn::Error::new(
-										tag.span(),
-										"#[derive(OpenapiType)] does not support tuple variants on internally tagged enums"
-									))
-								};
-								data
-							},
-							// adjacently tagged
-							(Some(tag), Some(content), false) => {
-								let struct_name = format!("{}::{}::AdjTagWrapper", ident, name.value());
-								ParseData::Struct {
-									name: Some(struct_name.to_lit_str()),
-									fields: vec![
-										ParseDataField {
-											name: tag.clone(),
-											doc: Vec::new(),
-											ty: TypeOrInline::Inline(ParseData::Enum(vec![name]))
-										},
-										ParseDataField {
-											name: content.clone(),
-											doc: Vec::new(),
-											ty: TypeOrInline::Inline(data)
-										},
-									]
-								}
-							},
-							// untagged
-							(None, None, true) => data,
-							// unknown
-							_ => return Err(syn::Error::new(Span::call_site(), "Unknown enum representation"))
-						})
-					})
-					.collect::<syn::Result<Vec<_>>>()?
-			))
+	let data_types = if types.is_empty() {
+		None
+	} else {
+		let (discriminator, mapping) = match (&attrs.tag, &attrs.content, attrs.untagged) {
+			// externally tagged (default)
+			(None, None, false) => (None, Default::default()),
+			// untagged
+			(None, None, true) => (None, Default::default()),
+			// internally tagged
+			(Some(tag), None, false) => {
+				let mut mapping = Vec::new();
+				for (name, data) in &types {
+					if let ParseData::Struct {
+						name: Some(struct_name), ..
+					} = data
+					{
+						let ref_name = struct_name.value().replace(|c: char| !c.is_alphanumeric(), "_");
+						mapping.push((name.clone(), ref_name.to_lit_str()));
+					}
+				}
+				if let Some(ParseData::Struct {
+					name: Some(struct_name), ..
+				}) = &data_strings
+				{
+					for name in strings {
+						mapping.push((name.clone(), struct_name.clone()));
+					}
+				}
+				(Some(tag.clone()), mapping)
+			},
+			// adjacently tagged
+			(Some(tag), Some(_), false) => {
+				let mut mapping = Vec::new();
+				for (name, _) in &types {
+					let ref_name = format!("{}__{}__AdjTagWrapper", ident, name.value());
+					mapping.push((name.clone(), ref_name.to_lit_str()));
+				}
+				if let Some(ParseData::Struct {
+					name: Some(struct_name), ..
+				}) = &data_strings
+				{
+					for name in strings {
+						mapping.push((name.clone(), struct_name.clone()));
+					}
+				}
+				(Some(tag.clone()), mapping)
+			},
+			// unknown would've errored before
+			_ => unreachable!()
 		};
+		let alternatives = types
+			.into_iter()
+			.map(|(name, mut data)| {
+				Ok(match (&attrs.tag, &attrs.content, attrs.untagged) {
+					// externally tagged (default)
+					(None, None, false) => {
+						let struct_name = format!("{}::{}::ExtTagWrapper", ident, name.value());
+						ParseData::Struct {
+							name: Some(struct_name.to_lit_str()),
+							fields: vec![ParseDataField {
+								name,
+								doc: Vec::new(),
+								ty: TypeOrInline::Inline(data)
+							}]
+						}
+					},
+					// internally tagged
+					(Some(tag), None, false) => {
+						match &mut data {
+							ParseData::Struct { fields, .. } => fields.push(ParseDataField {
+								name: tag.clone(),
+								doc: Vec::new(),
+								ty: TypeOrInline::Inline(ParseData::Enum(vec![name]))
+							}),
+							_ => {
+								return Err(syn::Error::new(
+									tag.span(),
+									"#[derive(OpenapiType)] does not support tuple variants on internally tagged enums"
+								))
+							},
+						};
+						data
+					},
+					// adjacently tagged
+					(Some(tag), Some(content), false) => {
+						let struct_name = format!("{}::{}::AdjTagWrapper", ident, name.value());
+						ParseData::Struct {
+							name: Some(struct_name.to_lit_str()),
+							fields: vec![
+								ParseDataField {
+									name: tag.clone(),
+									doc: Vec::new(),
+									ty: TypeOrInline::Inline(ParseData::Enum(vec![name]))
+								},
+								ParseDataField {
+									name: content.clone(),
+									doc: Vec::new(),
+									ty: TypeOrInline::Inline(data)
+								},
+							]
+						}
+					},
+					// untagged
+					(None, None, true) => data,
+					// unknown
+					_ => return Err(syn::Error::new(Span::call_site(), "Unknown enum representation"))
+				})
+			})
+			.collect::<syn::Result<Vec<_>>>()?;
+		Some(ParseData::Alternatives {
+			alternatives,
+			discriminator,
+			mapping
+		})
+	};
 
 	match (data_strings, data_types) {
 		// only variants without fields
 		(Some(data), None) => Ok(data),
 		// only one variant with fields
-		(None, Some(ParseData::Alternatives(mut alt))) if alt.len() == 1 => Ok(alt.remove(0)),
+		(
+			None,
+			Some(ParseData::Alternatives {
+				alternatives: mut alt, ..
+			})
+		) if alt.len() == 1 => Ok(alt.remove(0)),
 		// only variants with fields
 		(None, Some(data)) => Ok(data),
 		// variants with and without fields
-		(Some(data), Some(ParseData::Alternatives(mut alt))) => {
+		(
+			Some(data),
+			Some(ParseData::Alternatives {
+				alternatives: mut alt,
+				discriminator,
+				mapping
+			})
+		) => {
 			alt.push(data);
-			Ok(ParseData::Alternatives(alt))
+			Ok(ParseData::Alternatives {
+				alternatives: alt,
+				discriminator,
+				mapping
+			})
 		},
 		// no variants
 		(None, None) => Err(syn::Error::new(

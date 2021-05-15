@@ -75,7 +75,7 @@ mod impls;
 pub mod private;
 
 use indexmap::IndexMap;
-use openapi::{Schema, SchemaData, SchemaKind};
+use openapi::{Discriminator, Schema, SchemaData, SchemaKind};
 
 /// This struct is used to generate the OpenAPI specification for a particular type. It is already
 /// made available for all primitives and some other types from the rust standard library, and
@@ -97,6 +97,8 @@ pub struct OpenapiSchema {
 	pub nullable: bool,
 	/// The actual OpenAPI schema.
 	pub schema: SchemaKind,
+	/// An optional discriminator to go along with the schema for enums with non-unit variants.
+	pub discriminator: Option<Discriminator>,
 	/// Other schemas that this schema depends on. They will be included in the final OpenAPI Spec
 	/// along with this schema.
 	pub dependencies: IndexMap<String, OpenapiSchema>
@@ -110,6 +112,7 @@ impl OpenapiSchema {
 			description: None,
 			nullable: false,
 			schema,
+			discriminator: None,
 			dependencies: IndexMap::new()
 		}
 	}
@@ -121,6 +124,7 @@ impl OpenapiSchema {
 				nullable: self.nullable,
 				title: self.name,
 				description: self.description,
+				discriminator: self.discriminator,
 				..Default::default()
 			},
 			schema_kind: self.schema

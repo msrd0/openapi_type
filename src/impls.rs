@@ -41,6 +41,7 @@ impl_openapi_type!(Value => {
 		description: None,
 		name: None,
 		schema: SchemaKind::Any(Default::default()),
+		discriminator: None,
 		dependencies: Default::default()
 	}
 });
@@ -134,6 +135,7 @@ impl_openapi_type!(Option<T: OpenapiType> => {
 		name: None,
 		description: None,
 		schema,
+		discriminator: None,
 		dependencies
 	}
 });
@@ -164,6 +166,7 @@ fn array_schema<T: OpenapiType>(unique_items: bool) -> OpenapiSchema {
 			max_items: None,
 			unique_items
 		})),
+		discriminator: None,
 		dependencies
 	}
 }
@@ -216,6 +219,7 @@ fn map_schema<K: OpenapiType, T: OpenapiType>() -> OpenapiSchema {
 			additional_properties: Some(AdditionalProperties::Schema(items)),
 			..Default::default()
 		})),
+		discriminator: None,
 		dependencies
 	}
 }

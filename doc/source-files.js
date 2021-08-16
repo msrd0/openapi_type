@@ -1,7 +1,7 @@
 var N = null;var sourcesIndex = {};
 sourcesIndex["chrono"] = {"name":"","dirs":[{"name":"format","files":["mod.rs","parse.rs","parsed.rs","scan.rs","strftime.rs"]},{"name":"naive","files":["date.rs","datetime.rs","internals.rs","isoweek.rs","time.rs"]},{"name":"offset","files":["fixed.rs","mod.rs","utc.rs"]}],"files":["date.rs","datetime.rs","div.rs","lib.rs","oldtime.rs","round.rs"]};
 sourcesIndex["dtoa"] = {"name":"","files":["diyfp.rs","dtoa.rs","lib.rs"]};
-sourcesIndex["hashbrown"] = {"name":"","dirs":[{"name":"external_trait_impls","files":["mod.rs"]},{"name":"raw","files":["bitmask.rs","mod.rs","sse2.rs"]}],"files":["lib.rs","macros.rs","map.rs","scopeguard.rs","set.rs"]};
+sourcesIndex["hashbrown"] = {"name":"","dirs":[{"name":"external_trait_impls","files":["mod.rs"]},{"name":"raw","files":["alloc.rs","bitmask.rs","mod.rs","sse2.rs"]}],"files":["lib.rs","macros.rs","map.rs","scopeguard.rs","set.rs"]};
 sourcesIndex["indexmap"] = {"name":"","dirs":[{"name":"map","dirs":[{"name":"core","files":["raw.rs"]}],"files":["core.rs"]}],"files":["equivalent.rs","lib.rs","macros.rs","map.rs","mutable_keys.rs","serde.rs","serde_seq.rs","set.rs","util.rs"]};
 sourcesIndex["itoa"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["linked_hash_map"] = {"name":"","files":["lib.rs"]};

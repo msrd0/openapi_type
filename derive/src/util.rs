@@ -40,7 +40,7 @@ impl ToLitStr for Ident {
 
 impl ToLitStr for String {
 	fn to_lit_str(&self) -> LitStr {
-		LitStr::new(&self, Span::call_site())
+		LitStr::new(self, Span::call_site())
 	}
 }
 

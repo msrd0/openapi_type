@@ -7,7 +7,7 @@
 		<img alt="coverage report" src="https://msrd0.github.io/openapi_type/coverage.svg"/>
 	</a>
 	<a href="https://msrd0.github.io/openapi_type/doc/openapi_type/index.html">
-		<img alt="rustdoc" src="https://img.shields.io/badge/docs-master-blue.svg"/>
+		<img alt="rustdoc" src="https://img.shields.io/badge/docs-main-blue.svg"/>
 	</a>
     <a href="https://blog.rust-lang.org/2020/04/23/Rust-1.43.0.html">
         <img alt="Rust 1.43+" src="https://img.shields.io/badge/rustc-1.43+-orange.svg"/>

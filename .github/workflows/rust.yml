@@ -2,8 +2,7 @@ name: Rust
 
 on:
   push:
-    branches:
-      - master
+    branches: [main]
   pull_request:
 
 jobs:
@@ -169,7 +168,7 @@ jobs:
   pages:
     runs-on: ubuntu-20.04
     needs: [coverage, doc]
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v2
         with:

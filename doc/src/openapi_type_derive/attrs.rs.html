@@ -124,6 +124,11 @@
 <span id="122">122</span>
 <span id="123">123</span>
 <span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
 </pre><pre class="rust">
 <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::util::ExpectLit</span>;
 <span class="kw">use</span> <span class="ident">syn</span>::{<span class="ident">punctuated::Punctuated</span>, <span class="ident">spanned::Spanned</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">Attribute</span>, <span class="ident">LitStr</span>, <span class="ident">Meta</span>, <span class="ident">Token</span>};
@@ -199,6 +204,8 @@
 	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="ident">rename</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">LitStr</span><span class="op">&gt;</span>,
 	<span class="doccomment">/// This field can be skipped during either serialization or deserialization.</span>
 	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="ident">nullable</span>: <span class="ident">bool</span>,
+	<span class="doccomment">/// This field&#39;s fields will be flattened into this field.</span>
+	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="ident">flatten</span>: <span class="ident">bool</span>,
 	<span class="doccomment">/// This field will always be skipped during serialization.</span>
 	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="ident">skip_serializing</span>: <span class="ident">bool</span>,
 	<span class="doccomment">/// This field will always be skipped during deserialization.</span>
@@ -222,7 +229,10 @@
 					<span class="self">self</span>.<span class="ident">nullable</span> <span class="op">=</span> <span class="bool-val">true</span>;
 				},
 
-				<span class="comment">// TODO Meta::Path(path) if path.is_ident(&quot;flatten&quot;)</span>
+				<span class="ident">Meta::Path</span>(<span class="ident">path</span>) <span class="kw">if</span> <span class="ident">path</span>.<span class="ident">is_ident</span>(<span class="string">&quot;flatten&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> {
+					<span class="self">self</span>.<span class="ident">flatten</span> <span class="op">=</span> <span class="bool-val">true</span>;
+				},
+
 				<span class="ident">Meta::Path</span>(<span class="ident">path</span>) <span class="kw">if</span> <span class="ident">path</span>.<span class="ident">is_ident</span>(<span class="string">&quot;skip&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> {
 					<span class="self">self</span>.<span class="ident">nullable</span> <span class="op">=</span> <span class="bool-val">true</span>;
 					<span class="self">self</span>.<span class="ident">skip_serializing</span> <span class="op">=</span> <span class="bool-val">true</span>;

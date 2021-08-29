@@ -261,6 +261,13 @@
 <span id="259">259</span>
 <span id="260">260</span>
 <span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
 </pre><pre class="rust">
 <span class="kw">use</span> <span class="kw">crate</span>::{
 	<span class="ident">attrs</span>::{<span class="ident">parse_doc_attr</span>, <span class="ident">ContainerAttributes</span>, <span class="ident">FieldAttributes</span>},
@@ -281,7 +288,8 @@
 <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">struct</span> <span class="ident">ParseDataField</span> {
 	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="ident">name</span>: <span class="ident">LitStr</span>,
 	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="ident">doc</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="ident">ty</span>: <span class="ident">TypeOrInline</span>
+	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="ident">ty</span>: <span class="ident">TypeOrInline</span>,
+	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="ident">flatten</span>: <span class="ident">bool</span>
 }
 
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
@@ -360,7 +368,8 @@
 		<span class="ident">fields</span>.<span class="ident">push</span>(<span class="ident">ParseDataField</span> {
 			<span class="ident">name</span>,
 			<span class="ident">doc</span>,
-			<span class="ident">ty</span>: <span class="ident">TypeOrInline::Type</span>(<span class="ident">ty</span>)
+			<span class="ident">ty</span>: <span class="ident">TypeOrInline::Type</span>(<span class="ident">ty</span>),
+			<span class="ident">flatten</span>: <span class="ident">attrs</span>.<span class="ident">flatten</span>
 		});
 	}
 	<span class="prelude-val">Ok</span>(<span class="ident">fields</span>)
@@ -420,7 +429,8 @@
 				<span class="ident">fields</span>: <span class="macro">vec!</span>[<span class="ident">ParseDataField</span> {
 					<span class="ident">name</span>: <span class="ident">tag</span>.<span class="ident">clone</span>(),
 					<span class="ident">doc</span>: <span class="ident">Vec::new</span>(),
-					<span class="ident">ty</span>: <span class="ident">TypeOrInline::Inline</span>(<span class="ident">ParseData::Enum</span>(<span class="ident">strings</span>))
+					<span class="ident">ty</span>: <span class="ident">TypeOrInline::Inline</span>(<span class="ident">ParseData::Enum</span>(<span class="ident">strings</span>)),
+					<span class="ident">flatten</span>: <span class="bool-val">false</span>
 				}]
 			}),
 			<span class="comment">// untagged</span>
@@ -447,7 +457,8 @@
 									<span class="ident">fields</span>: <span class="macro">vec!</span>[<span class="ident">ParseDataField</span> {
 										<span class="ident">name</span>,
 										<span class="ident">doc</span>: <span class="ident">Vec::new</span>(),
-										<span class="ident">ty</span>: <span class="ident">TypeOrInline::Inline</span>(<span class="ident">data</span>)
+										<span class="ident">ty</span>: <span class="ident">TypeOrInline::Inline</span>(<span class="ident">data</span>),
+										<span class="ident">flatten</span>: <span class="bool-val">false</span>
 									}]
 								}
 							},
@@ -457,7 +468,8 @@
 									<span class="ident">ParseData::Struct</span> { <span class="ident">fields</span>, .. } <span class="op">=</span><span class="op">&gt;</span> <span class="ident">fields</span>.<span class="ident">push</span>(<span class="ident">ParseDataField</span> {
 										<span class="ident">name</span>: <span class="ident">tag</span>.<span class="ident">clone</span>(),
 										<span class="ident">doc</span>: <span class="ident">Vec::new</span>(),
-										<span class="ident">ty</span>: <span class="ident">TypeOrInline::Inline</span>(<span class="ident">ParseData::Enum</span>(<span class="macro">vec!</span>[<span class="ident">name</span>]))
+										<span class="ident">ty</span>: <span class="ident">TypeOrInline::Inline</span>(<span class="ident">ParseData::Enum</span>(<span class="macro">vec!</span>[<span class="ident">name</span>])),
+										<span class="ident">flatten</span>: <span class="bool-val">false</span>
 									}),
 									<span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">syn::Error::new</span>(
 										<span class="ident">tag</span>.<span class="ident">span</span>(),
@@ -475,12 +487,14 @@
 										<span class="ident">ParseDataField</span> {
 											<span class="ident">name</span>: <span class="ident">tag</span>.<span class="ident">clone</span>(),
 											<span class="ident">doc</span>: <span class="ident">Vec::new</span>(),
-											<span class="ident">ty</span>: <span class="ident">TypeOrInline::Inline</span>(<span class="ident">ParseData::Enum</span>(<span class="macro">vec!</span>[<span class="ident">name</span>]))
+											<span class="ident">ty</span>: <span class="ident">TypeOrInline::Inline</span>(<span class="ident">ParseData::Enum</span>(<span class="macro">vec!</span>[<span class="ident">name</span>])),
+											<span class="ident">flatten</span>: <span class="bool-val">false</span>
 										},
 										<span class="ident">ParseDataField</span> {
 											<span class="ident">name</span>: <span class="ident">content</span>.<span class="ident">clone</span>(),
 											<span class="ident">doc</span>: <span class="ident">Vec::new</span>(),
-											<span class="ident">ty</span>: <span class="ident">TypeOrInline::Inline</span>(<span class="ident">data</span>)
+											<span class="ident">ty</span>: <span class="ident">TypeOrInline::Inline</span>(<span class="ident">data</span>),
+											<span class="ident">flatten</span>: <span class="bool-val">false</span>
 										},
 									]
 								}

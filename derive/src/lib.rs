@@ -8,10 +8,6 @@ use proc_macro2::TokenStream as TokenStream2;
 use quote::quote;
 use syn::{parse_macro_input, Data, DeriveInput, LitStr, TraitBound, TraitBoundModifier, TypeParamBound};
 
-// unfortunately, the serde_derive_internals crate does not make
-// `case::RenameRule` available
-mod serde_derive_internals;
-
 #[macro_use]
 mod util;
 
@@ -71,7 +67,7 @@ fn expand_openapi_type(mut input: DeriveInput) -> syn::Result<TokenStream2> {
 				paren_token: None,
 				modifier: TraitBoundModifier::None,
 				lifetimes: None,
-				path: path!(::openapi_type::OpenapiType)
+				path: path!(::openapi_type::OpenapiType),
 			}));
 		});
 		generics.split_for_impl()
@@ -81,7 +77,7 @@ fn expand_openapi_type(mut input: DeriveInput) -> syn::Result<TokenStream2> {
 	let parsed = match &input.data {
 		Data::Struct(strukt) => parse_struct(ident, strukt, &attrs)?,
 		Data::Enum(inum) => parse_enum(ident, inum, &attrs)?,
-		Data::Union(union) => parse_union(union)?
+		Data::Union(union) => parse_union(union)?,
 	};
 
 	// run the codegen

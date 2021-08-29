@@ -1,1 +1,0 @@
-../../../serde/serde_derive/src/internals/case.rs

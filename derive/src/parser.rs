@@ -1,34 +1,34 @@
 use crate::{
 	attrs::{parse_doc_attr, ContainerAttributes, FieldAttributes},
-	serde_derive_internals::case::RenameRule,
-	util::ToLitStr
+	util::ToLitStr,
 };
 use proc_macro2::{Ident, Span};
+use serde_derive_internals::attr::RenameRule;
 use syn::{
 	punctuated::Punctuated, spanned::Spanned as _, AngleBracketedGenericArguments, DataEnum, DataStruct, DataUnion, Fields,
-	FieldsNamed, GenericArgument, LitStr, PathArguments, Type, TypePath
+	FieldsNamed, GenericArgument, LitStr, PathArguments, Type, TypePath,
 };
 
 pub(super) enum TypeOrInline {
 	Type(Type),
-	Inline(ParseData)
+	Inline(ParseData),
 }
 
 pub(super) struct ParseDataField {
 	pub(super) name: LitStr,
 	pub(super) doc: Vec<String>,
-	pub(super) ty: TypeOrInline
+	pub(super) ty: TypeOrInline,
 }
 
 #[allow(dead_code)]
 pub(super) enum ParseData {
 	Struct {
 		name: Option<LitStr>,
-		fields: Vec<ParseDataField>
+		fields: Vec<ParseDataField>,
 	},
 	Enum(Vec<LitStr>),
 	Alternatives(Vec<ParseData>),
-	Unit
+	Unit,
 }
 
 fn parse_named_fields(named_fields: &FieldsNamed, rename_all: Option<&LitStr>) -> syn::Result<Vec<ParseDataField>> {
@@ -88,7 +88,7 @@ fn parse_named_fields(named_fields: &FieldsNamed, rename_all: Option<&LitStr>) -
 				colon2_token: None,
 				lt_token: Default::default(),
 				args,
-				gt_token: Default::default()
+				gt_token: Default::default(),
 			});
 			ty = Type::Path(TypePath { qself: None, path })
 		}
@@ -96,7 +96,7 @@ fn parse_named_fields(named_fields: &FieldsNamed, rename_all: Option<&LitStr>) -
 		fields.push(ParseDataField {
 			name,
 			doc,
-			ty: TypeOrInline::Type(ty)
+			ty: TypeOrInline::Type(ty),
 		});
 	}
 	Ok(fields)
@@ -108,14 +108,14 @@ pub(super) fn parse_struct(ident: &Ident, strukt: &DataStruct, attrs: &Container
 			let fields = parse_named_fields(named_fields, attrs.rename_all.as_ref())?;
 			Ok(ParseData::Struct {
 				name: Some(ident.to_lit_str()),
-				fields
+				fields,
 			})
-		},
+		}
 		Fields::Unnamed(unnamed_fields) => Err(syn::Error::new(
 			unnamed_fields.span(),
-			"#[derive(OpenapiType)] does not support tuple structs"
+			"#[derive(OpenapiType)] does not support tuple structs",
 		)),
-		Fields::Unit => Ok(ParseData::Unit)
+		Fields::Unit => Ok(ParseData::Unit),
 	}
 }
 
@@ -129,18 +129,21 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 			Fields::Named(named_fields) => {
 				let fields = parse_named_fields(named_fields, attrs.rename_all.as_ref())?;
 				let struct_name = format!("{}::{}", ident, name.value());
-				types.push((name, ParseData::Struct {
-					name: Some(struct_name.to_lit_str()),
-					fields
-				}));
-			},
+				types.push((
+					name,
+					ParseData::Struct {
+						name: Some(struct_name.to_lit_str()),
+						fields,
+					},
+				));
+			}
 			Fields::Unnamed(unnamed_fields) => {
 				return Err(syn::Error::new(
 					unnamed_fields.span(),
-					"#[derive(OpenapiType)] does not support tuple variants"
+					"#[derive(OpenapiType)] does not support tuple variants",
 				))
-			},
-			Fields::Unit => strings.push(name)
+			}
+			Fields::Unit => strings.push(name),
 		}
 	}
 
@@ -156,13 +159,13 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 				fields: vec![ParseDataField {
 					name: tag.clone(),
 					doc: Vec::new(),
-					ty: TypeOrInline::Inline(ParseData::Enum(strings))
-				}]
+					ty: TypeOrInline::Inline(ParseData::Enum(strings)),
+				}],
 			}),
 			// untagged
 			(None, None, true) => Some(ParseData::Unit),
 			// unknown
-			_ => return Err(syn::Error::new(Span::call_site(), "Unknown enum representation"))
+			_ => return Err(syn::Error::new(Span::call_site(), "Unknown enum representation")),
 		}
 	};
 
@@ -183,25 +186,25 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 									fields: vec![ParseDataField {
 										name,
 										doc: Vec::new(),
-										ty: TypeOrInline::Inline(data)
-									}]
+										ty: TypeOrInline::Inline(data),
+									}],
 								}
-							},
+							}
 							// internally tagged
 							(Some(tag), None, false) => {
 								match &mut data {
 									ParseData::Struct { fields, .. } => fields.push(ParseDataField {
 										name: tag.clone(),
 										doc: Vec::new(),
-										ty: TypeOrInline::Inline(ParseData::Enum(vec![name]))
+										ty: TypeOrInline::Inline(ParseData::Enum(vec![name])),
 									}),
 									_ => return Err(syn::Error::new(
 										tag.span(),
-										"#[derive(OpenapiType)] does not support tuple variants on internally tagged enums"
-									))
+										"#[derive(OpenapiType)] does not support tuple variants on internally tagged enums",
+									)),
 								};
 								data
-							},
+							}
 							// adjacently tagged
 							(Some(tag), Some(content), false) => {
 								let struct_name = format!("{}::{}::AdjTagWrapper", ident, name.value());
@@ -211,23 +214,23 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 										ParseDataField {
 											name: tag.clone(),
 											doc: Vec::new(),
-											ty: TypeOrInline::Inline(ParseData::Enum(vec![name]))
+											ty: TypeOrInline::Inline(ParseData::Enum(vec![name])),
 										},
 										ParseDataField {
 											name: content.clone(),
 											doc: Vec::new(),
-											ty: TypeOrInline::Inline(data)
+											ty: TypeOrInline::Inline(data),
 										},
-									]
+									],
 								}
-							},
+							}
 							// untagged
 							(None, None, true) => data,
 							// unknown
-							_ => return Err(syn::Error::new(Span::call_site(), "Unknown enum representation"))
+							_ => return Err(syn::Error::new(Span::call_site(), "Unknown enum representation")),
 						})
 					})
-					.collect::<syn::Result<Vec<_>>>()?
+					.collect::<syn::Result<Vec<_>>>()?,
 			))
 		};
 
@@ -242,20 +245,20 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 		(Some(data), Some(ParseData::Alternatives(mut alt))) => {
 			alt.push(data);
 			Ok(ParseData::Alternatives(alt))
-		},
+		}
 		// no variants
 		(None, None) => Err(syn::Error::new(
 			inum.brace_token.span,
-			"#[derive(OpenapiType)] does not support enums with no variants"
+			"#[derive(OpenapiType)] does not support enums with no variants",
 		)),
 		// data_types always produces Alternatives
-		_ => unreachable!()
+		_ => unreachable!(),
 	}
 }
 
 pub(super) fn parse_union(union: &DataUnion) -> syn::Result<ParseData> {
 	Err(syn::Error::new(
 		union.union_token.span(),
-		"#[derive(OpenapiType)] cannot be used on unions"
+		"#[derive(OpenapiType)] cannot be used on unions",
 	))
 }

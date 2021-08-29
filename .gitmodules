@@ -1,3 +1,0 @@
-[submodule "serde"]
-	path = serde
-	url = https://github.com/serde-rs/serde

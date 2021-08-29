@@ -1,4 +1,4 @@
-# openapi_type [![Rust 1.43+](https://img.shields.io/badge/rustc-1.43+-orange.svg)](https://blog.rust-lang.org/2020/04/23/Rust-1.43.0.html) [![License Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0) [![GitHub](https://img.shields.io/badge/Code-On%20Github-blue?logo=GitHub)](https://github.com/msrd0/openapi_type)
+# openapi_type [![Rust 1.49+](https://img.shields.io/badge/rustc-1.49+-orange.svg)](https://blog.rust-lang.org/2020/12/31/Rust-1.49.0.html) [![License Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0) [![GitHub](https://img.shields.io/badge/Code-On%20Github-blue?logo=GitHub)](https://github.com/msrd0/openapi_type)
 
 This crate gives static type information for primitives and commonly used types from the standard
 library and a few other commonly used libraries like `chrono` and `uuid`. Also, it provides a

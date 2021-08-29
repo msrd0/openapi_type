@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        toolchain: [1.43, stable, beta]
+        toolchain: [1.49, stable, beta]
         nightly: [false]
         include:
           - toolchain: nightly
@@ -45,13 +45,13 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: recursive
-      - uses: dtolnay/rust-toolchain@1.52.0
+      - uses: dtolnay/rust-toolchain@1.54.0
       - uses: actions/cache@v2
         with:
           path: |
             ~/.cargo
             target
-          key: ${{ runner.os }}-cargo-1.52 }}
+          key: ${{ runner.os }}-cargo-1.54
       - run: cargo test -- trybuild
         env:
           RUST_BACKTRACE: 1
@@ -120,7 +120,7 @@ jobs:
             ~/.cargo/git
             ~/.cargo/registry
             target
-          key: ${{ runner.os }}-cargo-${{ steps.rust-version.outputs.version }}-tarpaulin-${{ steps.tarpaulin-version.outputs.version }} }}
+          key: ${{ runner.os }}-cargo-${{ steps.rust-version.outputs.version }}-tarpaulin-${{ steps.tarpaulin-version.outputs.version }}
       - name: Install Tarpaulin
         run: |
           test -e ~/.cargo/bin/cargo-tarpaulin || cargo install cargo-tarpaulin --version ${{ steps.tarpaulin-version.outputs.version }}
@@ -157,7 +157,7 @@ jobs:
           path: |
             ~/.cargo
             target
-          key: ${{ runner.os }}-cargo-doc }}
+          key: ${{ runner.os }}-cargo-doc
       - run: cargo doc --workspace --all-features
       - run: tar cfJ rustdoc.tar.xz target/doc/
       - uses: actions/upload-artifact@v2

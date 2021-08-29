@@ -5,4 +5,4 @@ error[E0277]: the trait bound `Bar: OpenapiType` is not satisfied
   |          ^^^^^^^^^^^ the trait `OpenapiType` is not implemented for `Bar`
   |
   = note: required by `schema`
-  = note: this error originates in a derive macro (in Nightly builds, run with -Z macro-backtrace for more info)
+  = note: this error originates in the derive macro `OpenapiType` (in Nightly builds, run with -Z macro-backtrace for more info)

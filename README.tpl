@@ -9,8 +9,8 @@
 	<a href="https://msrd0.github.io/openapi_type/doc/openapi_type/index.html">
 		<img alt="rustdoc" src="https://img.shields.io/badge/docs-main-blue.svg"/>
 	</a>
-    <a href="https://blog.rust-lang.org/2020/04/23/Rust-1.43.0.html">
-        <img alt="Rust 1.43+" src="https://img.shields.io/badge/rustc-1.43+-orange.svg"/>
+    <a href="https://blog.rust-lang.org/2020/12/31/Rust-1.49.0.html">
+        <img alt="Rust 1.49+" src="https://img.shields.io/badge/rustc-1.49+-orange.svg"/>
     </a>
 	<a href="https://www.apache.org/licenses/LICENSE-2.0">
 		<img alt="License Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-blue.svg"/>

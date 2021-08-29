@@ -72,6 +72,8 @@ pub(super) struct FieldAttributes {
 	pub(super) rename: Option<LitStr>,
 	/// This field can be skipped during either serialization or deserialization.
 	pub(super) nullable: bool,
+	/// This field's fields will be flattened into this field.
+	pub(super) flatten: bool,
 	/// This field will always be skipped during serialization.
 	pub(super) skip_serializing: bool,
 	/// This field will always be skipped during deserialization.
@@ -95,7 +97,10 @@ impl FieldAttributes {
 					self.nullable = true;
 				},
 
-				// TODO Meta::Path(path) if path.is_ident("flatten")
+				Meta::Path(path) if path.is_ident("flatten") => {
+					self.flatten = true;
+				},
+
 				Meta::Path(path) if path.is_ident("skip") => {
 					self.nullable = true;
 					self.skip_serializing = true;

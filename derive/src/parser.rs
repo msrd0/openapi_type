@@ -17,7 +17,8 @@ pub(super) enum TypeOrInline {
 pub(super) struct ParseDataField {
 	pub(super) name: LitStr,
 	pub(super) doc: Vec<String>,
-	pub(super) ty: TypeOrInline
+	pub(super) ty: TypeOrInline,
+	pub(super) flatten: bool
 }
 
 #[allow(dead_code)]
@@ -96,7 +97,8 @@ fn parse_named_fields(named_fields: &FieldsNamed, rename_all: Option<&LitStr>) -
 		fields.push(ParseDataField {
 			name,
 			doc,
-			ty: TypeOrInline::Type(ty)
+			ty: TypeOrInline::Type(ty),
+			flatten: attrs.flatten
 		});
 	}
 	Ok(fields)
@@ -156,7 +158,8 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 				fields: vec![ParseDataField {
 					name: tag.clone(),
 					doc: Vec::new(),
-					ty: TypeOrInline::Inline(ParseData::Enum(strings))
+					ty: TypeOrInline::Inline(ParseData::Enum(strings)),
+					flatten: false
 				}]
 			}),
 			// untagged
@@ -183,7 +186,8 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 									fields: vec![ParseDataField {
 										name,
 										doc: Vec::new(),
-										ty: TypeOrInline::Inline(data)
+										ty: TypeOrInline::Inline(data),
+										flatten: false
 									}]
 								}
 							},
@@ -193,7 +197,8 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 									ParseData::Struct { fields, .. } => fields.push(ParseDataField {
 										name: tag.clone(),
 										doc: Vec::new(),
-										ty: TypeOrInline::Inline(ParseData::Enum(vec![name]))
+										ty: TypeOrInline::Inline(ParseData::Enum(vec![name])),
+										flatten: false
 									}),
 									_ => return Err(syn::Error::new(
 										tag.span(),
@@ -211,12 +216,14 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 										ParseDataField {
 											name: tag.clone(),
 											doc: Vec::new(),
-											ty: TypeOrInline::Inline(ParseData::Enum(vec![name]))
+											ty: TypeOrInline::Inline(ParseData::Enum(vec![name])),
+											flatten: false
 										},
 										ParseDataField {
 											name: content.clone(),
 											doc: Vec::new(),
-											ty: TypeOrInline::Inline(data)
+											ty: TypeOrInline::Inline(data),
+											flatten: false
 										},
 									]
 								}

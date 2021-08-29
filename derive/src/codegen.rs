@@ -33,49 +33,65 @@ fn gen_struct(name: Option<&LitStr>, fields: &[ParseDataField]) -> TokenStream {
 		None => quote!(#option::None)
 	};
 
-	let field_name = fields.iter().map(|f| &f.name);
-	let field_doc = fields.iter().map(|f| gen_doc_option(&f.doc));
-	let field_schema = fields.iter().map(|f| match &f.ty {
-		TypeOrInline::Type(ty) => {
-			quote!(<#ty as ::openapi_type::OpenapiType>::schema())
-		},
-		TypeOrInline::Inline(data) => data.gen_schema()
+	let fields = fields.iter().map(|f| {
+		let name = &f.name;
+		let doc = gen_doc_option(&f.doc);
+		let schema = match &f.ty {
+			TypeOrInline::Type(ty) => {
+				quote!(<#ty as ::openapi_type::OpenapiType>::schema())
+			},
+			TypeOrInline::Inline(data) => data.gen_schema()
+		};
+
+		if f.flatten {
+			quote!({
+				let field_schema = #schema;
+				::openapi_type::private::flatten(
+					&mut dependencies,
+					&mut properties,
+					&mut required,
+					field_schema
+				);
+			})
+		} else {
+			quote!({
+				const FIELD_NAME: &::core::primitive::str = #name;
+				const FIELD_DOC: #option<&'static ::core::primitive::str> = #doc;
+
+				let mut field_schema = #schema;
+
+				// fields in OpenAPI are nullable by default
+				match field_schema.nullable {
+					true => field_schema.nullable = false,
+					false => required.push(::std::string::String::from(FIELD_NAME))
+				};
+
+				let field_schema = ::openapi_type::private::inline_if_unnamed(
+					&mut dependencies, field_schema, FIELD_DOC
+				);
+				let field_schema = match field_schema {
+					#openapi::ReferenceOr::Item(schema) => {
+						#openapi::ReferenceOr::Item(::std::boxed::Box::new(schema))
+					},
+					#openapi::ReferenceOr::Reference { reference } => {
+						#openapi::ReferenceOr::Reference { reference }
+					}
+				};
+
+				properties.insert(
+					::std::string::String::from(FIELD_NAME),
+					field_schema
+				);
+			})
+		}
 	});
 
 	quote! {
 		{
-			let mut properties = <::openapi_type::indexmap::IndexMap<
-				::std::string::String,
-				#openapi::ReferenceOr<::std::boxed::Box<#openapi::Schema>>
-			>>::new();
-			let mut required = <::std::vec::Vec<::std::string::String>>::new();
+			let mut properties = ::openapi_type::private::Properties::new();
+			let mut required = ::openapi_type::private::Required::new();
 
-			#({
-					const FIELD_NAME: &::core::primitive::str = #field_name;
-					const FIELD_DOC: #option<&'static ::core::primitive::str> = #field_doc;
-
-					let mut field_schema = #field_schema;
-
-					// fields in OpenAPI are nullable by default
-					match field_schema.nullable {
-						true => field_schema.nullable = false,
-						false => required.push(::std::string::String::from(FIELD_NAME))
-					};
-
-					let field_schema = match ::openapi_type::private::inline_if_unnamed(
-						&mut dependencies, field_schema, FIELD_DOC
-					) {
-						#openapi::ReferenceOr::Item(schema) =>
-							#openapi::ReferenceOr::Item(::std::boxed::Box::new(schema)),
-						#openapi::ReferenceOr::Reference { reference } =>
-							#openapi::ReferenceOr::Reference { reference }
-					};
-
-					properties.insert(
-						::std::string::String::from(FIELD_NAME),
-						field_schema
-					);
-			})*
+			#(#fields)*
 
 			let mut schema = ::openapi_type::OpenapiSchema::new(
 				#openapi::SchemaKind::Type(

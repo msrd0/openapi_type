@@ -1,8 +1,11 @@
 use crate::OpenapiSchema;
 use indexmap::IndexMap;
-use openapiv3::{ReferenceOr, Schema};
+use openapiv3::{ReferenceOr, Schema, SchemaKind, Type};
+use std::borrow::Cow;
 
 pub type Dependencies = IndexMap<String, OpenapiSchema>;
+pub type Properties = IndexMap<String, ReferenceOr<Box<Schema>>>;
+pub type Required = Vec<String>;
 
 fn add_dependencies(dependencies: &mut Dependencies, other: &mut Dependencies) {
 	while let Some((dep_name, dep_schema)) = other.pop() {
@@ -35,4 +38,42 @@ pub fn inline_if_unnamed(
 			ReferenceOr::Item(schema)
 		}
 	}
+}
+
+struct FlattenError(Cow<'static, str>);
+
+fn flatten_impl(properties: &mut Properties, required: &mut Required, schema: SchemaKind) -> Result<(), FlattenError> {
+	let mut obj = match schema {
+		SchemaKind::Type(Type::Object(obj)) => obj,
+		_ => return Err(FlattenError("Expected object".into()))
+	};
+
+	while let Some((prop_name, prop_schema)) = obj.properties.pop() {
+		if properties.contains_key(&prop_name) {
+			return Err(FlattenError("Duplicate property name".into()));
+		}
+		properties.insert(prop_name, prop_schema);
+	}
+	required.extend(obj.required.into_iter());
+
+	Ok(())
+}
+
+pub fn flatten(
+	dependencies: &mut Dependencies,
+	properties: &mut Properties,
+	required: &mut Required,
+	mut schema: OpenapiSchema
+) {
+	add_dependencies(dependencies, &mut schema.dependencies);
+	match flatten_impl(properties, required, schema.schema) {
+		Ok(_) => {},
+		Err(e) => panic!(
+			concat!(
+				"Flattening produced an error: {}\n",
+				"This is likely a bug, please open an issue: https://github.com/msrd0/openapi_type/issues"
+			),
+			e.0
+		)
+	};
 }

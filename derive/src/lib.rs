@@ -67,7 +67,7 @@ fn expand_openapi_type(mut input: DeriveInput) -> syn::Result<TokenStream2> {
 				paren_token: None,
 				modifier: TraitBoundModifier::None,
 				lifetimes: None,
-				path: path!(::openapi_type::OpenapiType),
+				path: path!(::openapi_type::OpenapiType)
 			}));
 		});
 		generics.split_for_impl()
@@ -77,7 +77,7 @@ fn expand_openapi_type(mut input: DeriveInput) -> syn::Result<TokenStream2> {
 	let parsed = match &input.data {
 		Data::Struct(strukt) => parse_struct(ident, strukt, &attrs)?,
 		Data::Enum(inum) => parse_enum(ident, inum, &attrs)?,
-		Data::Union(union) => parse_union(union)?,
+		Data::Union(union) => parse_union(union)?
 	};
 
 	// run the codegen

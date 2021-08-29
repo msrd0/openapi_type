@@ -94,6 +94,30 @@ test_type!(FieldRename = {
 });
 
 #[derive(OpenapiType)]
+struct FieldFlattenInner {
+	inner: String
+}
+#[derive(OpenapiType)]
+struct FieldFlatten {
+	outer: String,
+	#[openapi(flatten)]
+	flat: FieldFlattenInner
+}
+test_type!(FieldFlatten = {
+	"type": "object",
+	"title": "FieldFlatten",
+	"properties": {
+		"inner": {
+			"type": "string"
+		},
+		"outer": {
+			"type": "string"
+		}
+	},
+	"required": ["outer", "inner"]
+});
+
+#[derive(OpenapiType)]
 struct FieldSkip {
 	#[openapi(skip_serializing, skip_deserializing)]
 	foo: String,

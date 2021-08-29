@@ -1,9 +1,9 @@
 use crate::{
 	attrs::{parse_doc_attr, ContainerAttributes, FieldAttributes},
-	serde_derive_internals::case::RenameRule,
 	util::ToLitStr
 };
 use proc_macro2::{Ident, Span};
+use serde_derive_internals::attr::RenameRule;
 use syn::{
 	punctuated::Punctuated, spanned::Spanned as _, AngleBracketedGenericArguments, DataEnum, DataStruct, DataUnion, Fields,
 	FieldsNamed, GenericArgument, LitStr, PathArguments, Type, TypePath
@@ -71,9 +71,7 @@ fn parse_named_fields(named_fields: &FieldsNamed, rename_all: Option<&LitStr>) -
 		if let Some(rename) = attrs.rename {
 			name = rename;
 		} else if let Some(rename_all) = rename_all {
-			let rule: RenameRule = rename_all
-				.value()
-				.parse()
+			let rule = RenameRule::from_str(&rename_all.value())
 				.map_err(|_| syn::Error::new(rename_all.span(), "Unknown rename_all rule"))?;
 			let rename = rule.apply_to_field(&name.value());
 			name = LitStr::new(&rename, name.span());

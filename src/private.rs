@@ -45,12 +45,17 @@ struct FlattenError(Cow<'static, str>);
 fn flatten_impl(properties: &mut Properties, required: &mut Required, schema: SchemaKind) -> Result<(), FlattenError> {
 	let mut obj = match schema {
 		SchemaKind::Type(Type::Object(obj)) => obj,
+		SchemaKind::OneOf { .. } => {
+			return Err(FlattenError(
+				"#[serde(flatten)] is currently not supported for enums with non-unit variants".into()
+			))
+		},
 		_ => return Err(FlattenError("Expected object".into()))
 	};
 
 	while let Some((prop_name, prop_schema)) = obj.properties.pop() {
 		if properties.contains_key(&prop_name) {
-			return Err(FlattenError("Duplicate property name".into()));
+			return Err(FlattenError(format!("Duplicate property name {}", prop_name).into()));
 		}
 		properties.insert(prop_name, prop_schema);
 	}
@@ -68,12 +73,6 @@ pub fn flatten(
 	add_dependencies(dependencies, &mut schema.dependencies);
 	match flatten_impl(properties, required, schema.schema) {
 		Ok(_) => {},
-		Err(e) => panic!(
-			concat!(
-				"Flattening produced an error: {}\n",
-				"This is likely a bug, please open an issue: https://github.com/msrd0/openapi_type/issues"
-			),
-			e.0
-		)
+		Err(e) => panic!("Flattening produced an error: {}", e.0)
 	};
 }

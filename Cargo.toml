@@ -5,7 +5,7 @@ members = [".", "./derive"]
 
 [package]
 name = "openapi_type"
-version = "0.2.2"
+version = "0.2.3"
 authors = ["Dominic Meiser <git@msrd0.de>"]
 edition = "2018"
 description = "OpenAPI type information for Rust structs and enums"

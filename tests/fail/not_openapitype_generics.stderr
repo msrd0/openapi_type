@@ -1,5 +1,5 @@
 error[E0599]: the function or associated item `schema` exists for struct `Foo<Bar>`, but its trait bounds were not satisfied
-  --> $DIR/not_openapitype_generics.rs:11:14
+  --> tests/fail/not_openapitype_generics.rs:11:14
    |
 4  | struct Foo<T> {
    | -------------

@@ -1,5 +1,5 @@
 error: #[derive(OpenapiType)] cannot be used on unions
- --> $DIR/union.rs:4:1
+ --> tests/fail/union.rs:4:1
   |
 4 | union Foo {
   | ^^^^^

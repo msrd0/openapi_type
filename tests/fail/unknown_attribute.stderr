@@ -1,5 +1,5 @@
 error: Unexpected token
- --> $DIR/unknown_attribute.rs:4:11
+ --> tests/fail/unknown_attribute.rs:4:11
   |
 4 | #[openapi(pizza)]
   |           ^^^^^

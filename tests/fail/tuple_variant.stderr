@@ -1,5 +1,5 @@
 error: #[derive(OpenapiType)] does not support tuple variants
- --> $DIR/tuple_variant.rs:5:6
+ --> tests/fail/tuple_variant.rs:5:6
   |
 5 |     Pair(i64, i64)
   |         ^^^^^^^^^^

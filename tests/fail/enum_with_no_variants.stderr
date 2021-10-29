@@ -1,5 +1,5 @@
 error: #[derive(OpenapiType)] does not support enums with no variants
- --> $DIR/enum_with_no_variants.rs:4:10
+ --> tests/fail/enum_with_no_variants.rs:4:10
   |
 4 | enum Foo {}
   |          ^^

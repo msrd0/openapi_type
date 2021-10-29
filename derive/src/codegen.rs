@@ -1,7 +1,7 @@
 use crate::parser::{ParseData, ParseDataField, TypeOrInline};
 use proc_macro2::TokenStream;
-use quote::quote;
-use syn::LitStr;
+use quote::{quote, quote_spanned};
+use syn::{spanned::Spanned, LitStr};
 
 pub(super) fn gen_doc_option(doc: &[String]) -> TokenStream {
 	let doc = doc.join("\n");
@@ -38,7 +38,7 @@ fn gen_struct(name: Option<&LitStr>, fields: &[ParseDataField]) -> TokenStream {
 		let doc = gen_doc_option(&f.doc);
 		let schema = match &f.ty {
 			TypeOrInline::Type(ty) => {
-				quote!(<#ty as ::openapi_type::OpenapiType>::schema())
+				quote_spanned!(ty.span() => <#ty as ::openapi_type::OpenapiType>::schema())
 			},
 			TypeOrInline::Inline(data) => data.gen_schema()
 		};

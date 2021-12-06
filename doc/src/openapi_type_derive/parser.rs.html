@@ -278,7 +278,7 @@
 };
 
 <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">enum</span> <span class="ident">TypeOrInline</span> {
-	<span class="ident">Type</span>(<span class="ident">Type</span>),
+	<span class="ident">Type</span>(<span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Type</span><span class="op">&gt;</span>),
 	<span class="ident">Inline</span>(<span class="ident">ParseData</span>)
 }
 
@@ -365,7 +365,7 @@
 		<span class="ident">fields</span>.<span class="ident">push</span>(<span class="ident">ParseDataField</span> {
 			<span class="ident">name</span>,
 			<span class="ident">doc</span>,
-			<span class="ident">ty</span>: <span class="ident">TypeOrInline::Type</span>(<span class="ident">ty</span>),
+			<span class="ident">ty</span>: <span class="ident">TypeOrInline::Type</span>(<span class="ident">Box::new</span>(<span class="ident">ty</span>)),
 			<span class="ident">flatten</span>: <span class="ident">attrs</span>.<span class="ident">flatten</span>
 		});
 	}

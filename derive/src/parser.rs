@@ -10,7 +10,7 @@ use syn::{
 };
 
 pub(super) enum TypeOrInline {
-	Type(Type),
+	Type(Box<Type>),
 	Inline(ParseData)
 }
 
@@ -97,7 +97,7 @@ fn parse_named_fields(named_fields: &FieldsNamed, rename_all: Option<&LitStr>) -
 		fields.push(ParseDataField {
 			name,
 			doc,
-			ty: TypeOrInline::Type(ty),
+			ty: TypeOrInline::Type(Box::new(ty)),
 			flatten: attrs.flatten
 		});
 	}

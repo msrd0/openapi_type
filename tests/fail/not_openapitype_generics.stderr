@@ -1,23 +1,30 @@
 error[E0599]: the function or associated item `schema` exists for struct `Foo<Bar>`, but its trait bounds were not satisfied
-  --> tests/fail/not_openapitype_generics.rs:11:14
-   |
-4  | struct Foo<T> {
-   | -------------
-   | |
-   | function or associated item `schema` not found for this
-   | doesn't satisfy `Foo<Bar>: OpenapiType`
+   --> tests/fail/not_openapitype_generics.rs:11:14
+    |
+4   | struct Foo<T> {
+    | -------------
+    | |
+    | function or associated item `schema` not found for this
+    | doesn't satisfy `Foo<Bar>: OpenapiType`
 ...
-8  | struct Bar;
-   | ----------- doesn't satisfy `Bar: OpenapiType`
+8   | struct Bar;
+    | ----------- doesn't satisfy `Bar: OpenapiType`
 ...
-11 |     <Foo<Bar>>::schema();
-   |                 ^^^^^^ function or associated item cannot be called on `Foo<Bar>` due to unsatisfied trait bounds
-   |
-   = note: the following trait bounds were not satisfied:
-           `Bar: OpenapiType`
-           which is required by `Foo<Bar>: OpenapiType`
-           `Foo<Bar>: OpenapiType`
-           which is required by `&Foo<Bar>: OpenapiType`
-   = help: items from traits can only be used if the trait is implemented and in scope
-   = note: the following trait defines an item `schema`, perhaps you need to implement it:
-           candidate #1: `OpenapiType`
+11  |     <Foo<Bar>>::schema();
+    |                 ^^^^^^ function or associated item cannot be called on `Foo<Bar>` due to unsatisfied trait bounds
+    |
+    = note: the following trait bounds were not satisfied:
+            `Bar: OpenapiType`
+            which is required by `Foo<Bar>: OpenapiType`
+            `Foo<Bar>: OpenapiType`
+            which is required by `&Foo<Bar>: OpenapiType`
+note: the following trait must be implemented
+   --> src/lib.rs
+    |
+    | / pub trait OpenapiType {
+    | |     fn schema() -> OpenapiSchema;
+    | | }
+    | |_^
+    = help: items from traits can only be used if the trait is implemented and in scope
+    = note: the following trait defines an item `schema`, perhaps you need to implement it:
+            candidate #1: `OpenapiType`

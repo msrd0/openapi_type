@@ -5,7 +5,7 @@ derive macro for structs and enums to gain access to their static type informati
 <a href="trait.OpenapiType.html#tymethod.schema"><code>schema</code></a>, which returns an <a href="struct.OpenapiSchema.html" title="OpenapiSchema"><code>OpenapiSchema</code></a>. This assembles the static
 type information in a way that is convenient to use for a generated OpenAPI specification, but
 can also be utilized in other use cases as well.</p>
-<h1 id="custom-types" class="section-header"><a href="#custom-types">Custom Types</a></h1>
+<h2 id="custom-types" class="section-header"><a href="#custom-types">Custom Types</a></h2>
 <p>To gain access to the static type information of your custom types at runtime, the easiest way
 is to use the derive macro:</p>
 
@@ -14,7 +14,7 @@ is to use the derive macro:</p>
 	<span class="ident">foo</span>: <span class="ident">String</span>,
 	<span class="ident">bar</span>: <span class="ident">u64</span>
 }</code></pre></div>
-<h1 id="openapi-specification" class="section-header"><a href="#openapi-specification">OpenAPI specification</a></h1>
+<h2 id="openapi-specification" class="section-header"><a href="#openapi-specification">OpenAPI specification</a></h2>
 <p>Using above type, running <code>FooBar::schema().into_schema()</code> yields</p>
 <div class="example-wrap"><pre class="language-yaml"><code>type: object
 title: FooBar
@@ -34,16 +34,16 @@ a reference to that schema. Therefore, always remember to put the
 <a href="struct.OpenapiSchema.html#structfield.dependencies"><code>dependencies</code></a> into the specification alongside the type you are
 interested in.</p>
 </div></details><h2 id="reexports" class="section-header"><a href="#reexports">Re-exports</a></h2>
-<div class="item-table"><div class="item-left import-item"><code>pub use <a class="mod" href="../indexmap/index.html" title="mod indexmap">indexmap</a>;</code></div><div class="item-right docblock-short"></div><div class="item-left import-item"><code>pub use <a class="mod" href="../openapiv3/index.html" title="mod openapiv3">openapiv3</a> as openapi;</code></div><div class="item-right docblock-short"></div></div><h2 id="structs" class="section-header"><a href="#structs">Structs</a></h2>
-<div class="item-table"><div class="item-left module-item"><a class="struct" href="struct.OpenapiSchema.html" title="openapi_type::OpenapiSchema struct">OpenapiSchema</a></div><div class="item-right docblock-short"><p>This struct is used to generate the OpenAPI specification for a particular type. It is already
+<div class="item-table"><div class="item-row"><div class="item-left import-item"><code>pub use <a class="mod" href="../indexmap/index.html" title="mod indexmap">indexmap</a>;</code></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left import-item"><code>pub use <a class="mod" href="../openapiv3/index.html" title="mod openapiv3">openapiv3</a> as openapi;</code></div><div class="item-right docblock-short"></div></div></div><h2 id="structs" class="section-header"><a href="#structs">Structs</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.OpenapiSchema.html" title="openapi_type::OpenapiSchema struct">OpenapiSchema</a></div><div class="item-right docblock-short"><p>This struct is used to generate the OpenAPI specification for a particular type. It is already
 made available for all primitives and some other types from the rust standard library, and
 you can also make your own types provide one through the <a href="trait.OpenapiType.html" title="OpenapiType">OpenapiType</a> trait and derive macro.</p>
-</div></div><h2 id="traits" class="section-header"><a href="#traits">Traits</a></h2>
-<div class="item-table"><div class="item-left module-item"><a class="trait" href="trait.OpenapiType.html" title="openapi_type::OpenapiType trait">OpenapiType</a></div><div class="item-right docblock-short"><p>This trait needs to be implemented by every type that is being used in the OpenAPI Spec. It gives
+</div></div></div><h2 id="traits" class="section-header"><a href="#traits">Traits</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.OpenapiType.html" title="openapi_type::OpenapiType trait">OpenapiType</a></div><div class="item-right docblock-short"><p>This trait needs to be implemented by every type that is being used in the OpenAPI Spec. It gives
 access to the <a href="struct.OpenapiSchema.html" title="OpenapiSchema">OpenapiSchema</a> of this type. It is provided for primitive types, String and the
 like. For use on your own types, there is a derive macro:</p>
-</div></div><h2 id="derives" class="section-header"><a href="#derives">Derive Macros</a></h2>
-<div class="item-table"><div class="item-left module-item"><a class="derive" href="derive.OpenapiType.html" title="openapi_type::OpenapiType derive">OpenapiType</a></div><div class="item-right docblock-short"><p>The derive macro for <a href="https://docs.rs/openapi_type/*/openapi_type/trait.OpenapiType.html">OpenapiType</a>.</p>
-</div></div></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../" data-current-crate="openapi_type" data-search-index-js="../search-index.js" data-search-js="../search.js"></div>
+</div></div></div><h2 id="derives" class="section-header"><a href="#derives">Derive Macros</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="derive" href="derive.OpenapiType.html" title="openapi_type::OpenapiType derive">OpenapiType</a></div><div class="item-right docblock-short"><p>The derive macro for <a href="https://docs.rs/openapi_type/*/openapi_type/trait.OpenapiType.html">OpenapiType</a>.</p>
+</div></div></div></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../" data-current-crate="openapi_type" data-search-index-js="../search-index.js" data-search-js="../search.js"></div>
     <script src="../main.js"></script>
 </body></html>

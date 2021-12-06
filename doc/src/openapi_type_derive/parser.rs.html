@@ -300,7 +300,7 @@
 	<span class="ident">Unit</span>
 }
 
-<span class="kw">fn</span> <span class="ident">parse_named_fields</span>(<span class="ident">named_fields</span>: <span class="kw-2">&amp;</span><span class="ident">FieldsNamed</span>, <span class="ident">rename_all</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">LitStr</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">syn::Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">ParseDataField</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">parse_named_fields</span>(<span class="ident">named_fields</span>: <span class="kw-2">&amp;</span><span class="ident">FieldsNamed</span>, <span class="ident">rename_all</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">LitStr</span><span class="op">&gt;</span>) -&gt; <span class="ident">syn::Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">ParseDataField</span><span class="op">&gt;</span><span class="op">&gt;</span> {
 	<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">fields</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">ParseDataField</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
 	<span class="kw">for</span> <span class="ident">f</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">named_fields</span>.<span class="ident">named</span> {
 		<span class="comment">// parse #[serde] and #[openapi] attributes</span>
@@ -372,31 +372,31 @@
 	<span class="prelude-val">Ok</span>(<span class="ident">fields</span>)
 }
 
-<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">parse_struct</span>(<span class="ident">ident</span>: <span class="kw-2">&amp;</span><span class="ident">Ident</span>, <span class="ident">strukt</span>: <span class="kw-2">&amp;</span><span class="ident">DataStruct</span>, <span class="ident">attrs</span>: <span class="kw-2">&amp;</span><span class="ident">ContainerAttributes</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">syn::Result</span><span class="op">&lt;</span><span class="ident">ParseData</span><span class="op">&gt;</span> {
+<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">parse_struct</span>(<span class="ident">ident</span>: <span class="kw-2">&amp;</span><span class="ident">Ident</span>, <span class="ident">strukt</span>: <span class="kw-2">&amp;</span><span class="ident">DataStruct</span>, <span class="ident">attrs</span>: <span class="kw-2">&amp;</span><span class="ident">ContainerAttributes</span>) -&gt; <span class="ident">syn::Result</span><span class="op">&lt;</span><span class="ident">ParseData</span><span class="op">&gt;</span> {
 	<span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">strukt</span>.<span class="ident">fields</span> {
-		<span class="ident">Fields::Named</span>(<span class="ident">named_fields</span>) <span class="op">=</span><span class="op">&gt;</span> {
+		<span class="ident">Fields::Named</span>(<span class="ident">named_fields</span>) =&gt; {
 			<span class="kw">let</span> <span class="ident">fields</span> <span class="op">=</span> <span class="ident">parse_named_fields</span>(<span class="ident">named_fields</span>, <span class="ident">attrs</span>.<span class="ident">rename_all</span>.<span class="ident">as_ref</span>())<span class="question-mark">?</span>;
 			<span class="prelude-val">Ok</span>(<span class="ident">ParseData::Struct</span> {
 				<span class="ident">name</span>: <span class="prelude-val">Some</span>(<span class="ident">ident</span>.<span class="ident">to_lit_str</span>()),
 				<span class="ident">fields</span>
 			})
 		},
-		<span class="ident">Fields::Unnamed</span>(<span class="ident">unnamed_fields</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">syn::Error::new</span>(
+		<span class="ident">Fields::Unnamed</span>(<span class="ident">unnamed_fields</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident">syn::Error::new</span>(
 			<span class="ident">unnamed_fields</span>.<span class="ident">span</span>(),
 			<span class="string">&quot;#[derive(OpenapiType)] does not support tuple structs&quot;</span>
 		)),
-		<span class="ident">Fields::Unit</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">ParseData::Unit</span>)
+		<span class="ident">Fields::Unit</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">ParseData::Unit</span>)
 	}
 }
 
-<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">parse_enum</span>(<span class="ident">ident</span>: <span class="kw-2">&amp;</span><span class="ident">Ident</span>, <span class="ident">inum</span>: <span class="kw-2">&amp;</span><span class="ident">DataEnum</span>, <span class="ident">attrs</span>: <span class="kw-2">&amp;</span><span class="ident">ContainerAttributes</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">syn::Result</span><span class="op">&lt;</span><span class="ident">ParseData</span><span class="op">&gt;</span> {
+<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">parse_enum</span>(<span class="ident">ident</span>: <span class="kw-2">&amp;</span><span class="ident">Ident</span>, <span class="ident">inum</span>: <span class="kw-2">&amp;</span><span class="ident">DataEnum</span>, <span class="ident">attrs</span>: <span class="kw-2">&amp;</span><span class="ident">ContainerAttributes</span>) -&gt; <span class="ident">syn::Result</span><span class="op">&lt;</span><span class="ident">ParseData</span><span class="op">&gt;</span> {
 	<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">strings</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">LitStr</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
 	<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">types</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">LitStr</span>, <span class="ident">ParseData</span>)<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
 
 	<span class="kw">for</span> <span class="ident">v</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">inum</span>.<span class="ident">variants</span> {
 		<span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">v</span>.<span class="ident">ident</span>.<span class="ident">to_lit_str</span>();
 		<span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">v</span>.<span class="ident">fields</span> {
-			<span class="ident">Fields::Named</span>(<span class="ident">named_fields</span>) <span class="op">=</span><span class="op">&gt;</span> {
+			<span class="ident">Fields::Named</span>(<span class="ident">named_fields</span>) =&gt; {
 				<span class="kw">let</span> <span class="ident">fields</span> <span class="op">=</span> <span class="ident">parse_named_fields</span>(<span class="ident">named_fields</span>, <span class="ident">attrs</span>.<span class="ident">rename_all</span>.<span class="ident">as_ref</span>())<span class="question-mark">?</span>;
 				<span class="kw">let</span> <span class="ident">struct_name</span> <span class="op">=</span> <span class="macro">format!</span>(<span class="string">&quot;{}::{}&quot;</span>, <span class="ident">ident</span>, <span class="ident">name</span>.<span class="ident">value</span>());
 				<span class="ident">types</span>.<span class="ident">push</span>((<span class="ident">name</span>, <span class="ident">ParseData::Struct</span> {
@@ -404,13 +404,13 @@
 					<span class="ident">fields</span>
 				}));
 			},
-			<span class="ident">Fields::Unnamed</span>(<span class="ident">unnamed_fields</span>) <span class="op">=</span><span class="op">&gt;</span> {
+			<span class="ident">Fields::Unnamed</span>(<span class="ident">unnamed_fields</span>) =&gt; {
 				<span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">syn::Error::new</span>(
 					<span class="ident">unnamed_fields</span>.<span class="ident">span</span>(),
 					<span class="string">&quot;#[derive(OpenapiType)] does not support tuple variants&quot;</span>
 				))
 			},
-			<span class="ident">Fields::Unit</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">strings</span>.<span class="ident">push</span>(<span class="ident">name</span>)
+			<span class="ident">Fields::Unit</span> =&gt; <span class="ident">strings</span>.<span class="ident">push</span>(<span class="ident">name</span>)
 		}
 	}
 
@@ -419,9 +419,9 @@
 	} <span class="kw">else</span> {
 		<span class="kw">match</span> (<span class="kw-2">&amp;</span><span class="ident">attrs</span>.<span class="ident">tag</span>, <span class="kw-2">&amp;</span><span class="ident">attrs</span>.<span class="ident">content</span>, <span class="ident">attrs</span>.<span class="ident">untagged</span>) {
 			<span class="comment">// externally tagged (default)</span>
-			(<span class="prelude-val">None</span>, <span class="prelude-val">None</span>, <span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">ParseData::Enum</span>(<span class="ident">strings</span>)),
+			(<span class="prelude-val">None</span>, <span class="prelude-val">None</span>, <span class="bool-val">false</span>) =&gt; <span class="prelude-val">Some</span>(<span class="ident">ParseData::Enum</span>(<span class="ident">strings</span>)),
 			<span class="comment">// internally tagged or adjacently tagged</span>
-			(<span class="prelude-val">Some</span>(<span class="ident">tag</span>), <span class="kw">_</span>, <span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">ParseData::Struct</span> {
+			(<span class="prelude-val">Some</span>(<span class="ident">tag</span>), <span class="kw">_</span>, <span class="bool-val">false</span>) =&gt; <span class="prelude-val">Some</span>(<span class="ident">ParseData::Struct</span> {
 				<span class="ident">name</span>: <span class="prelude-val">None</span>,
 				<span class="ident">fields</span>: <span class="macro">vec!</span>[<span class="ident">ParseDataField</span> {
 					<span class="ident">name</span>: <span class="ident">tag</span>.<span class="ident">clone</span>(),
@@ -431,9 +431,9 @@
 				}]
 			}),
 			<span class="comment">// untagged</span>
-			(<span class="prelude-val">None</span>, <span class="prelude-val">None</span>, <span class="bool-val">true</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">ParseData::Unit</span>),
+			(<span class="prelude-val">None</span>, <span class="prelude-val">None</span>, <span class="bool-val">true</span>) =&gt; <span class="prelude-val">Some</span>(<span class="ident">ParseData::Unit</span>),
 			<span class="comment">// unknown</span>
-			<span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">syn::Error::new</span>(<span class="ident">Span::call_site</span>(), <span class="string">&quot;Unknown enum representation&quot;</span>))
+			<span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">syn::Error::new</span>(<span class="ident">Span::call_site</span>(), <span class="string">&quot;Unknown enum representation&quot;</span>))
 		}
 	};
 
@@ -447,7 +447,7 @@
 					.<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">name</span>, <span class="kw-2">mut</span> <span class="ident">data</span>)<span class="op">|</span> {
 						<span class="prelude-val">Ok</span>(<span class="kw">match</span> (<span class="kw-2">&amp;</span><span class="ident">attrs</span>.<span class="ident">tag</span>, <span class="kw-2">&amp;</span><span class="ident">attrs</span>.<span class="ident">content</span>, <span class="ident">attrs</span>.<span class="ident">untagged</span>) {
 							<span class="comment">// externally tagged (default)</span>
-							(<span class="prelude-val">None</span>, <span class="prelude-val">None</span>, <span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> {
+							(<span class="prelude-val">None</span>, <span class="prelude-val">None</span>, <span class="bool-val">false</span>) =&gt; {
 								<span class="kw">let</span> <span class="ident">struct_name</span> <span class="op">=</span> <span class="macro">format!</span>(<span class="string">&quot;{}::{}::ExtTagWrapper&quot;</span>, <span class="ident">ident</span>, <span class="ident">name</span>.<span class="ident">value</span>());
 								<span class="ident">ParseData::Struct</span> {
 									<span class="ident">name</span>: <span class="prelude-val">Some</span>(<span class="ident">struct_name</span>.<span class="ident">to_lit_str</span>()),
@@ -460,15 +460,15 @@
 								}
 							},
 							<span class="comment">// internally tagged</span>
-							(<span class="prelude-val">Some</span>(<span class="ident">tag</span>), <span class="prelude-val">None</span>, <span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> {
+							(<span class="prelude-val">Some</span>(<span class="ident">tag</span>), <span class="prelude-val">None</span>, <span class="bool-val">false</span>) =&gt; {
 								<span class="kw">match</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">data</span> {
-									<span class="ident">ParseData::Struct</span> { <span class="ident">fields</span>, .. } <span class="op">=</span><span class="op">&gt;</span> <span class="ident">fields</span>.<span class="ident">push</span>(<span class="ident">ParseDataField</span> {
+									<span class="ident">ParseData::Struct</span> { <span class="ident">fields</span>, .. } =&gt; <span class="ident">fields</span>.<span class="ident">push</span>(<span class="ident">ParseDataField</span> {
 										<span class="ident">name</span>: <span class="ident">tag</span>.<span class="ident">clone</span>(),
 										<span class="ident">doc</span>: <span class="ident">Vec::new</span>(),
 										<span class="ident">ty</span>: <span class="ident">TypeOrInline::Inline</span>(<span class="ident">ParseData::Enum</span>(<span class="macro">vec!</span>[<span class="ident">name</span>])),
 										<span class="ident">flatten</span>: <span class="bool-val">false</span>
 									}),
-									<span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">syn::Error::new</span>(
+									<span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">syn::Error::new</span>(
 										<span class="ident">tag</span>.<span class="ident">span</span>(),
 										<span class="string">&quot;#[derive(OpenapiType)] does not support tuple variants on internally tagged enums&quot;</span>
 									))
@@ -476,7 +476,7 @@
 								<span class="ident">data</span>
 							},
 							<span class="comment">// adjacently tagged</span>
-							(<span class="prelude-val">Some</span>(<span class="ident">tag</span>), <span class="prelude-val">Some</span>(<span class="ident">content</span>), <span class="bool-val">false</span>) <span class="op">=</span><span class="op">&gt;</span> {
+							(<span class="prelude-val">Some</span>(<span class="ident">tag</span>), <span class="prelude-val">Some</span>(<span class="ident">content</span>), <span class="bool-val">false</span>) =&gt; {
 								<span class="kw">let</span> <span class="ident">struct_name</span> <span class="op">=</span> <span class="macro">format!</span>(<span class="string">&quot;{}::{}::AdjTagWrapper&quot;</span>, <span class="ident">ident</span>, <span class="ident">name</span>.<span class="ident">value</span>());
 								<span class="ident">ParseData::Struct</span> {
 									<span class="ident">name</span>: <span class="prelude-val">Some</span>(<span class="ident">struct_name</span>.<span class="ident">to_lit_str</span>()),
@@ -497,9 +497,9 @@
 								}
 							},
 							<span class="comment">// untagged</span>
-							(<span class="prelude-val">None</span>, <span class="prelude-val">None</span>, <span class="bool-val">true</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">data</span>,
+							(<span class="prelude-val">None</span>, <span class="prelude-val">None</span>, <span class="bool-val">true</span>) =&gt; <span class="ident">data</span>,
 							<span class="comment">// unknown</span>
-							<span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">syn::Error::new</span>(<span class="ident">Span::call_site</span>(), <span class="string">&quot;Unknown enum representation&quot;</span>))
+							<span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">syn::Error::new</span>(<span class="ident">Span::call_site</span>(), <span class="string">&quot;Unknown enum representation&quot;</span>))
 						})
 					})
 					.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">syn::Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>()<span class="question-mark">?</span>
@@ -508,27 +508,27 @@
 
 	<span class="kw">match</span> (<span class="ident">data_strings</span>, <span class="ident">data_types</span>) {
 		<span class="comment">// only variants without fields</span>
-		(<span class="prelude-val">Some</span>(<span class="ident">data</span>), <span class="prelude-val">None</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">data</span>),
+		(<span class="prelude-val">Some</span>(<span class="ident">data</span>), <span class="prelude-val">None</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">data</span>),
 		<span class="comment">// only one variant with fields</span>
-		(<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="ident">ParseData::Alternatives</span>(<span class="kw-2">mut</span> <span class="ident">alt</span>))) <span class="kw">if</span> <span class="ident">alt</span>.<span class="ident">len</span>() <span class="op">=</span><span class="op">=</span> <span class="number">1</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">alt</span>.<span class="ident">remove</span>(<span class="number">0</span>)),
+		(<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="ident">ParseData::Alternatives</span>(<span class="kw-2">mut</span> <span class="ident">alt</span>))) <span class="kw">if</span> <span class="ident">alt</span>.<span class="ident">len</span>() <span class="op">==</span> <span class="number">1</span> =&gt; <span class="prelude-val">Ok</span>(<span class="ident">alt</span>.<span class="ident">remove</span>(<span class="number">0</span>)),
 		<span class="comment">// only variants with fields</span>
-		(<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="ident">data</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">data</span>),
+		(<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="ident">data</span>)) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">data</span>),
 		<span class="comment">// variants with and without fields</span>
-		(<span class="prelude-val">Some</span>(<span class="ident">data</span>), <span class="prelude-val">Some</span>(<span class="ident">ParseData::Alternatives</span>(<span class="kw-2">mut</span> <span class="ident">alt</span>))) <span class="op">=</span><span class="op">&gt;</span> {
+		(<span class="prelude-val">Some</span>(<span class="ident">data</span>), <span class="prelude-val">Some</span>(<span class="ident">ParseData::Alternatives</span>(<span class="kw-2">mut</span> <span class="ident">alt</span>))) =&gt; {
 			<span class="ident">alt</span>.<span class="ident">push</span>(<span class="ident">data</span>);
 			<span class="prelude-val">Ok</span>(<span class="ident">ParseData::Alternatives</span>(<span class="ident">alt</span>))
 		},
 		<span class="comment">// no variants</span>
-		(<span class="prelude-val">None</span>, <span class="prelude-val">None</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">syn::Error::new</span>(
+		(<span class="prelude-val">None</span>, <span class="prelude-val">None</span>) =&gt; <span class="prelude-val">Err</span>(<span class="ident">syn::Error::new</span>(
 			<span class="ident">inum</span>.<span class="ident">brace_token</span>.<span class="ident">span</span>,
 			<span class="string">&quot;#[derive(OpenapiType)] does not support enums with no variants&quot;</span>
 		)),
 		<span class="comment">// data_types always produces Alternatives</span>
-		<span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable!</span>()
+		<span class="kw">_</span> =&gt; <span class="macro">unreachable!</span>()
 	}
 }
 
-<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">parse_union</span>(<span class="ident">union</span>: <span class="kw-2">&amp;</span><span class="ident">DataUnion</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">syn::Result</span><span class="op">&lt;</span><span class="ident">ParseData</span><span class="op">&gt;</span> {
+<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">parse_union</span>(<span class="ident">union</span>: <span class="kw-2">&amp;</span><span class="ident">DataUnion</span>) -&gt; <span class="ident">syn::Result</span><span class="op">&lt;</span><span class="ident">ParseData</span><span class="op">&gt;</span> {
 	<span class="prelude-val">Err</span>(<span class="ident">syn::Error::new</span>(
 		<span class="ident">union</span>.<span class="ident">union_token</span>.<span class="ident">span</span>(),
 		<span class="string">&quot;#[derive(OpenapiType)] cannot be used on unions&quot;</span>

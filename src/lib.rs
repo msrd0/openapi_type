@@ -1,4 +1,5 @@
 #![warn(missing_debug_implementations, rust_2018_idioms)]
+#![deny(rustdoc::broken_intra_doc_links)]
 #![forbid(unsafe_code)]
 #![cfg_attr(feature = "cargo-clippy", allow(clippy::tabs_in_doc_comments))]
 #![doc = r##"

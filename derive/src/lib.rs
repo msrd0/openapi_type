@@ -1,5 +1,5 @@
 #![warn(missing_debug_implementations, rust_2018_idioms)]
-#![deny(broken_intra_doc_links)]
+#![deny(rustdoc::broken_intra_doc_links)]
 #![forbid(unsafe_code)]
 //! This crate defines the macros for `#[derive(OpenapiType)]`.
 

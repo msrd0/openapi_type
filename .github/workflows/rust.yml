@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        toolchain: [1.49, stable, beta]
+        toolchain: [1.56, stable, beta]
         nightly: [false]
         include:
           - toolchain: nightly

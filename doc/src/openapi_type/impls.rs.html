@@ -226,9 +226,13 @@
 <span id="226">226</span>
 <span id="227">227</span>
 <span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">OpenapiSchema</span>, <span class="ident">OpenapiType</span>};
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;chrono&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">chrono</span>::{<span class="ident">offset::TimeZone</span>, <span class="ident">Date</span>, <span class="ident">DateTime</span>, <span class="ident">NaiveDate</span>, <span class="ident">NaiveDateTime</span>};
 <span class="kw">use</span> <span class="ident">indexmap</span>::{<span class="ident">IndexMap</span>, <span class="ident">IndexSet</span>};
 <span class="kw">use</span> <span class="ident">openapiv3</span>::{
 	<span class="ident">AdditionalProperties</span>, <span class="ident">ArrayType</span>, <span class="ident">IntegerType</span>, <span class="ident">NumberFormat</span>, <span class="ident">NumberType</span>, <span class="ident">ObjectType</span>, <span class="ident">ReferenceOr</span>, <span class="ident">SchemaKind</span>,
@@ -240,13 +244,11 @@
 	<span class="ident">hash::BuildHasher</span>,
 	<span class="ident">num</span>::{<span class="ident">NonZeroU128</span>, <span class="ident">NonZeroU16</span>, <span class="ident">NonZeroU32</span>, <span class="ident">NonZeroU64</span>, <span class="ident">NonZeroU8</span>, <span class="ident">NonZeroUsize</span>}
 };
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;uuid&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">uuid::Uuid</span>;
 
 <span class="macro">macro_rules!</span> <span class="ident">impl_openapi_type</span> {
-	($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">ty</span>:<span class="ident">ident</span> $(<span class="op">&lt;</span>$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">generic</span>:<span class="ident">ident</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">bound</span>:<span class="ident">path</span>),<span class="op">+</span><span class="op">&gt;</span>)<span class="kw-2">*</span>),<span class="op">*</span> =&gt; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">schema</span>:<span class="ident">expr</span>) =&gt; {
+	($($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">ty</span>:<span class="ident">ident</span>)::<span class="op">+</span> $(<span class="op">&lt;</span>$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">generic</span>:<span class="ident">ident</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">bound</span>:<span class="ident">path</span>),<span class="op">+</span><span class="op">&gt;</span>)<span class="question-mark">?</span>),<span class="op">*</span> =&gt; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">schema</span>:<span class="ident">expr</span>) =&gt; {
 		$(
-			<span class="kw">impl</span> $(<span class="op">&lt;</span>$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">generic</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">bound</span>),<span class="op">+</span><span class="op">&gt;</span>)<span class="op">*</span> <span class="ident">OpenapiType</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ty</span> $(<span class="op">&lt;</span>$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">generic</span>),<span class="op">+</span><span class="op">&gt;</span>)<span class="op">*</span> {
+			<span class="kw">impl</span> $(<span class="op">&lt;</span>$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">generic</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">bound</span>),<span class="op">+</span><span class="op">&gt;</span>)<span class="question-mark">?</span> <span class="ident">OpenapiType</span> <span class="kw">for</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">ty</span>)::<span class="op">+</span> $(<span class="op">&lt;</span>$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">generic</span>),<span class="op">+</span><span class="op">&gt;</span>)<span class="question-mark">?</span> {
 				<span class="kw">fn</span> <span class="ident">schema</span>() -&gt; <span class="ident">OpenapiSchema</span> {
 					<span class="macro-nonterminal">$</span><span class="macro-nonterminal">schema</span>
 				}
@@ -329,17 +331,27 @@
 <span class="macro">impl_openapi_type!</span>(<span class="ident">String</span>, <span class="ident">str</span> =&gt; <span class="ident">str_schema</span>(<span class="ident">VariantOrUnknownOrEmpty::Empty</span>));
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;chrono&quot;</span>)]</span>
-<span class="macro">impl_openapi_type!</span>(<span class="ident">Date</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">TimeZone</span><span class="op">&gt;</span>, <span class="ident">NaiveDate</span> =&gt; {
+<span class="macro">impl_openapi_type!</span>(<span class="ident">chrono::Date</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">chrono::TimeZone</span><span class="op">&gt;</span>, <span class="ident">chrono::NaiveDate</span> =&gt; {
+	<span class="ident">str_schema</span>(<span class="ident">VariantOrUnknownOrEmpty::Item</span>(<span class="ident">StringFormat::Date</span>))
+});
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;time&quot;</span>)]</span>
+<span class="macro">impl_openapi_type!</span>(<span class="ident">time::Date</span> =&gt; {
 	<span class="ident">str_schema</span>(<span class="ident">VariantOrUnknownOrEmpty::Item</span>(<span class="ident">StringFormat::Date</span>))
 });
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;chrono&quot;</span>)]</span>
-<span class="macro">impl_openapi_type!</span>(<span class="ident">DateTime</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">TimeZone</span><span class="op">&gt;</span>, <span class="ident">NaiveDateTime</span> =&gt; {
+<span class="macro">impl_openapi_type!</span>(<span class="ident">chrono::DateTime</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">chrono::TimeZone</span><span class="op">&gt;</span>, <span class="ident">chrono::NaiveDateTime</span> =&gt; {
+	<span class="ident">str_schema</span>(<span class="ident">VariantOrUnknownOrEmpty::Item</span>(<span class="ident">StringFormat::DateTime</span>))
+});
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;time&quot;</span>)]</span>
+<span class="macro">impl_openapi_type!</span>(<span class="ident">time::OffsetDateTime</span>, <span class="ident">time::PrimitiveDateTime</span> =&gt; {
 	<span class="ident">str_schema</span>(<span class="ident">VariantOrUnknownOrEmpty::Item</span>(<span class="ident">StringFormat::DateTime</span>))
 });
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;uuid&quot;</span>)]</span>
-<span class="macro">impl_openapi_type!</span>(<span class="ident">Uuid</span> =&gt; {
+<span class="macro">impl_openapi_type!</span>(<span class="ident">uuid::Uuid</span> =&gt; {
 	<span class="ident">str_schema</span>(<span class="ident">VariantOrUnknownOrEmpty::Unknown</span>(<span class="string">&quot;uuid&quot;</span>.<span class="ident">to_owned</span>()))
 });
 

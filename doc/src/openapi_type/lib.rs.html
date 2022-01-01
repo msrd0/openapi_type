@@ -156,8 +156,8 @@
 <span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cargo-clippy&quot;</span>, <span class="ident">allow</span>(<span class="ident">clippy::tabs_in_doc_comments</span>))]</span>
 <span class="attribute">#![<span class="ident">doc</span> <span class="op">=</span> <span class="string">r##&quot;
 This crate gives static type information for primitives and commonly used types from the standard
-library and a few other commonly used libraries like `chrono` and `uuid`. Also, it provides a
-derive macro for structs and enums to gain access to their static type information at runtime.
+library and a few other commonly used libraries like `chrono`, `time` and `uuid`. Also, it provides
+a derive macro for structs and enums to gain access to their static type information at runtime.
 
 The core of this crate is the [`OpenapiType`] trait. It has one static function,
 [`schema`](OpenapiType::schema), which returns an [`OpenapiSchema`]. This assembles the static

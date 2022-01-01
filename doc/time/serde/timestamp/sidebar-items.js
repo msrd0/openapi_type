@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["deserialize","Deserialize an `OffsetDateTime` from its Unix timestamp"],["serialize","Serialize an `OffsetDateTime` as its Unix timestamp"]],"mod":[["option","Treat an `Option<OffsetDateTime>` as a Unix timestamp for the purposes of serde."]]});

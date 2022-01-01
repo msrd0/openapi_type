@@ -134,7 +134,7 @@ impl OpenapiSchema {
 /// This trait needs to be implemented by every type that is being used in the OpenAPI Spec. It gives
 /// access to the [OpenapiSchema] of this type. It is provided for primitive types, String and the
 /// like. For use on your own types, there is a derive macro:
-/// 
+///
 /// ```
 /// # #[macro_use] extern crate openapi_type_derive;
 /// #

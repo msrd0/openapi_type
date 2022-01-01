@@ -5,7 +5,7 @@ members = [".", "./derive"]
 
 [package]
 name = "openapi_type"
-version = "0.2.4"
+version = "0.3.0"
 authors = ["Dominic Meiser <git@msrd0.de>"]
 edition = "2021"
 rust-version = "1.56"
@@ -18,7 +18,7 @@ include = ["src/**/*", "LICENSE", "crates-io.md"]
 
 [dependencies]
 indexmap = "1.7"
-openapi_type_derive = { path = "./derive", version = "0.2.5" }
+openapi_type_derive = { path = "./derive", version = "0.3.0" }
 openapiv3 = "=1.0.0"
 serde_json = "1.0"
 

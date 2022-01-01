@@ -153,14 +153,16 @@
 <span id="153">153</span>
 <span id="154">154</span>
 <span id="155">155</span>
+<span id="156">156</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">warn</span>(<span class="ident">missing_debug_implementations</span>, <span class="ident">rust_2018_idioms</span>)]</span>
 <span class="attribute">#![<span class="ident">deny</span>(<span class="ident">rustdoc::broken_intra_doc_links</span>)]</span>
 <span class="attribute">#![<span class="ident">forbid</span>(<span class="ident">unsafe_code</span>)]</span>
 <span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cargo-clippy&quot;</span>, <span class="ident">allow</span>(<span class="ident">clippy::tabs_in_doc_comments</span>))]</span>
 <span class="attribute">#![<span class="ident">doc</span> <span class="op">=</span> <span class="string">r##&quot;
 This crate gives static type information for primitives and commonly used types from the standard
-library and a few other commonly used libraries like `chrono`, `time` and `uuid`. Also, it provides
-a derive macro for structs and enums to gain access to their static type information at runtime.
+library and other commonly used libraries `chrono`, `indexmap`, `linked-hash-map`, `time` and
+`uuid` when the according feature is enabled. Also, it provides a derive macro for structs and
+enums to gain access to their static type information at runtime.
 
 The core of this crate is the [`OpenapiType`] trait. It has one static function,
 [`schema`](OpenapiType::schema), which returns an [`OpenapiSchema`]. This assembles the static

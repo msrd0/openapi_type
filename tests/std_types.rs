@@ -1,5 +1,3 @@
-#[cfg(feature = "chrono")]
-use chrono::{Date, DateTime, FixedOffset, NaiveDate, NaiveDateTime, Utc};
 use indexmap::{IndexMap, IndexSet};
 use openapi_type::OpenapiType;
 use serde_json::Value;
@@ -7,21 +5,20 @@ use std::{
 	collections::{BTreeMap, BTreeSet, HashMap, HashSet},
 	num::{NonZeroU128, NonZeroU16, NonZeroU32, NonZeroU64, NonZeroU8, NonZeroUsize}
 };
-#[cfg(feature = "uuid")]
-use uuid::Uuid;
-
 macro_rules! test_type {
-	($($ty:ident $(<$($generic:ident),+>)*),* = $json:tt) => {
-		paste::paste! { $(
-			#[test]
-			fn [< $ty:lower $($(_ $generic:lower)+)* >]() {
-				let schema = <$ty $(<$($generic),+>)* as OpenapiType>::schema();
-				let schema = openapi_type::OpenapiSchema::into_schema(schema);
-				let schema_json = serde_json::to_value(&schema).unwrap();
-				let expected = serde_json::json!($json);
-				pretty_assertions::assert_eq!(schema_json, expected);
-			}
-		)* }
+	($($($ty:ident)::+ $(<$($($generic:ident)::+),+>)?),* = $json:tt) => {
+		paste::paste! {
+			$(
+				#[test]
+				fn [<$($ty:lower)_+ $($($(_$generic:lower)+)+)? >]() {
+					let schema = <$($ty)::+ $(<$($($generic)::+),+>)? as OpenapiType>::schema();
+					let schema = openapi_type::OpenapiSchema::into_schema(schema);
+					let schema_json = serde_json::to_value(&schema).unwrap();
+					let expected = serde_json::json!($json);
+					pretty_assertions::assert_eq!(schema_json, expected);
+				}
+			)*
+		}
 	};
 }
 
@@ -161,7 +158,7 @@ test_type!(String = {
 });
 
 #[cfg(feature = "uuid")]
-test_type!(Uuid = {
+test_type!(uuid::Uuid = {
 	"type": "string",
 	"format": "uuid"
 });
@@ -169,13 +166,25 @@ test_type!(Uuid = {
 // ### date/time
 
 #[cfg(feature = "chrono")]
-test_type!(Date<FixedOffset>, Date<Utc>, NaiveDate = {
+test_type!(chrono::Date<chrono::FixedOffset>, chrono::Date<chrono::Utc>, chrono::NaiveDate = {
+	"type": "string",
+	"format": "date"
+});
+
+#[cfg(feature = "time")]
+test_type!(time::Date = {
 	"type": "string",
 	"format": "date"
 });
 
 #[cfg(feature = "chrono")]
-test_type!(DateTime<FixedOffset>, DateTime<Utc>, NaiveDateTime = {
+test_type!(chrono::DateTime<chrono::FixedOffset>, chrono::DateTime<chrono::Utc>, chrono::NaiveDateTime = {
+	"type": "string",
+	"format": "date-time"
+});
+
+#[cfg(feature = "time")]
+test_type!(time::OffsetDateTime, time::PrimitiveDateTime = {
 	"type": "string",
 	"format": "date-time"
 });

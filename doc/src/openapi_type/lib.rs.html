@@ -151,7 +151,10 @@
 <span id="151">151</span>
 <span id="152">152</span>
 <span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">warn</span>(<span class="ident">missing_debug_implementations</span>, <span class="ident">rust_2018_idioms</span>)]</span>
+<span class="attribute">#![<span class="ident">deny</span>(<span class="ident">rustdoc::broken_intra_doc_links</span>)]</span>
 <span class="attribute">#![<span class="ident">forbid</span>(<span class="ident">unsafe_code</span>)]</span>
 <span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cargo-clippy&quot;</span>, <span class="ident">allow</span>(<span class="ident">clippy::tabs_in_doc_comments</span>))]</span>
 <span class="attribute">#![<span class="ident">doc</span> <span class="op">=</span> <span class="string">r##&quot;
@@ -242,7 +245,8 @@ interested in.
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">OpenapiSchema</span> {
 	<span class="doccomment">/// The name of this schema. If it is None, the schema will be inlined.</span>
 	<span class="kw">pub</span> <span class="ident">name</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-	<span class="doccomment">/// The description of this schema. Optional and only makes sense when a [name] is set as well.</span>
+	<span class="doccomment">/// The description of this schema. Optional and only makes sense when a [`name`](Self::name)</span>
+	<span class="doccomment">/// is set as well.</span>
 	<span class="kw">pub</span> <span class="ident">description</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
 	<span class="doccomment">/// Whether this particular schema is nullable. Note that there is no guarantee that this will</span>
 	<span class="doccomment">/// make it into the final specification, it might just be interpreted as a hint to make it</span>

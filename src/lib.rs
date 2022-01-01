@@ -90,7 +90,8 @@ use openapi::{Schema, SchemaData, SchemaKind};
 pub struct OpenapiSchema {
 	/// The name of this schema. If it is None, the schema will be inlined.
 	pub name: Option<String>,
-	/// The description of this schema. Optional and only makes sense when a [name] is set as well.
+	/// The description of this schema. Optional and only makes sense when a [`name`](Self::name)
+	/// is set as well.
 	pub description: Option<String>,
 	/// Whether this particular schema is nullable. Note that there is no guarantee that this will
 	/// make it into the final specification, it might just be interpreted as a hint to make it

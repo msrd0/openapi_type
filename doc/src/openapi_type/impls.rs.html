@@ -232,8 +232,11 @@
 <span id="232">232</span>
 <span id="233">233</span>
 <span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">OpenapiSchema</span>, <span class="ident">OpenapiType</span>};
 <span class="kw">use</span> <span class="ident">indexmap</span>::{<span class="ident">IndexMap</span>, <span class="ident">IndexSet</span>};
+<span class="kw">use</span> <span class="ident">linked_hash_map::LinkedHashMap</span>;
 <span class="kw">use</span> <span class="ident">openapiv3</span>::{
 	<span class="ident">AdditionalProperties</span>, <span class="ident">ArrayType</span>, <span class="ident">IntegerType</span>, <span class="ident">NumberFormat</span>, <span class="ident">NumberType</span>, <span class="ident">ObjectType</span>, <span class="ident">ReferenceOr</span>, <span class="ident">SchemaKind</span>,
 	<span class="ident">StringFormat</span>, <span class="ident">StringType</span>, <span class="ident">Type</span>, <span class="ident">VariantOrUnknownOrEmpty</span>
@@ -462,8 +465,9 @@
 
 <span class="macro">impl_openapi_type!</span>(
 	<span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="ident">OpenapiType</span>, <span class="ident">T</span>: <span class="ident">OpenapiType</span><span class="op">&gt;</span>,
+	<span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="ident">OpenapiType</span>, <span class="ident">T</span>: <span class="ident">OpenapiType</span>, <span class="ident">S</span>: <span class="ident">BuildHasher</span><span class="op">&gt;</span>,
 	<span class="ident">IndexMap</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="ident">OpenapiType</span>, <span class="ident">T</span>: <span class="ident">OpenapiType</span><span class="op">&gt;</span>,
-	<span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="ident">OpenapiType</span>, <span class="ident">T</span>: <span class="ident">OpenapiType</span>, <span class="ident">S</span>: <span class="ident">BuildHasher</span><span class="op">&gt;</span>
+	<span class="ident">LinkedHashMap</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="ident">OpenapiType</span>, <span class="ident">T</span>: <span class="ident">OpenapiType</span>, <span class="ident">S</span>: <span class="ident">BuildHasher</span><span class="op">&gt;</span>
 	=&gt; <span class="ident">map_schema</span>::<span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">T</span><span class="op">&gt;</span>()
 );
 </code></pre></div>

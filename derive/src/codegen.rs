@@ -114,8 +114,8 @@ fn gen_enum(variants: &[LitStr]) -> TokenStream {
 	let openapi = path!(::openapi_type::openapi);
 	quote! {
 		{
-			let mut enumeration = <::std::vec::Vec<::std::string::String>>::new();
-			#(enumeration.push(::std::string::String::from(#variants));)*
+			let mut enumeration = <::std::vec::Vec<::std::option::Option<::std::string::String>>>::new();
+			#(enumeration.push(::std::option::Option::Some(::std::string::String::from(#variants)));)*
 			::openapi_type::OpenapiSchema::new(
 				#openapi::SchemaKind::Type(
 					#openapi::Type::String(

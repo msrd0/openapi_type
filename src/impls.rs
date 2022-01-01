@@ -166,7 +166,7 @@ fn array_schema<T: OpenapiType>(unique_items: bool) -> OpenapiSchema {
 		name: None,
 		description: None,
 		schema: SchemaKind::Type(Type::Array(ArrayType {
-			items,
+			items: Some(items),
 			min_items: None,
 			max_items: None,
 			unique_items

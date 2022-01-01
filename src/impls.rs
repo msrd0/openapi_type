@@ -1,5 +1,6 @@
 use crate::{OpenapiSchema, OpenapiType};
 use indexmap::{IndexMap, IndexSet};
+use linked_hash_map::LinkedHashMap;
 use openapiv3::{
 	AdditionalProperties, ArrayType, IntegerType, NumberFormat, NumberType, ObjectType, ReferenceOr, SchemaKind,
 	StringFormat, StringType, Type, VariantOrUnknownOrEmpty
@@ -228,7 +229,8 @@ fn map_schema<K: OpenapiType, T: OpenapiType>() -> OpenapiSchema {
 
 impl_openapi_type!(
 	BTreeMap<K: OpenapiType, T: OpenapiType>,
+	HashMap<K: OpenapiType, T: OpenapiType, S: BuildHasher>,
 	IndexMap<K: OpenapiType, T: OpenapiType>,
-	HashMap<K: OpenapiType, T: OpenapiType, S: BuildHasher>
+	LinkedHashMap<K: OpenapiType, T: OpenapiType, S: BuildHasher>
 	=> map_schema::<K, T>()
 );

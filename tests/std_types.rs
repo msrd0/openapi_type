@@ -1,10 +1,12 @@
 use indexmap::{IndexMap, IndexSet};
+use linked_hash_map::LinkedHashMap;
 use openapi_type::OpenapiType;
 use serde_json::Value;
 use std::{
 	collections::{BTreeMap, BTreeSet, HashMap, HashSet},
 	num::{NonZeroU128, NonZeroU16, NonZeroU32, NonZeroU64, NonZeroU8, NonZeroUsize}
 };
+
 macro_rules! test_type {
 	($($($ty:ident)::+ $(<$($($generic:ident)::+),+>)?),* = $json:tt) => {
 		paste::paste! {
@@ -211,15 +213,20 @@ test_type!(BTreeSet<String>, IndexSet<String>, HashSet<String> = {
 	"uniqueItems": true
 });
 
-test_type!(BTreeMap<isize, String>, IndexMap<isize, String>, HashMap<isize, String> = {
-	"type": "object",
-	"properties": {
-		"default": {
-			"type": "integer"
+test_type!(
+	BTreeMap<isize, String>,
+	HashMap<isize, String>,
+	IndexMap<isize, String>,
+	LinkedHashMap<isize, String> = {
+		"type": "object",
+		"properties": {
+			"default": {
+				"type": "integer"
+			}
+		},
+		"required": ["default"],
+		"additionalProperties": {
+			"type": "string"
 		}
-	},
-	"required": ["default"],
-	"additionalProperties": {
-		"type": "string"
 	}
-});
+);

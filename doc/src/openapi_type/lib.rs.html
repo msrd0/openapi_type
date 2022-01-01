@@ -152,8 +152,6 @@
 <span id="152">152</span>
 <span id="153">153</span>
 <span id="154">154</span>
-<span id="155">155</span>
-<span id="156">156</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">warn</span>(<span class="ident">missing_debug_implementations</span>, <span class="ident">rust_2018_idioms</span>)]</span>
 <span class="attribute">#![<span class="ident">deny</span>(<span class="ident">rustdoc::broken_intra_doc_links</span>)]</span>
 <span class="attribute">#![<span class="ident">forbid</span>(<span class="ident">unsafe_code</span>)]</span>
@@ -287,20 +285,18 @@ interested in.
 	}
 }
 
-<span class="doccomment">/**
-This trait needs to be implemented by every type that is being used in the OpenAPI Spec. It gives
-access to the [OpenapiSchema] of this type. It is provided for primitive types, String and the
-like. For use on your own types, there is a derive macro:
-
-```
-# #[macro_use] extern crate openapi_type_derive;
-#
-#[derive(OpenapiType)]
-struct MyResponse {
-	message: String
-}
-```
-*/</span>
+<span class="doccomment">/// This trait needs to be implemented by every type that is being used in the OpenAPI Spec. It gives</span>
+<span class="doccomment">/// access to the [OpenapiSchema] of this type. It is provided for primitive types, String and the</span>
+<span class="doccomment">/// like. For use on your own types, there is a derive macro:</span>
+<span class="doccomment">/// </span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">/// # #[macro_use] extern crate openapi_type_derive;</span>
+<span class="doccomment">/// #</span>
+<span class="doccomment">/// #[derive(OpenapiType)]</span>
+<span class="doccomment">/// struct MyResponse {</span>
+<span class="doccomment">/// 	message: String</span>
+<span class="doccomment">/// }</span>
+<span class="doccomment">/// ```</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">OpenapiType</span> {
 	<span class="kw">fn</span> <span class="ident">schema</span>() -&gt; <span class="ident">OpenapiSchema</span>;
 }

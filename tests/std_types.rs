@@ -1,5 +1,4 @@
 use indexmap::{IndexMap, IndexSet};
-use linked_hash_map::LinkedHashMap;
 use openapi_type::OpenapiType;
 use serde_json::Value;
 use std::{
@@ -213,20 +212,29 @@ test_type!(BTreeSet<String>, IndexSet<String>, HashSet<String> = {
 	"uniqueItems": true
 });
 
-test_type!(
-	BTreeMap<isize, String>,
-	HashMap<isize, String>,
-	IndexMap<isize, String>,
-	LinkedHashMap<isize, String> = {
-		"type": "object",
-		"properties": {
-			"default": {
-				"type": "integer"
-			}
-		},
-		"required": ["default"],
-		"additionalProperties": {
-			"type": "string"
+test_type!(BTreeMap<isize, String>, HashMap<isize, String>, IndexMap<isize, String> = {
+	"type": "object",
+	"properties": {
+		"default": {
+			"type": "integer"
 		}
+	},
+	"required": ["default"],
+	"additionalProperties": {
+		"type": "string"
 	}
-);
+});
+
+#[cfg(feature = "linked-hash-map")]
+test_type!(linked_hash_map::LinkedHashMap<isize, String> = {
+	"type": "object",
+	"properties": {
+		"default": {
+			"type": "integer"
+		}
+	},
+	"required": ["default"],
+	"additionalProperties": {
+		"type": "string"
+	}
+});

@@ -1,6 +1,4 @@
 use crate::{OpenapiSchema, OpenapiType};
-#[cfg(feature = "chrono")]
-use chrono::{offset::TimeZone, Date, DateTime, NaiveDate, NaiveDateTime};
 use indexmap::{IndexMap, IndexSet};
 use openapiv3::{
 	AdditionalProperties, ArrayType, IntegerType, NumberFormat, NumberType, ObjectType, ReferenceOr, SchemaKind,
@@ -12,13 +10,11 @@ use std::{
 	hash::BuildHasher,
 	num::{NonZeroU128, NonZeroU16, NonZeroU32, NonZeroU64, NonZeroU8, NonZeroUsize}
 };
-#[cfg(feature = "uuid")]
-use uuid::Uuid;
 
 macro_rules! impl_openapi_type {
-	($($ty:ident $(<$($generic:ident : $bound:path),+>)*),* => $schema:expr) => {
+	($($($ty:ident)::+ $(<$($generic:ident : $bound:path),+>)?),* => $schema:expr) => {
 		$(
-			impl $(<$($generic : $bound),+>)* OpenapiType for $ty $(<$($generic),+>)* {
+			impl $(<$($generic : $bound),+>)? OpenapiType for $($ty)::+ $(<$($generic),+>)? {
 				fn schema() -> OpenapiSchema {
 					$schema
 				}
@@ -101,17 +97,27 @@ fn str_schema(format: VariantOrUnknownOrEmpty<StringFormat>) -> OpenapiSchema {
 impl_openapi_type!(String, str => str_schema(VariantOrUnknownOrEmpty::Empty));
 
 #[cfg(feature = "chrono")]
-impl_openapi_type!(Date<T: TimeZone>, NaiveDate => {
+impl_openapi_type!(chrono::Date<T: chrono::TimeZone>, chrono::NaiveDate => {
+	str_schema(VariantOrUnknownOrEmpty::Item(StringFormat::Date))
+});
+
+#[cfg(feature = "time")]
+impl_openapi_type!(time::Date => {
 	str_schema(VariantOrUnknownOrEmpty::Item(StringFormat::Date))
 });
 
 #[cfg(feature = "chrono")]
-impl_openapi_type!(DateTime<T: TimeZone>, NaiveDateTime => {
+impl_openapi_type!(chrono::DateTime<T: chrono::TimeZone>, chrono::NaiveDateTime => {
+	str_schema(VariantOrUnknownOrEmpty::Item(StringFormat::DateTime))
+});
+
+#[cfg(feature = "time")]
+impl_openapi_type!(time::OffsetDateTime, time::PrimitiveDateTime => {
 	str_schema(VariantOrUnknownOrEmpty::Item(StringFormat::DateTime))
 });
 
 #[cfg(feature = "uuid")]
-impl_openapi_type!(Uuid => {
+impl_openapi_type!(uuid::Uuid => {
 	str_schema(VariantOrUnknownOrEmpty::Unknown("uuid".to_owned()))
 });
 

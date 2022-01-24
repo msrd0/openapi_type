@@ -42,20 +42,31 @@ pub fn inline_if_unnamed(
 
 struct FlattenError(Cow<'static, str>);
 
+macro_rules! bail {
+	($msg:expr) => {
+		return Err(FlattenError($msg.into()))
+	};
+}
+
 fn flatten_impl(properties: &mut Properties, required: &mut Required, schema: SchemaKind) -> Result<(), FlattenError> {
 	let mut obj = match schema {
 		SchemaKind::Type(Type::Object(obj)) => obj,
+		SchemaKind::Type(Type::String(_)) => bail!("can only flatten structs and maps (got a string)"),
+		SchemaKind::Type(Type::Number(_)) => bail!("can only flatten structs and maps (got a number)"),
+		SchemaKind::Type(Type::Integer(_)) => bail!("can only flatten structs and maps (got an integer)"),
+		SchemaKind::Type(Type::Array(_)) => bail!("can only flatten structs and maps (got a sequence)"),
+		SchemaKind::Type(Type::Boolean {}) => bail!("can only flatten structs and maps (got a bool)"),
+
 		SchemaKind::OneOf { .. } => {
-			return Err(FlattenError(
-				"#[serde(flatten)] is currently not supported for enums with non-unit variants".into()
-			))
+			bail!("flatten for enums with non-unit variants is currently unsupported")
 		},
-		_ => return Err(FlattenError("Expected object".into()))
+
+		_ => bail!("unsupported schema type, can only flatten structs and maps")
 	};
 
 	while let Some((prop_name, prop_schema)) = obj.properties.pop() {
 		if properties.contains_key(&prop_name) {
-			return Err(FlattenError(format!("Duplicate property name {}", prop_name).into()));
+			bail!(format!("Duplicate property name {}", prop_name));
 		}
 		properties.insert(prop_name, prop_schema);
 	}

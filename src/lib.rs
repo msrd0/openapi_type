@@ -68,6 +68,9 @@ a reference to that schema. Therefore, always remember to put the
 interested in.
 "##]
 
+use indexmap::IndexMap;
+use openapi::{Schema, SchemaData, SchemaKind};
+
 pub use indexmap;
 pub use openapi_type_derive::OpenapiType;
 pub use openapiv3 as openapi;
@@ -76,8 +79,8 @@ mod impls;
 #[doc(hidden)]
 pub mod private;
 
-use indexmap::IndexMap;
-use openapi::{Schema, SchemaData, SchemaKind};
+mod visitor;
+pub use visitor::{Visitor, OpenapiVisitor};
 
 /// This struct is used to generate the OpenAPI specification for a particular type. It is already
 /// made available for all primitives and some other types from the rust standard library, and

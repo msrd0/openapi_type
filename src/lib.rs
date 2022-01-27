@@ -80,7 +80,7 @@ mod impls;
 pub mod private;
 
 mod visitor;
-pub use visitor::{Visitor, OpenapiVisitor};
+pub use visitor::{OpenapiVisitor, Visitor};
 
 /// This struct is used to generate the OpenAPI specification for a particular type. It is already
 /// made available for all primitives and some other types from the rust standard library, and

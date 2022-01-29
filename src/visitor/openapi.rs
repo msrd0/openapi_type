@@ -1,6 +1,9 @@
 use super::*;
 use indexmap::{map::Entry, IndexMap};
-use openapiv3::{ObjectType, ReferenceOr, Schema, SchemaData, SchemaKind, Type};
+use openapiv3::{
+	AdditionalProperties, IntegerFormat, IntegerType, NumberFormat, NumberType, ObjectType, ReferenceOr, Schema, SchemaData,
+	SchemaKind, StringFormat, StringType, Type, VariantOrUnknownOrEmpty
+};
 
 trait Boxed {
 	type Boxed;
@@ -26,9 +29,33 @@ pub struct OpenapiSchema {
 	pub dependencies: IndexMap<String, OpenapiSchema>
 }
 
+impl OpenapiSchema {
+	fn new(schema: Schema) -> Self {
+		Self {
+			schema,
+			dependencies: IndexMap::new()
+		}
+	}
+}
+
 #[derive(Debug)]
 pub enum OpenapiVisitor {
 	Empty,
+
+	Unit,
+	Any,
+	Bool,
+
+	Int { byte: Option<u32>, minimum: Option<i64> },
+	Number { byte: Option<u32> },
+	Char,
+
+	String,
+	Uuid,
+	Date,
+	DateTime,
+
+	Option(Box<OpenapiVisitor>),
 
 	Object(Object)
 }
@@ -41,25 +68,196 @@ impl OpenapiVisitor {
 	pub fn into_schema(self) -> Option<OpenapiSchema> {
 		match self {
 			Self::Empty => None,
+
+			Self::Unit => Some(OpenapiSchema::new(Schema {
+				schema_data: Default::default(),
+				schema_kind: SchemaKind::Type(Type::Object(ObjectType {
+					additional_properties: Some(AdditionalProperties::Any(false)),
+					..Default::default()
+				}))
+			})),
+
+			Self::Any => Some(OpenapiSchema::new(Schema {
+				schema_data: SchemaData {
+					nullable: true,
+					..Default::default()
+				},
+				schema_kind: SchemaKind::Any(Default::default())
+			})),
+
+			Self::Bool => Some(OpenapiSchema::new(Schema {
+				schema_data: Default::default(),
+				schema_kind: SchemaKind::Type(Type::Boolean {})
+			})),
+
+			Self::Int { byte, minimum } => Some(OpenapiSchema::new(Schema {
+				schema_data: Default::default(),
+				schema_kind: SchemaKind::Type(Type::Integer(IntegerType {
+					format: match byte {
+						None => VariantOrUnknownOrEmpty::Empty,
+						Some(4) => VariantOrUnknownOrEmpty::Item(IntegerFormat::Int32),
+						Some(8) => VariantOrUnknownOrEmpty::Item(IntegerFormat::Int64),
+						Some(byte) => VariantOrUnknownOrEmpty::Unknown(format!("int{}", byte * 8))
+					},
+					minimum,
+					..Default::default()
+				}))
+			})),
+
+			Self::Number { byte } => Some(OpenapiSchema::new(Schema {
+				schema_data: Default::default(),
+				schema_kind: SchemaKind::Type(Type::Number(NumberType {
+					format: match byte {
+						None => VariantOrUnknownOrEmpty::Empty,
+						Some(4) => VariantOrUnknownOrEmpty::Item(NumberFormat::Float),
+						Some(8) => VariantOrUnknownOrEmpty::Item(NumberFormat::Double),
+						Some(byte) => VariantOrUnknownOrEmpty::Unknown(format!("f{}", byte * 8))
+					},
+					..Default::default()
+				}))
+			})),
+
+			Self::Char => Some(OpenapiSchema::new(Schema {
+				schema_data: Default::default(),
+				schema_kind: SchemaKind::Type(Type::String(StringType {
+					min_length: Some(1),
+					max_length: Some(1),
+					..Default::default()
+				}))
+			})),
+
+			Self::String => Some(OpenapiSchema::new(Schema {
+				schema_data: Default::default(),
+				schema_kind: SchemaKind::Type(Type::String(Default::default()))
+			})),
+
+			Self::Uuid => Some(OpenapiSchema::new(Schema {
+				schema_data: Default::default(),
+				schema_kind: SchemaKind::Type(Type::String(StringType {
+					format: VariantOrUnknownOrEmpty::Unknown("uuid".into()),
+					..Default::default()
+				}))
+			})),
+
+			Self::Date => Some(OpenapiSchema::new(Schema {
+				schema_data: Default::default(),
+				schema_kind: SchemaKind::Type(Type::String(StringType {
+					format: VariantOrUnknownOrEmpty::Item(StringFormat::Date),
+					..Default::default()
+				}))
+			})),
+
+			Self::DateTime => Some(OpenapiSchema::new(Schema {
+				schema_data: Default::default(),
+				schema_kind: SchemaKind::Type(Type::String(StringType {
+					format: VariantOrUnknownOrEmpty::Item(StringFormat::DateTime),
+					..Default::default()
+				}))
+			})),
+
+			Self::Option(opt) => opt.into_schema().map(|mut schema| match schema.schema.schema_data.title {
+				Some(title) => {
+					schema.dependencies.insert(title.clone(), schema);
+					OpenapiSchema {
+						schema: Schema {
+							schema_data: SchemaData {
+								nullable: true,
+								..Default::default()
+							},
+							schema_kind: SchemaKind::AllOf {
+								all_of: vec![ReferenceOr::Reference {
+									reference: format!("#/components/schemas/{title}")
+								}]
+							}
+						},
+						dependencies: schema.dependencies
+					}
+				},
+				None => {
+					schema.schema.schema_data.nullable = true;
+					schema
+				}
+			}),
+
 			Self::Object(obj) => Some(obj.into_schema())
 		}
 	}
 
 	#[track_caller]
-	fn panic_non_empty(&self) -> ! {
-		panic!("This visitor has been called before. You may only specify one type per visitor.");
+	fn panic_if_non_empty(&self) {
+		if !matches!(self, Self::Empty) {
+			panic!("This visitor has been called before. You may only specify one type per visitor.");
+		}
 	}
 }
 
 impl seal::Sealed for OpenapiVisitor {}
 
 impl Visitor for OpenapiVisitor {
+	type OptionVisitor = Self;
 	type ObjectVisitor = Object;
 
-	fn visit_object(&mut self) -> &mut Object {
-		if !matches!(self, Self::Empty) {
-			self.panic_non_empty();
+	fn visit_unit(&mut self) {
+		self.panic_if_non_empty();
+		*self = Self::Unit;
+	}
+
+	fn visit_any(&mut self) {
+		self.panic_if_non_empty();
+		*self = Self::Any;
+	}
+
+	fn visit_bool(&mut self) {
+		self.panic_if_non_empty();
+		*self = Self::Bool;
+	}
+
+	fn visit_int(&mut self, byte: Option<u32>, minimum: Option<i64>) {
+		self.panic_if_non_empty();
+		*self = Self::Int { byte, minimum };
+	}
+
+	fn visit_number(&mut self, byte: Option<u32>) {
+		self.panic_if_non_empty();
+		*self = Self::Number { byte }
+	}
+
+	fn visit_char(&mut self) {
+		self.panic_if_non_empty();
+		*self = Self::Char;
+	}
+
+	fn visit_string(&mut self) {
+		self.panic_if_non_empty();
+		*self = Self::String;
+	}
+
+	fn visit_uuid(&mut self) {
+		self.panic_if_non_empty();
+		*self = Self::Uuid;
+	}
+
+	fn visit_date(&mut self) {
+		self.panic_if_non_empty();
+		*self = Self::Date;
+	}
+
+	fn visit_datetime(&mut self) {
+		self.panic_if_non_empty();
+		*self = Self::DateTime;
+	}
+
+	fn visit_option(&mut self) -> &mut Self {
+		self.panic_if_non_empty();
+		*self = Self::Option(Box::new(Self::new()));
+		match self {
+			Self::Option(opt) => opt,
+			_ => unreachable!()
 		}
+	}
+
+	fn visit_object(&mut self) -> &mut Object {
+		self.panic_if_non_empty();
 		*self = Self::Object(Object::default());
 		match self {
 			Self::Object(obj) => obj,

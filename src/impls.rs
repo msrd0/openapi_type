@@ -1,4 +1,4 @@
-use crate::{OpenapiSchema, OpenapiType};
+use crate::{OpenapiSchema, OpenapiType, Visitor};
 use indexmap::{IndexMap, IndexSet};
 use openapiv3::{
 	AdditionalProperties, ArrayType, IntegerType, NumberFormat, NumberType, ObjectType, ReferenceOr, SchemaKind,
@@ -7,9 +7,184 @@ use openapiv3::{
 use serde_json::Value;
 use std::{
 	collections::{BTreeMap, BTreeSet, HashMap, HashSet},
+	ffi::{CStr, CString},
 	hash::BuildHasher,
 	num::{NonZeroU128, NonZeroU16, NonZeroU32, NonZeroU64, NonZeroU8, NonZeroUsize}
 };
+
+impl OpenapiType for () {
+	fn visit_type<V: Visitor>(visitor: &mut V) {
+		visitor.visit_unit();
+	}
+}
+
+impl OpenapiType for Value {
+	fn visit_type<V: Visitor>(visitor: &mut V) {
+		visitor.visit_any();
+	}
+}
+
+impl OpenapiType for bool {
+	fn visit_type<V: Visitor>(visitor: &mut V) {
+		visitor.visit_bool();
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+macro_rules! int {
+	($($ty:ident($byte:expr, $minimum:expr);)+) => {
+		$(
+			impl OpenapiType for $ty {
+				fn visit_type<V: Visitor>(visitor: &mut V) {
+					visitor.visit_int($byte, $minimum);
+				}
+			}
+		)+
+	}
+}
+
+int! {
+	isize(None, None);
+	i8(None, Some(1));
+	i16(None, Some(2));
+	i32(None, Some(4));
+	i64(None, Some(8));
+	i128(None, Some(16));
+
+	usize(Some(0), None);
+	u8(Some(0), Some(1));
+	u16(Some(0), Some(2));
+	u32(Some(0), Some(4));
+	u64(Some(0), Some(8));
+	u128(Some(0), Some(16));
+
+	NonZeroUsize(Some(1), None);
+	NonZeroU8(Some(1), Some(1));
+	NonZeroU16(Some(1), Some(2));
+	NonZeroU32(Some(1), Some(4));
+	NonZeroU64(Some(1), Some(8));
+	NonZeroU128(Some(1), Some(16));
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+macro_rules! number {
+	($($ty:ident($byte:expr);)+) => {
+		$(
+			impl OpenapiType for $ty {
+				fn visit_type<V: Visitor>(visitor: &mut V) {
+					visitor.visit_number($byte);
+				}
+			}
+		)+
+	}
+}
+
+number! {
+	f32(Some(4));
+	f64(Some(8));
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+impl OpenapiType for char {
+	fn visit_type<V: Visitor>(visitor: &mut V) {
+		visitor.visit_char();
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+macro_rules! string {
+	($($ty:ident;)+) => {
+		$(
+			impl OpenapiType for $ty {
+				fn visit_type<V: Visitor>(visitor: &mut V) {
+					visitor.visit_string();
+				}
+			}
+		)+
+	}
+}
+
+string! {
+	String;
+	str;
+	CString;
+	CStr;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+#[cfg(feature = "uuid08")]
+impl OpenapiType for uuid08::Uuid {
+	fn visit_type<V: Visitor>(visitor: &mut V) {
+		visitor.visit_uuid();
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+macro_rules! date {
+	($($($ty:ident)::+$(<$arg:ident: $bound:path>)?;)+) => {
+		$(
+			impl$(<$arg: $bound>)? OpenapiType for $($ty)::+$(<$arg>)? {
+				fn visit_type<V: Visitor>(visitor: &mut V) {
+					visitor.visit_date();
+				}
+			}
+		)+
+	}
+}
+
+#[cfg(feature = "time03")]
+date! {
+	time03::Date;
+}
+
+#[cfg(feature = "chrono04")]
+date! {
+	chrono04::Date<T: chrono04::TimeZone>;
+	chrono04::NaiveDate;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+macro_rules! datetime {
+	($($($ty:ident)::+$(<$arg:ident: $bound:path>)?;)+) => {
+		$(
+			impl$(<$arg: $bound>)? OpenapiType for $($ty)::+$(<$arg>)? {
+				fn visit_type<V: Visitor>(visitor: &mut V) {
+					visitor.visit_datetime();
+				}
+			}
+		)+
+	}
+}
+
+#[cfg(feature = "time03")]
+date! {
+	time03::OffsetDateTime;
+	time03::PrimitiveDateTime;
+}
+
+#[cfg(feature = "chrono04")]
+date! {
+	chrono04::DateTime<T: chrono04::TimeZone>;
+	chrono04::NaiveDateTime;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+impl<T: OpenapiType> OpenapiType for Option<T> {
+	fn visit_type<V: Visitor>(visitor: &mut V) {
+		let v = visitor.visit_option();
+		T::visit_type(v);
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
 
 macro_rules! impl_openapi_type {
 	($($($ty:ident)::+ $(<$($generic:ident : $bound:path),+>)?),* => $schema:expr) => {
@@ -22,127 +197,6 @@ macro_rules! impl_openapi_type {
 		)*
 	};
 }
-
-type Unit = ();
-impl_openapi_type!(Unit => {
-	OpenapiSchema::new(SchemaKind::Type(Type::Object(ObjectType {
-		additional_properties: Some(AdditionalProperties::Any(false)),
-		..Default::default()
-	})))
-});
-
-impl_openapi_type!(Value => {
-	OpenapiSchema {
-		nullable: true,
-		description: None,
-		name: None,
-		schema: SchemaKind::Any(Default::default()),
-		dependencies: Default::default()
-	}
-});
-
-impl_openapi_type!(bool => OpenapiSchema::new(SchemaKind::Type(Type::Boolean {})));
-
-#[inline]
-fn int_schema(minimum: Option<i64>, bits: Option<i64>) -> OpenapiSchema {
-	OpenapiSchema::new(SchemaKind::Type(Type::Integer(IntegerType {
-		minimum,
-		format: bits
-			.map(|bits| VariantOrUnknownOrEmpty::Unknown(format!("int{}", bits)))
-			.unwrap_or(VariantOrUnknownOrEmpty::Empty),
-		..Default::default()
-	})))
-}
-
-impl_openapi_type!(isize => int_schema(None, None));
-impl_openapi_type!(i8 => int_schema(None, Some(8)));
-impl_openapi_type!(i16 => int_schema(None, Some(16)));
-impl_openapi_type!(i32 => int_schema(None, Some(32)));
-impl_openapi_type!(i64 => int_schema(None, Some(64)));
-impl_openapi_type!(i128 => int_schema(None, Some(128)));
-
-impl_openapi_type!(usize => int_schema(Some(0), None));
-impl_openapi_type!(u8 => int_schema(Some(0), Some(8)));
-impl_openapi_type!(u16 => int_schema(Some(0), Some(16)));
-impl_openapi_type!(u32 => int_schema(Some(0), Some(32)));
-impl_openapi_type!(u64 => int_schema(Some(0), Some(64)));
-impl_openapi_type!(u128 => int_schema(Some(0), Some(128)));
-
-impl_openapi_type!(NonZeroUsize => int_schema(Some(1), None));
-impl_openapi_type!(NonZeroU8 => int_schema(Some(1), Some(8)));
-impl_openapi_type!(NonZeroU16 => int_schema(Some(1), Some(16)));
-impl_openapi_type!(NonZeroU32 => int_schema(Some(1), Some(32)));
-impl_openapi_type!(NonZeroU64 => int_schema(Some(1), Some(64)));
-impl_openapi_type!(NonZeroU128 => int_schema(Some(1), Some(128)));
-
-#[inline]
-fn float_schema(format: NumberFormat) -> OpenapiSchema {
-	OpenapiSchema::new(SchemaKind::Type(Type::Number(NumberType {
-		format: VariantOrUnknownOrEmpty::Item(format),
-		..Default::default()
-	})))
-}
-
-impl_openapi_type!(f32 => float_schema(NumberFormat::Float));
-impl_openapi_type!(f64 => float_schema(NumberFormat::Double));
-
-#[inline]
-fn str_schema(format: VariantOrUnknownOrEmpty<StringFormat>) -> OpenapiSchema {
-	OpenapiSchema::new(SchemaKind::Type(Type::String(StringType {
-		format,
-		..Default::default()
-	})))
-}
-
-impl_openapi_type!(String, str => str_schema(VariantOrUnknownOrEmpty::Empty));
-
-#[cfg(feature = "chrono")]
-impl_openapi_type!(chrono::Date<T: chrono::TimeZone>, chrono::NaiveDate => {
-	str_schema(VariantOrUnknownOrEmpty::Item(StringFormat::Date))
-});
-
-#[cfg(feature = "time")]
-impl_openapi_type!(time::Date => {
-	str_schema(VariantOrUnknownOrEmpty::Item(StringFormat::Date))
-});
-
-#[cfg(feature = "chrono")]
-impl_openapi_type!(chrono::DateTime<T: chrono::TimeZone>, chrono::NaiveDateTime => {
-	str_schema(VariantOrUnknownOrEmpty::Item(StringFormat::DateTime))
-});
-
-#[cfg(feature = "time")]
-impl_openapi_type!(time::OffsetDateTime, time::PrimitiveDateTime => {
-	str_schema(VariantOrUnknownOrEmpty::Item(StringFormat::DateTime))
-});
-
-#[cfg(feature = "uuid")]
-impl_openapi_type!(uuid::Uuid => {
-	str_schema(VariantOrUnknownOrEmpty::Unknown("uuid".to_owned()))
-});
-
-impl_openapi_type!(Option<T: OpenapiType> => {
-	let schema = T::schema();
-	let mut dependencies = schema.dependencies.clone();
-	let schema = match schema.name.clone() {
-		Some(name) => {
-			let reference = ReferenceOr::Reference {
-				reference: format!("#/components/schemas/{}", name)
-			};
-			dependencies.insert(name, schema);
-			SchemaKind::AllOf { all_of: vec![reference] }
-		},
-		None => schema.schema
-	};
-
-	OpenapiSchema {
-		nullable: true,
-		name: None,
-		description: None,
-		schema,
-		dependencies
-	}
-});
 
 #[inline]
 fn array_schema<T: OpenapiType>(unique_items: bool) -> OpenapiSchema {

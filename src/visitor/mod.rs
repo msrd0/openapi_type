@@ -9,6 +9,7 @@ mod seal {
 /// trait **exactly once**.
 pub trait Visitor: seal::Sealed {
 	type OptionVisitor: Visitor;
+	type ArrayVisitor: Visitor;
 	type ObjectVisitor: ObjectVisitor;
 
 	fn visit_unit(&mut self);
@@ -33,15 +34,20 @@ pub trait Visitor: seal::Sealed {
 
 	fn visit_option(&mut self) -> &mut Self::OptionVisitor;
 
+	fn visit_array(&mut self, len: Option<usize>, unique_items: bool) -> &mut Self::ArrayVisitor;
+
 	fn visit_object(&mut self) -> &mut Self::ObjectVisitor;
 }
 
 pub trait ObjectVisitor: seal::Sealed {
 	type FieldVisitor: Visitor;
+	type ValueVisitor: Visitor;
 
 	fn visit_name(&mut self, name: String);
 
 	fn visit_description(&mut self, description: String);
 
 	fn visit_field(&mut self, name: String, doc: Option<String>) -> &mut Self::FieldVisitor;
+
+	fn visit_additional(&mut self) -> &mut Self::ValueVisitor;
 }

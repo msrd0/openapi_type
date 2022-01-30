@@ -1,8 +1,8 @@
 use super::*;
 use indexmap::{map::Entry, IndexMap};
 use openapiv3::{
-	AdditionalProperties, IntegerFormat, IntegerType, NumberFormat, NumberType, ObjectType, ReferenceOr, Schema, SchemaData,
-	SchemaKind, StringFormat, StringType, Type, VariantOrUnknownOrEmpty
+	AdditionalProperties, ArrayType, IntegerFormat, IntegerType, NumberFormat, NumberType, ObjectType, ReferenceOr, Schema,
+	SchemaData, SchemaKind, StringFormat, StringType, Type, VariantOrUnknownOrEmpty
 };
 
 trait Boxed {
@@ -46,8 +46,13 @@ pub enum OpenapiVisitor {
 	Any,
 	Bool,
 
-	Int { byte: Option<u32>, minimum: Option<i64> },
-	Number { byte: Option<u32> },
+	Int {
+		byte: Option<u32>,
+		minimum: Option<i64>
+	},
+	Number {
+		byte: Option<u32>
+	},
 	Char,
 
 	String,
@@ -56,8 +61,40 @@ pub enum OpenapiVisitor {
 	DateTime,
 
 	Option(Box<OpenapiVisitor>),
-
+	Array {
+		items: Box<OpenapiVisitor>,
+		len: Option<usize>,
+		unique_items: bool
+	},
 	Object(Object)
+}
+
+fn add_dependencies(dependencies: &mut IndexMap<String, OpenapiSchema>, other: &mut IndexMap<String, OpenapiSchema>) {
+	while let Some((name, schema)) = other.pop() {
+		dependencies.entry(name).or_insert(schema);
+	}
+}
+
+fn inline_if_unnamed(
+	dependencies: &mut IndexMap<String, OpenapiSchema>,
+	mut schema: OpenapiSchema,
+	doc: Option<String>
+) -> ReferenceOr<Schema> {
+	add_dependencies(dependencies, &mut schema.dependencies);
+	match schema.schema.schema_data.title.as_deref() {
+		Some(schema_name) => {
+			let ref_name = schema_name.replace(|c: char| !c.is_alphanumeric(), "_");
+			let reference = format!("#/components/schemas/{ref_name}");
+			dependencies.insert(ref_name, schema);
+			ReferenceOr::Reference { reference }
+		},
+		None => {
+			if let Some(doc) = doc {
+				schema.schema.schema_data.description = Some(doc);
+			}
+			ReferenceOr::Item(schema.schema)
+		}
+	}
 }
 
 impl OpenapiVisitor {
@@ -155,29 +192,50 @@ impl OpenapiVisitor {
 				}))
 			})),
 
-			Self::Option(opt) => opt.into_schema().map(|mut schema| match schema.schema.schema_data.title {
-				Some(title) => {
-					schema.dependencies.insert(title.clone(), schema);
-					OpenapiSchema {
-						schema: Schema {
-							schema_data: SchemaData {
-								nullable: true,
-								..Default::default()
+			Self::Option(opt) => opt
+				.into_schema()
+				.map(|mut schema| match schema.schema.schema_data.title.as_deref() {
+					Some(_) => {
+						let mut dependencies = IndexMap::new();
+						let reference = inline_if_unnamed(&mut dependencies, schema, None);
+						OpenapiSchema {
+							schema: Schema {
+								schema_data: SchemaData {
+									nullable: true,
+									..Default::default()
+								},
+								schema_kind: SchemaKind::AllOf { all_of: vec![reference] }
 							},
-							schema_kind: SchemaKind::AllOf {
-								all_of: vec![ReferenceOr::Reference {
-									reference: format!("#/components/schemas/{title}")
-								}]
-							}
-						},
-						dependencies: schema.dependencies
+							dependencies
+						}
+					},
+					None => {
+						schema.schema.schema_data.nullable = true;
+						schema
 					}
-				},
-				None => {
-					schema.schema.schema_data.nullable = true;
-					schema
-				}
-			}),
+				}),
+
+			Self::Array {
+				items,
+				len,
+				unique_items
+			} => {
+				let mut dependencies = IndexMap::new();
+				Some(OpenapiSchema {
+					schema: Schema {
+						schema_data: Default::default(),
+						schema_kind: SchemaKind::Type(Type::Array(ArrayType {
+							items: items
+								.into_schema()
+								.map(|schema| inline_if_unnamed(&mut dependencies, schema, None).boxed()),
+							min_items: len,
+							max_items: len,
+							unique_items
+						}))
+					},
+					dependencies
+				})
+			},
 
 			Self::Object(obj) => Some(obj.into_schema())
 		}
@@ -195,6 +253,7 @@ impl seal::Sealed for OpenapiVisitor {}
 
 impl Visitor for OpenapiVisitor {
 	type OptionVisitor = Self;
+	type ArrayVisitor = Self;
 	type ObjectVisitor = Object;
 
 	fn visit_unit(&mut self) {
@@ -256,6 +315,19 @@ impl Visitor for OpenapiVisitor {
 		}
 	}
 
+	fn visit_array(&mut self, len: Option<usize>, unique_items: bool) -> &mut Self {
+		self.panic_if_non_empty();
+		*self = Self::Array {
+			items: Box::new(Self::new()),
+			len,
+			unique_items
+		};
+		match self {
+			Self::Array { items, .. } => items,
+			_ => unreachable!()
+		}
+	}
+
 	fn visit_object(&mut self) -> &mut Object {
 		self.panic_if_non_empty();
 		*self = Self::Object(Object::default());
@@ -276,35 +348,8 @@ pub struct Field {
 pub struct Object {
 	name: Option<String>,
 	description: Option<String>,
-	fields: IndexMap<String, Field>
-}
-
-fn add_dependencies(dependencies: &mut IndexMap<String, OpenapiSchema>, other: &mut IndexMap<String, OpenapiSchema>) {
-	while let Some((name, schema)) = other.pop() {
-		dependencies.entry(name).or_insert(schema);
-	}
-}
-
-fn inline_if_unnamed(
-	dependencies: &mut IndexMap<String, OpenapiSchema>,
-	mut schema: OpenapiSchema,
-	doc: Option<String>
-) -> ReferenceOr<Schema> {
-	add_dependencies(dependencies, &mut schema.dependencies);
-	match schema.schema.schema_data.title.as_deref() {
-		Some(schema_name) => {
-			let ref_name = schema_name.replace(|c: char| !c.is_alphanumeric(), "_");
-			let reference = format!("#/components/schemas/{ref_name}");
-			dependencies.insert(ref_name, schema);
-			ReferenceOr::Reference { reference }
-		},
-		None => {
-			if let Some(doc) = doc {
-				schema.schema.schema_data.description = Some(doc);
-			}
-			ReferenceOr::Item(schema.schema)
-		}
-	}
+	fields: IndexMap<String, Field>,
+	additional: Option<Box<OpenapiVisitor>>
 }
 
 impl Object {
@@ -347,6 +392,7 @@ impl seal::Sealed for Object {}
 
 impl ObjectVisitor for Object {
 	type FieldVisitor = OpenapiVisitor;
+	type ValueVisitor = OpenapiVisitor;
 
 	fn visit_name(&mut self, name: String) {
 		if self.name.is_some() {
@@ -374,5 +420,13 @@ impl ObjectVisitor for Object {
 					.visitor
 			},
 		}
+	}
+
+	fn visit_additional(&mut self) -> &mut OpenapiVisitor {
+		if self.additional.is_some() {
+			panic!("visit_additional has been called before. You may only call this once per visitor.");
+		}
+		self.additional = Some(Box::new(OpenapiVisitor::new()));
+		self.additional.as_mut().unwrap_or_else(|| unreachable!())
 	}
 }

@@ -68,19 +68,14 @@ a reference to that schema. Therefore, always remember to put the
 interested in.
 "##]
 
-use indexmap::IndexMap;
-use openapi::{Schema, SchemaData, SchemaKind};
-
 pub use indexmap;
 pub use openapi_type_derive::OpenapiType;
 pub use openapiv3 as openapi;
 
 mod impls;
-#[doc(hidden)]
-pub mod private;
-
 mod visitor;
-pub use visitor::{OpenapiSchema, OpenapiVisitor, Visitor};
+
+pub use visitor::{ObjectVisitor, OpenapiSchema, OpenapiVisitor, Visitor};
 
 /// This trait needs to be implemented by every type that is being used in the OpenAPI Spec. It gives
 /// access to the [OpenapiSchema] of this type. It is provided for primitive types, String and the

@@ -91,6 +91,14 @@ pub use visitor::{ObjectVisitor, OpenapiSchema, OpenapiVisitor, Visitor};
 /// ```
 pub trait OpenapiType {
 	fn visit_type<V: Visitor>(visitor: &mut V);
+
+	fn schema() -> OpenapiSchema {
+		let mut visitor = OpenapiVisitor::new();
+		Self::visit_type(&mut visitor);
+		visitor
+			.into_schema()
+			.expect("The OpenapiType implementation failed to call the visitor")
+	}
 }
 
 impl<'a, T: ?Sized + OpenapiType> OpenapiType for &'a T {

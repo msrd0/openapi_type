@@ -12,8 +12,7 @@ macro_rules! test_type {
 			$(
 				#[test]
 				fn [<$($ty:lower)_+ $($($(_$generic:lower)+)+)? >]() {
-					let schema = <$($ty)::+ $(<$($($generic)::+),+>)? as OpenapiType>::schema();
-					let schema = openapi_type::OpenapiSchema::into_schema(schema);
+					let schema: openapiv3::Schema = <$($ty)::+ $(<$($($generic)::+),+>)? as OpenapiType>::schema().schema;
 					let schema_json = serde_json::to_value(&schema).unwrap();
 					let expected = serde_json::json!($json);
 					pretty_assertions::assert_eq!(schema_json, expected);

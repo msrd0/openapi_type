@@ -3,8 +3,8 @@ macro_rules! test_type {
 		paste::paste! {
 			#[test]
 			fn [< $ty:lower >]() {
-				let schema = <$ty as OpenapiType>::schema().schema;
-				let schema_json = serde_json::to_value(&schema).unwrap();
+				let schema = <$ty as OpenapiType>::schema();
+				let schema_json = serde_json::to_value(&schema.schema).unwrap();
 				let expected = serde_json::json!($json);
 				pretty_assertions::assert_eq!(schema_json, expected);
 			}
@@ -15,10 +15,12 @@ macro_rules! test_type {
 		paste::paste! {
 			#[test]
 			fn [< $ty:lower _dependencies >]() {
-				let mut schema = <$ty as OpenapiType>::schema();
+				let schema = <$ty as OpenapiType>::schema();
 				$({
-					let dep_schema = schema.dependencies.remove($dep_name).expect(concat!("Schema is missing the following dependency: ", $dep_name)).schema;
-					let dep_json = serde_json::to_value(&dep_schema).unwrap();
+					let dep_schema = schema.dependencies
+						.get($dep_name)
+						.expect(concat!("Schema is missing the following dependency: ", $dep_name));
+					let dep_json = serde_json::to_value(&dep_schema.schema).unwrap();
 					let expected = serde_json::json!($dep_json);
 					pretty_assertions::assert_eq!(dep_json, expected)
 				})*

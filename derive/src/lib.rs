@@ -18,7 +18,9 @@ use codegen::*;
 mod parser;
 use parser::*;
 
-/// The derive macro for [OpenapiType](https://docs.rs/openapi_type/*/openapi_type/trait.OpenapiType.html).
+/// The derive macro for [`OpenapiType`].
+///
+///  [`OpenapiType`]: https://docs.rs/openapi_type/*/openapi_type/trait.OpenapiType.html
 #[proc_macro_derive(OpenapiType, attributes(openapi))]
 pub fn derive_openapi_type(input: TokenStream) -> TokenStream {
 	let input = parse_macro_input!(input);
@@ -26,6 +28,8 @@ pub fn derive_openapi_type(input: TokenStream) -> TokenStream {
 }
 
 fn expand_openapi_type(mut input: DeriveInput) -> syn::Result<TokenStream2> {
+	let ident = &input.ident;
+
 	// parse #[serde] and #[openapi] attributes
 	let mut attrs = ContainerAttributes::default();
 	for attr in &input.attrs {
@@ -50,14 +54,6 @@ fn expand_openapi_type(mut input: DeriveInput) -> syn::Result<TokenStream2> {
 	}
 	let doc = gen_doc_option(&doc);
 
-	// prepare impl block for codegen
-	let ident = &input.ident;
-	let name = ident.to_string();
-	let mut name = LitStr::new(&name, ident.span());
-	if let Some(rename) = &attrs.rename {
-		name = rename.clone();
-	}
-
 	// prepare the generics - all impl generics will get `OpenapiType` requirement
 	let (impl_generics, ty_generics, where_clause) = {
 		let generics = &mut input.generics;
@@ -81,27 +77,17 @@ fn expand_openapi_type(mut input: DeriveInput) -> syn::Result<TokenStream2> {
 	};
 
 	// run the codegen
-	let schema_code = parsed.gen_schema();
+	let visit_impl = parsed.gen_visit_impl();
 
 	// put the code together
 	Ok(quote! {
 		#[allow(unused_mut)]
 		impl #impl_generics ::openapi_type::OpenapiType for #ident #ty_generics #where_clause {
-			fn schema() -> ::openapi_type::OpenapiSchema {
-				// this will be used by the schema code
-				let mut dependencies = ::openapi_type::private::Dependencies::new();
-
-				let mut schema: ::openapi_type::OpenapiSchema = #schema_code;
-				schema.nullable = false;
-				schema.dependencies = dependencies;
-
-				const NAME: &::core::primitive::str = #name;
-				schema.name = ::std::option::Option::Some(::std::string::String::from(NAME));
-
-				const DESCRIPTION: ::core::option::Option<&'static ::core::primitive::str> = #doc;
-				schema.description = DESCRIPTION.map(|desc| ::std::string::String::from(desc));
-
-				schema
+			fn visit_type<__openapi_type_V>(visitor: &mut __openapi_type_V)
+			where
+				__openapi_type_V: ::openapi_type::Visitor
+			{
+				#visit_impl
 			}
 		}
 	})

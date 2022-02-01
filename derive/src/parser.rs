@@ -29,7 +29,9 @@ pub(super) enum ParseData {
 	},
 	Enum(Vec<LitStr>),
 	Alternatives(Vec<ParseData>),
-	Unit
+	Unit {
+		name: Option<LitStr>
+	}
 }
 
 fn parse_named_fields(named_fields: &FieldsNamed, rename_all: Option<&LitStr>) -> syn::Result<Vec<ParseDataField>> {
@@ -105,11 +107,12 @@ fn parse_named_fields(named_fields: &FieldsNamed, rename_all: Option<&LitStr>) -
 }
 
 pub(super) fn parse_struct(ident: &Ident, strukt: &DataStruct, attrs: &ContainerAttributes) -> syn::Result<ParseData> {
+	let name = attrs.rename.clone().unwrap_or_else(|| ident.to_lit_str());
 	match &strukt.fields {
 		Fields::Named(named_fields) => {
 			let fields = parse_named_fields(named_fields, attrs.rename_all.as_ref())?;
 			Ok(ParseData::Struct {
-				name: Some(ident.to_lit_str()),
+				name: Some(name),
 				fields
 			})
 		},
@@ -117,7 +120,7 @@ pub(super) fn parse_struct(ident: &Ident, strukt: &DataStruct, attrs: &Container
 			unnamed_fields.span(),
 			"#[derive(OpenapiType)] does not support tuple structs"
 		)),
-		Fields::Unit => Ok(ParseData::Unit)
+		Fields::Unit => Ok(ParseData::Unit { name: Some(name) })
 	}
 }
 
@@ -163,7 +166,7 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 				}]
 			}),
 			// untagged
-			(None, None, true) => Some(ParseData::Unit),
+			(None, None, true) => Some(ParseData::Unit { name: None }),
 			// unknown
 			_ => return Err(syn::Error::new(Span::call_site(), "Unknown enum representation"))
 		}

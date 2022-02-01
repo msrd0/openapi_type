@@ -17,7 +17,7 @@ impl ParseData {
 	pub(super) fn gen_visit_impl(&self) -> TokenStream {
 		match self {
 			Self::Struct { name, doc, fields } => gen_struct(name.as_ref(), &doc, fields),
-			Self::Enum(variants) => gen_enum(variants),
+			Self::Enum { name, doc, variants } => gen_enum(name.as_ref(), &doc, variants),
 			Self::Alternatives(alt) => gen_alt(alt),
 			Self::Unit { name, doc } => gen_unit(name.as_ref(), &doc)
 		}
@@ -99,9 +99,22 @@ fn gen_struct(name: Option<&LitStr>, doc: &[String], fields: &[ParseDataField]) 
 	}
 }
 
-fn gen_enum(variants: &[LitStr]) -> TokenStream {
+fn gen_enum(name: Option<&LitStr>, doc: &[String], variants: &[LitStr]) -> TokenStream {
+	let str = path!(::core::primitive::str);
+	let option = path!(::core::option::Option);
+
+	let name = match name {
+		Some(name) => quote!(#option::Some(#name)),
+		None => quote!(#option::None)
+	};
+	let doc = gen_doc_option(doc);
+
 	quote! {
-		unimplemented!("alt codegen is currently not implemented")
+		const ENUM_NAME: #option<&'static #str> = #name;
+		const ENUM_DOC: #option<&'static #str> = #doc;
+		const ENUM_VARIANTS: &[&'static #str] = &[#(#variants),*];
+
+		visitor.visit_enum(ENUM_NAME, ENUM_DOC, ENUM_VARIANTS);
 	}
 }
 

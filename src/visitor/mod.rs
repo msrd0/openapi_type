@@ -38,6 +38,8 @@ pub trait Visitor: seal::Sealed {
 
 	fn visit_option(&mut self) -> &mut Self::OptionVisitor;
 
+	fn visit_enum(&mut self, name: Option<&str>, description: Option<&str>, variants: &[&str]);
+
 	fn visit_array(&mut self, len: Option<usize>, unique_items: bool) -> &mut Self::ArrayVisitor;
 
 	fn visit_object(&mut self) -> &mut Self::ObjectVisitor;

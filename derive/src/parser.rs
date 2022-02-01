@@ -28,7 +28,11 @@ pub(super) enum ParseData {
 		doc: Vec<String>,
 		fields: Vec<ParseDataField>
 	},
-	Enum(Vec<LitStr>),
+	Enum {
+		name: Option<LitStr>,
+		doc: Vec<String>,
+		variants: Vec<LitStr>
+	},
 	Alternatives(Vec<ParseData>),
 	Unit {
 		name: Option<LitStr>,
@@ -162,7 +166,11 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 	} else {
 		match (&attrs.tag, &attrs.content, attrs.untagged) {
 			// externally tagged (default)
-			(None, None, false) => Some(ParseData::Enum(strings)),
+			(None, None, false) => Some(ParseData::Enum {
+				name: None,
+				doc: Vec::new(),
+				variants: strings
+			}),
 			// internally tagged or adjacently tagged
 			(Some(tag), _, false) => Some(ParseData::Struct {
 				name: None,
@@ -170,7 +178,11 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 				fields: vec![ParseDataField {
 					name: tag.clone(),
 					doc: Vec::new(),
-					ty: TypeOrInline::Inline(ParseData::Enum(strings)),
+					ty: TypeOrInline::Inline(ParseData::Enum {
+						name: None,
+						doc: Vec::new(),
+						variants: strings
+					}),
 					flatten: false
 				}]
 			}),
@@ -213,7 +225,11 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 									ParseData::Struct { fields, .. } => fields.push(ParseDataField {
 										name: tag.clone(),
 										doc: Vec::new(),
-										ty: TypeOrInline::Inline(ParseData::Enum(vec![name])),
+										ty: TypeOrInline::Inline(ParseData::Enum {
+											name: None,
+											doc: Vec::new(),
+											variants: vec![name]
+										}),
 										flatten: false
 									}),
 									_ => return Err(syn::Error::new(
@@ -233,7 +249,11 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 										ParseDataField {
 											name: tag.clone(),
 											doc: Vec::new(),
-											ty: TypeOrInline::Inline(ParseData::Enum(vec![name])),
+											ty: TypeOrInline::Inline(ParseData::Enum {
+												name: None,
+												doc: Vec::new(),
+												variants: vec![name]
+											}),
 											flatten: false
 										},
 										ParseDataField {
@@ -257,7 +277,12 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 
 	match (data_strings, data_types) {
 		// only variants without fields
-		(Some(data), None) => Ok(data),
+		(Some(ParseData::Enum { variants, .. }), None) => Ok(ParseData::Enum {
+			name: Some(ident.to_lit_str()),
+			doc: attrs.doc.clone(),
+			variants
+		}),
+		(Some(_), None) => unreachable!(),
 		// only one variant with fields
 		(None, Some(ParseData::Alternatives(mut alt))) if alt.len() == 1 => Ok(alt.remove(0)),
 		// only variants with fields

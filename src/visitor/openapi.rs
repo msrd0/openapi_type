@@ -64,6 +64,11 @@ pub enum OpenapiVisitor {
 	DateTime,
 
 	Option(Box<OpenapiVisitor>),
+	Enum {
+		name: Option<String>,
+		description: Option<String>,
+		variants: Vec<Option<String>>
+	},
 	Array {
 		items: Box<OpenapiVisitor>,
 		len: Option<usize>,
@@ -223,6 +228,22 @@ impl OpenapiVisitor {
 					}
 				}),
 
+			Self::Enum {
+				name,
+				description,
+				variants
+			} => Some(OpenapiSchema::new(Schema {
+				schema_data: SchemaData {
+					title: name,
+					description,
+					..Default::default()
+				},
+				schema_kind: SchemaKind::Type(Type::String(StringType {
+					enumeration: variants,
+					..Default::default()
+				}))
+			})),
+
 			Self::Array {
 				items,
 				len,
@@ -321,6 +342,15 @@ impl Visitor for OpenapiVisitor {
 			Self::Option(opt) => opt,
 			_ => unreachable!()
 		}
+	}
+
+	fn visit_enum(&mut self, name: Option<&str>, description: Option<&str>, variants: &[&str]) {
+		self.panic_if_non_empty();
+		*self = Self::Enum {
+			name: name.map(Into::into),
+			description: description.map(Into::into),
+			variants: variants.into_iter().map(|variant| Some((*variant).into())).collect()
+		};
 	}
 
 	fn visit_array(&mut self, len: Option<usize>, unique_items: bool) -> &mut Self {

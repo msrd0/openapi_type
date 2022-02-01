@@ -12,7 +12,11 @@ pub trait Visitor: seal::Sealed {
 	type ArrayVisitor: Visitor;
 	type ObjectVisitor: ObjectVisitor;
 
-	fn visit_unit(&mut self);
+	fn visit_unit(&mut self) {
+		self.visit_unit_struct(None, None);
+	}
+
+	fn visit_unit_struct(&mut self, name: Option<String>, description: Option<String>);
 
 	fn visit_any(&mut self);
 

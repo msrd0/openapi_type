@@ -3,7 +3,7 @@ use proc_macro2::TokenStream;
 use quote::{quote, quote_spanned};
 use syn::{spanned::Spanned, LitStr};
 
-pub(super) fn gen_doc_option(doc: &[String]) -> TokenStream {
+fn gen_doc_option(doc: &[String]) -> TokenStream {
 	let doc = doc.join("\n");
 	let doc = doc.trim();
 	if doc.is_empty() {
@@ -16,15 +16,15 @@ pub(super) fn gen_doc_option(doc: &[String]) -> TokenStream {
 impl ParseData {
 	pub(super) fn gen_visit_impl(&self) -> TokenStream {
 		match self {
-			Self::Struct { name, fields } => gen_struct(name.as_ref(), fields),
+			Self::Struct { name, doc, fields } => gen_struct(name.as_ref(), &doc, fields),
 			Self::Enum(variants) => gen_enum(variants),
 			Self::Alternatives(alt) => gen_alt(alt),
-			Self::Unit { name } => gen_unit(name.as_ref())
+			Self::Unit { name, doc } => gen_unit(name.as_ref(), &doc)
 		}
 	}
 }
 
-fn gen_struct(name: Option<&LitStr>, fields: &[ParseDataField]) -> TokenStream {
+fn gen_struct(name: Option<&LitStr>, doc: &[String], fields: &[ParseDataField]) -> TokenStream {
 	let str = path!(::core::primitive::str);
 	let string = path!(::std::string::String);
 	let option = path!(::core::option::Option);
@@ -33,6 +33,7 @@ fn gen_struct(name: Option<&LitStr>, fields: &[ParseDataField]) -> TokenStream {
 		Some(name) => quote!(#option::Some(#name)),
 		None => quote!(#option::None)
 	};
+	let doc = gen_doc_option(doc);
 
 	let fields = fields.iter().map(|f| {
 		let name = &f.name;
@@ -77,12 +78,20 @@ fn gen_struct(name: Option<&LitStr>, fields: &[ParseDataField]) -> TokenStream {
 
 	quote! {
 		const OBJECT_NAME: #option<&'static #str> = #name;
+		const OBJECT_DOC: #option<&'static #str> = #doc;
 
 		let object_visitor = visitor.visit_object();
+
 		if let #option::Some(object_name) = OBJECT_NAME {
 			::openapi_type::ObjectVisitor::visit_name(
 				object_visitor,
 				#string::from(object_name)
+			);
+		}
+		if let #option::Some(object_doc) = OBJECT_DOC {
+			::openapi_type::ObjectVisitor::visit_description(
+				object_visitor,
+				#string::from(object_doc)
 			);
 		}
 
@@ -102,18 +111,24 @@ fn gen_alt(alt: &[ParseData]) -> TokenStream {
 	}
 }
 
-fn gen_unit(name: Option<&LitStr>) -> TokenStream {
-	match name {
-		Some(name) => quote! {
-			let object_visitor = visitor.visit_object();
-			::openapi_type::ObjectVisitor::visit_name(
-				object_visitor,
-				::std::string::String::from(#name)
-			);
-			::openapi_type::ObjectVisitor::visit_deny_additional(object_visitor);
-		},
-		None => quote! {
-			visitor.visit_unit();
-		}
+fn gen_unit(name: Option<&LitStr>, doc: &[String]) -> TokenStream {
+	let str = path!(::core::primitive::str);
+	let string = path!(::std::string::String);
+	let option = path!(::core::option::Option);
+
+	let name = match name {
+		Some(name) => quote!(#option::Some(#name)),
+		None => quote!(#option::None)
+	};
+	let doc = gen_doc_option(doc);
+
+	quote! {
+		const OBJECT_NAME: #option<&'static #str> = #name;
+		const OBJECT_DOC: #option<&'static #str> = #doc;
+
+		let option_visitor = visitor.visit_unit_struct(
+			OBJECT_NAME.map(#string::from),
+			OBJECT_DOC.map(#string::from)
+		);
 	}
 }

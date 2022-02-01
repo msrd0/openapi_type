@@ -71,6 +71,7 @@ test_type!(EnumDoc = {
 #[openapi(rename = "FooBar")]
 struct ContainerRename;
 test_type!(ContainerRename = {
+	"nullable": true,
 	"type": "object",
 	"title": "FooBar",
 	"additionalProperties": false

@@ -27,6 +27,7 @@ fn unknown(meta: Meta, error_on_unknown: bool) -> syn::Result<()> {
 
 #[derive(Default)]
 pub(super) struct ContainerAttributes {
+	pub(super) doc: Vec<String>,
 	pub(super) rename: Option<LitStr>,
 	pub(super) rename_all: Option<LitStr>,
 	pub(super) tag: Option<LitStr>,

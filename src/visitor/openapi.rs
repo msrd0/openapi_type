@@ -42,7 +42,10 @@ impl OpenapiSchema {
 pub enum OpenapiVisitor {
 	Empty,
 
-	Unit,
+	Unit {
+		name: Option<String>,
+		description: Option<String>
+	},
 	Any,
 	Bool,
 
@@ -106,8 +109,13 @@ impl OpenapiVisitor {
 		match self {
 			Self::Empty => None,
 
-			Self::Unit => Some(OpenapiSchema::new(Schema {
-				schema_data: Default::default(),
+			Self::Unit { name, description } => Some(OpenapiSchema::new(Schema {
+				schema_data: SchemaData {
+					nullable: true,
+					title: name,
+					description,
+					..Default::default()
+				},
 				schema_kind: SchemaKind::Type(Type::Object(ObjectType {
 					additional_properties: Some(AdditionalProperties::Any(false)),
 					..Default::default()
@@ -256,9 +264,9 @@ impl Visitor for OpenapiVisitor {
 	type ArrayVisitor = Self;
 	type ObjectVisitor = Object;
 
-	fn visit_unit(&mut self) {
+	fn visit_unit_struct(&mut self, name: Option<String>, description: Option<String>) {
 		self.panic_if_non_empty();
-		*self = Self::Unit;
+		*self = Self::Unit { name, description };
 	}
 
 	fn visit_any(&mut self) {

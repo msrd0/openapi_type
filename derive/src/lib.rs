@@ -44,15 +44,13 @@ fn expand_openapi_type(mut input: DeriveInput) -> syn::Result<TokenStream2> {
 	}
 
 	// parse #[doc] attributes
-	let mut doc: Vec<String> = Vec::new();
 	for attr in &input.attrs {
 		if attr.path.is_ident("doc") {
 			if let Some(lit) = parse_doc_attr(attr)? {
-				doc.push(lit.value());
+				attrs.doc.push(lit.value());
 			}
 		}
 	}
-	let doc = gen_doc_option(&doc);
 
 	// prepare the generics - all impl generics will get `OpenapiType` requirement
 	let (impl_generics, ty_generics, where_clause) = {

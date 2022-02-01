@@ -25,12 +25,14 @@ pub(super) struct ParseDataField {
 pub(super) enum ParseData {
 	Struct {
 		name: Option<LitStr>,
+		doc: Vec<String>,
 		fields: Vec<ParseDataField>
 	},
 	Enum(Vec<LitStr>),
 	Alternatives(Vec<ParseData>),
 	Unit {
-		name: Option<LitStr>
+		name: Option<LitStr>,
+		doc: Vec<String>
 	}
 }
 
@@ -113,6 +115,7 @@ pub(super) fn parse_struct(ident: &Ident, strukt: &DataStruct, attrs: &Container
 			let fields = parse_named_fields(named_fields, attrs.rename_all.as_ref())?;
 			Ok(ParseData::Struct {
 				name: Some(name),
+				doc: attrs.doc.clone(),
 				fields
 			})
 		},
@@ -120,7 +123,10 @@ pub(super) fn parse_struct(ident: &Ident, strukt: &DataStruct, attrs: &Container
 			unnamed_fields.span(),
 			"#[derive(OpenapiType)] does not support tuple structs"
 		)),
-		Fields::Unit => Ok(ParseData::Unit { name: Some(name) })
+		Fields::Unit => Ok(ParseData::Unit {
+			name: Some(name),
+			doc: attrs.doc.clone()
+		})
 	}
 }
 
@@ -134,8 +140,10 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 			Fields::Named(named_fields) => {
 				let fields = parse_named_fields(named_fields, attrs.rename_all.as_ref())?;
 				let struct_name = format!("{}::{}", ident, name.value());
+				// TODO add documentation here
 				types.push((name, ParseData::Struct {
 					name: Some(struct_name.to_lit_str()),
+					doc: Vec::new(),
 					fields
 				}));
 			},
@@ -158,6 +166,7 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 			// internally tagged or adjacently tagged
 			(Some(tag), _, false) => Some(ParseData::Struct {
 				name: None,
+				doc: Vec::new(),
 				fields: vec![ParseDataField {
 					name: tag.clone(),
 					doc: Vec::new(),
@@ -166,7 +175,10 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 				}]
 			}),
 			// untagged
-			(None, None, true) => Some(ParseData::Unit { name: None }),
+			(None, None, true) => Some(ParseData::Unit {
+				name: None,
+				doc: Vec::new()
+			}),
 			// unknown
 			_ => return Err(syn::Error::new(Span::call_site(), "Unknown enum representation"))
 		}
@@ -186,6 +198,7 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 								let struct_name = format!("{}::{}::ExtTagWrapper", ident, name.value());
 								ParseData::Struct {
 									name: Some(struct_name.to_lit_str()),
+									doc: Vec::new(),
 									fields: vec![ParseDataField {
 										name,
 										doc: Vec::new(),
@@ -215,6 +228,7 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 								let struct_name = format!("{}::{}::AdjTagWrapper", ident, name.value());
 								ParseData::Struct {
 									name: Some(struct_name.to_lit_str()),
+									doc: Vec::new(),
 									fields: vec![
 										ParseDataField {
 											name: tag.clone(),

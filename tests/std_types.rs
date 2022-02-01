@@ -25,6 +25,7 @@ macro_rules! test_type {
 
 type Unit = ();
 test_type!(Unit = {
+	"nullable": true,
 	"type": "object",
 	"additionalProperties": false
 });

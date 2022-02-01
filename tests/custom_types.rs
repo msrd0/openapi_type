@@ -6,6 +6,7 @@ include!("util/test_type.rs");
 #[derive(OpenapiType)]
 struct UnitStruct;
 test_type!(UnitStruct = {
+	"nullable": true,
 	"type": "object",
 	"title": "UnitStruct",
 	"additionalProperties": false
@@ -34,6 +35,7 @@ test_type!(SimpleStruct = {
 #[openapi(rename = "FooBar")]
 struct StructRename;
 test_type!(StructRename = {
+	"nullable": true,
 	"type": "object",
 	"title": "FooBar",
 	"additionalProperties": false

@@ -344,12 +344,30 @@ pub struct Field {
 	visitor: OpenapiVisitor
 }
 
+#[derive(Debug)]
+enum Additional {
+	/// Deny additional properties (serde: deny_unknown_fields)
+	Deny,
+
+	/// Allow additional properties (default)
+	Allow,
+
+	/// Allow specific additional property values
+	Schema(Box<OpenapiVisitor>)
+}
+
+impl Default for Additional {
+	fn default() -> Self {
+		Self::Allow
+	}
+}
+
 #[derive(Debug, Default)]
 pub struct Object {
 	name: Option<String>,
 	description: Option<String>,
 	fields: IndexMap<String, Field>,
-	additional: Option<Box<OpenapiVisitor>>
+	additional: Additional
 }
 
 impl Object {
@@ -372,6 +390,14 @@ impl Object {
 			properties.insert(field_name, field_schema.boxed());
 		}
 
+		let additional_properties = match self.additional {
+			Additional::Deny => Some(AdditionalProperties::Any(false)),
+			Additional::Allow => None,
+			Additional::Schema(schema) => schema
+				.into_schema()
+				.map(|schema| AdditionalProperties::Schema(Box::new(inline_if_unnamed(&mut dependencies, schema, None))))
+		};
+
 		let schema = Schema {
 			schema_data: SchemaData {
 				title: self.name,
@@ -381,6 +407,7 @@ impl Object {
 			schema_kind: SchemaKind::Type(Type::Object(ObjectType {
 				properties,
 				required,
+				additional_properties,
 				..Default::default()
 			}))
 		};
@@ -422,11 +449,25 @@ impl ObjectVisitor for Object {
 		}
 	}
 
-	fn visit_additional(&mut self) -> &mut OpenapiVisitor {
-		if self.additional.is_some() {
-			panic!("visit_additional has been called before. You may only call this once per visitor.");
+	fn visit_deny_additional(&mut self) {
+		if !matches!(self.additional, Additional::Allow) {
+			panic!(
+				"visit_additional or visit_deny_additional has been called before. You may only call this once per visitor."
+			);
 		}
-		self.additional = Some(Box::new(OpenapiVisitor::new()));
-		self.additional.as_mut().unwrap_or_else(|| unreachable!())
+		self.additional = Additional::Deny;
+	}
+
+	fn visit_additional(&mut self) -> &mut OpenapiVisitor {
+		if !matches!(self.additional, Additional::Allow) {
+			panic!(
+				"visit_additional or visit_deny_additional has been called before. You may only call this once per visitor."
+			);
+		}
+		self.additional = Additional::Schema(Box::new(OpenapiVisitor::new()));
+		match self.additional {
+			Additional::Schema(ref mut schema) => schema,
+			_ => unreachable!()
+		}
 	}
 }

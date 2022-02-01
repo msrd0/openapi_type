@@ -12,7 +12,8 @@ macro_rules! test_type {
 			$(
 				#[test]
 				fn [<$($ty:lower)_+ $($($(_$generic:lower)+)+)? >]() {
-					let schema: openapiv3::Schema = <$($ty)::+ $(<$($($generic)::+),+>)? as OpenapiType>::schema().schema;
+					let schema = <$($ty)::+ $(<$($($generic)::+),+>)? as OpenapiType>::schema();
+					let schema = &schema.schema;
 					let schema_json = serde_json::to_value(&schema).unwrap();
 					let expected = serde_json::json!($json);
 					pretty_assertions::assert_eq!(schema_json, expected);
@@ -213,12 +214,6 @@ test_type!(BTreeSet<String>, IndexSet<String>, HashSet<String> = {
 
 test_type!(BTreeMap<isize, String>, HashMap<isize, String>, IndexMap<isize, String> = {
 	"type": "object",
-	"properties": {
-		"default": {
-			"type": "integer"
-		}
-	},
-	"required": ["default"],
 	"additionalProperties": {
 		"type": "string"
 	}
@@ -227,12 +222,6 @@ test_type!(BTreeMap<isize, String>, HashMap<isize, String>, IndexMap<isize, Stri
 #[cfg(feature = "linked-hash-map")]
 test_type!(linked_hash_map::LinkedHashMap<isize, String> = {
 	"type": "object",
-	"properties": {
-		"default": {
-			"type": "integer"
-		}
-	},
-	"required": ["default"],
 	"additionalProperties": {
 		"type": "string"
 	}

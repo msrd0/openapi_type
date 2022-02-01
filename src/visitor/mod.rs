@@ -49,5 +49,7 @@ pub trait ObjectVisitor: seal::Sealed {
 
 	fn visit_field(&mut self, name: String, doc: Option<String>) -> &mut Self::FieldVisitor;
 
+	fn visit_deny_additional(&mut self);
+
 	fn visit_additional(&mut self) -> &mut Self::ValueVisitor;
 }

@@ -28,7 +28,7 @@ impl OpenapiType for bool {
 ////////////////////////////////////////////////////////////////////////////////
 
 macro_rules! int {
-	($($ty:ident($byte:expr, $minimum:expr);)+) => {
+	($($ty:ident($minimum:expr, $byte:expr);)+) => {
 		$(
 			impl OpenapiType for $ty {
 				fn visit_type<V: Visitor>(visitor: &mut V) {

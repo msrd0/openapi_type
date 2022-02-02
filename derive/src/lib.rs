@@ -6,16 +6,16 @@
 use proc_macro::TokenStream;
 use proc_macro2::TokenStream as TokenStream2;
 use quote::quote;
-use syn::{parse_macro_input, Data, DeriveInput, LitStr, TraitBound, TraitBoundModifier, TypeParamBound};
+use syn::{parse_macro_input, Data, DeriveInput, TraitBound, TraitBoundModifier, TypeParamBound};
 
 #[macro_use]
 mod util;
 
 mod attrs;
-use attrs::*;
 mod codegen;
-use codegen::*;
 mod parser;
+
+use attrs::*;
 use parser::*;
 
 /// The derive macro for [`OpenapiType`].

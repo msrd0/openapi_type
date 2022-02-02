@@ -101,6 +101,7 @@ fn gen_struct(name: Option<&LitStr>, doc: &[String], fields: &[ParseDataField]) 
 
 fn gen_enum(name: Option<&LitStr>, doc: &[String], variants: &[LitStr]) -> TokenStream {
 	let str = path!(::core::primitive::str);
+	let string = path!(::std::string::String);
 	let option = path!(::core::option::Option);
 
 	let name = match name {
@@ -112,9 +113,12 @@ fn gen_enum(name: Option<&LitStr>, doc: &[String], variants: &[LitStr]) -> Token
 	quote! {
 		const ENUM_NAME: #option<&'static #str> = #name;
 		const ENUM_DOC: #option<&'static #str> = #doc;
-		const ENUM_VARIANTS: &[&'static #str] = &[#(#variants),*];
 
-		visitor.visit_enum(ENUM_NAME, ENUM_DOC, ENUM_VARIANTS);
+		visitor.visit_enum(
+			ENUM_NAME.map(#string::from),
+			ENUM_DOC.map(#string::from),
+			[#(#string::from(#variants)),*]
+		);
 	}
 }
 

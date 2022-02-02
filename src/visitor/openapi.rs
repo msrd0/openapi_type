@@ -344,11 +344,14 @@ impl Visitor for OpenapiVisitor {
 		}
 	}
 
-	fn visit_enum(&mut self, name: Option<&str>, description: Option<&str>, variants: &[&str]) {
+	fn visit_enum<I>(&mut self, name: Option<String>, description: Option<String>, variants: I)
+	where
+		I: IntoIterator<Item = String>
+	{
 		self.panic_if_non_empty();
 		*self = Self::Enum {
-			name: name.map(Into::into),
-			description: description.map(Into::into),
+			name,
+			description,
 			variants: variants.into_iter().map(|variant| Some((*variant).into())).collect()
 		};
 	}

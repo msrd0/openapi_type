@@ -269,25 +269,7 @@ impl OpenapiVisitor {
 
 			Self::Object(obj) => Some(obj.into_schema()),
 
-			Self::Alternatives(alt) => {
-				let mut dependencies = IndexMap::new();
-				Some(OpenapiSchema {
-					schema: Schema {
-						schema_data: Default::default(),
-						schema_kind: SchemaKind::OneOf {
-							one_of: alt
-								.0
-								.into_iter()
-								.filter_map(|ty| {
-									ty.into_schema()
-										.map(|schema| inline_if_unnamed(&mut dependencies, schema, None))
-								})
-								.collect()
-						}
-					},
-					dependencies
-				})
-			}
+			Self::Alternatives(alt) => Some(alt.into_schema())
 		}
 	}
 
@@ -545,15 +527,59 @@ impl ObjectVisitor for Object {
 }
 
 #[derive(Debug, Default)]
-pub struct Alternatives(Vec<OpenapiVisitor>);
+pub struct Alternatives {
+	name: Option<String>,
+	description: Option<String>,
+	alts: Vec<OpenapiVisitor>
+}
+
+impl Alternatives {
+	fn into_schema(self) -> OpenapiSchema {
+		let mut dependencies = IndexMap::new();
+		OpenapiSchema {
+			schema: Schema {
+				schema_data: SchemaData {
+					title: self.name,
+					description: self.description,
+					..Default::default()
+				},
+				schema_kind: SchemaKind::OneOf {
+					one_of: self
+						.alts
+						.into_iter()
+						.filter_map(|ty| {
+							ty.into_schema()
+								.map(|schema| inline_if_unnamed(&mut dependencies, schema, None))
+						})
+						.collect()
+				}
+			},
+			dependencies
+		}
+	}
+}
 
 impl seal::Sealed for Alternatives {}
 
 impl AlternativesVisitor for Alternatives {
 	type Visitor = OpenapiVisitor;
 
+	fn visit_name(&mut self, name: String) {
+		if self.name.is_some() {
+			panic!("You must only set the name of this object once");
+		}
+		self.name = Some(name);
+	}
+
+	fn visit_description(&mut self, description: String) {
+		if self.description.is_some() {
+			panic!("You must only set the description of this object once");
+		}
+		self.description = Some(description);
+	}
+
 	fn visit_alternative(&mut self) -> &mut OpenapiVisitor {
-		self.0.push(OpenapiVisitor::new());
-		self.0.last_mut().unwrap_or_else(|| unreachable!())
+		self.alts.push(OpenapiVisitor::new());
+		self.alts.last_mut().unwrap_or_else(|| unreachable!())
 	}
 }

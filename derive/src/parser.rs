@@ -22,22 +22,17 @@ pub(super) struct ParseDataField {
 }
 
 #[allow(dead_code)]
-pub(super) enum ParseData {
-	Struct {
-		name: Option<LitStr>,
-		doc: Vec<String>,
-		fields: Vec<ParseDataField>
-	},
-	Enum {
-		name: Option<LitStr>,
-		doc: Vec<String>,
-		variants: Vec<LitStr>
-	},
-	Alternatives(Vec<ParseData>),
-	Unit {
-		name: Option<LitStr>,
-		doc: Vec<String>
-	}
+pub(super) struct ParseData {
+	pub(super) name: Option<LitStr>,
+	pub(super) doc: Vec<String>,
+	pub(super) ty: ParseDataType
+}
+
+pub(super) enum ParseDataType {
+	Struct { fields: Vec<ParseDataField> },
+	Enum { variants: Vec<LitStr> },
+	Alternatives { alts: Vec<ParseData> },
+	Unit
 }
 
 fn parse_named_fields(named_fields: &FieldsNamed, rename_all: Option<&LitStr>) -> syn::Result<Vec<ParseDataField>> {
@@ -117,19 +112,20 @@ pub(super) fn parse_struct(ident: &Ident, strukt: &DataStruct, attrs: &Container
 	match &strukt.fields {
 		Fields::Named(named_fields) => {
 			let fields = parse_named_fields(named_fields, attrs.rename_all.as_ref())?;
-			Ok(ParseData::Struct {
+			Ok(ParseData {
 				name: Some(name),
 				doc: attrs.doc.clone(),
-				fields
+				ty: ParseDataType::Struct { fields }
 			})
 		},
 		Fields::Unnamed(unnamed_fields) => Err(syn::Error::new(
 			unnamed_fields.span(),
 			"#[derive(OpenapiType)] does not support tuple structs"
 		)),
-		Fields::Unit => Ok(ParseData::Unit {
+		Fields::Unit => Ok(ParseData {
 			name: Some(name),
-			doc: attrs.doc.clone()
+			doc: attrs.doc.clone(),
+			ty: ParseDataType::Unit
 		})
 	}
 }
@@ -145,10 +141,10 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 				let fields = parse_named_fields(named_fields, attrs.rename_all.as_ref())?;
 				let struct_name = format!("{}::{}", ident, name.value());
 				// TODO add documentation here
-				types.push((name, ParseData::Struct {
+				types.push((name, ParseData {
 					name: Some(struct_name.to_lit_str()),
 					doc: Vec::new(),
-					fields
+					ty: ParseDataType::Struct { fields }
 				}));
 			},
 			Fields::Unnamed(unnamed_fields) => {
@@ -164,71 +160,69 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 	let data_strings = if strings.is_empty() {
 		None
 	} else {
-		match (&attrs.tag, &attrs.content, attrs.untagged) {
+		Some(match (&attrs.tag, &attrs.content, attrs.untagged) {
 			// externally tagged (default)
-			(None, None, false) => Some(ParseData::Enum {
-				name: None,
-				doc: Vec::new(),
-				variants: strings
-			}),
+			(None, None, false) => ParseDataType::Enum { variants: strings },
 			// internally tagged or adjacently tagged
-			(Some(tag), _, false) => Some(ParseData::Struct {
-				name: None,
-				doc: Vec::new(),
+			(Some(tag), _, false) => ParseDataType::Struct {
 				fields: vec![ParseDataField {
 					name: tag.clone(),
 					doc: Vec::new(),
-					ty: TypeOrInline::Inline(ParseData::Enum {
+					ty: TypeOrInline::Inline(ParseData {
 						name: None,
 						doc: Vec::new(),
-						variants: strings
+						ty: ParseDataType::Enum { variants: strings }
 					}),
 					flatten: false
 				}]
-			}),
+			},
 			// untagged
-			(None, None, true) => Some(ParseData::Unit {
-				name: None,
-				doc: Vec::new()
-			}),
+			(None, None, true) => ParseDataType::Unit,
 			// unknown
 			_ => return Err(syn::Error::new(Span::call_site(), "Unknown enum representation"))
-		}
+		})
 	};
 
-	let data_types =
-		if types.is_empty() {
-			None
-		} else {
-			Some(ParseData::Alternatives(
-				types
+	let data_types = if types.is_empty() {
+		None
+	} else {
+		Some(ParseData {
+			name: Some(ident.to_lit_str()),
+			doc: attrs.doc.clone(),
+			ty: ParseDataType::Alternatives {
+				alts: types
 					.into_iter()
 					.map(|(name, mut data)| {
 						Ok(match (&attrs.tag, &attrs.content, attrs.untagged) {
 							// externally tagged (default)
 							(None, None, false) => {
 								let struct_name = format!("{}::{}::ExtTagWrapper", ident, name.value());
-								ParseData::Struct {
+								ParseData {
 									name: Some(struct_name.to_lit_str()),
 									doc: Vec::new(),
-									fields: vec![ParseDataField {
-										name,
-										doc: Vec::new(),
-										ty: TypeOrInline::Inline(data),
-										flatten: false
-									}]
+									ty: ParseDataType::Struct {
+										fields: vec![ParseDataField {
+											name,
+											doc: Vec::new(),
+											ty: TypeOrInline::Inline(data),
+											flatten: false
+										}]
+									}
 								}
 							},
 							// internally tagged
 							(Some(tag), None, false) => {
 								match &mut data {
-									ParseData::Struct { fields, .. } => fields.push(ParseDataField {
+									ParseData {
+										ty: ParseDataType::Struct { fields },
+										..
+									} => fields.push(ParseDataField {
 										name: tag.clone(),
 										doc: Vec::new(),
-										ty: TypeOrInline::Inline(ParseData::Enum {
+										ty: TypeOrInline::Inline(ParseData {
 											name: None,
 											doc: Vec::new(),
-											variants: vec![name]
+											ty: ParseDataType::Enum { variants: vec![name] }
 										}),
 										flatten: false
 									}),
@@ -242,27 +236,29 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 							// adjacently tagged
 							(Some(tag), Some(content), false) => {
 								let struct_name = format!("{}::{}::AdjTagWrapper", ident, name.value());
-								ParseData::Struct {
+								ParseData {
 									name: Some(struct_name.to_lit_str()),
 									doc: Vec::new(),
-									fields: vec![
-										ParseDataField {
-											name: tag.clone(),
-											doc: Vec::new(),
-											ty: TypeOrInline::Inline(ParseData::Enum {
-												name: None,
+									ty: ParseDataType::Struct {
+										fields: vec![
+											ParseDataField {
+												name: tag.clone(),
 												doc: Vec::new(),
-												variants: vec![name]
-											}),
-											flatten: false
-										},
-										ParseDataField {
-											name: content.clone(),
-											doc: Vec::new(),
-											ty: TypeOrInline::Inline(data),
-											flatten: false
-										},
-									]
+												ty: TypeOrInline::Inline(ParseData {
+													name: None,
+													doc: Vec::new(),
+													ty: ParseDataType::Enum { variants: vec![name] }
+												}),
+												flatten: false
+											},
+											ParseDataField {
+												name: content.clone(),
+												doc: Vec::new(),
+												ty: TypeOrInline::Inline(data),
+												flatten: false
+											},
+										]
+									}
 								}
 							},
 							// untagged
@@ -272,33 +268,51 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 						})
 					})
 					.collect::<syn::Result<Vec<_>>>()?
-			))
-		};
+			}
+		})
+	};
 
 	match (data_strings, data_types) {
 		// only variants without fields
-		(Some(ParseData::Enum { variants, .. }), None) => Ok(ParseData::Enum {
+		(Some(ParseDataType::Enum { variants }), None) => Ok(ParseData {
 			name: Some(ident.to_lit_str()),
 			doc: attrs.doc.clone(),
-			variants
+			ty: ParseDataType::Enum { variants }
 		}),
 		(Some(_), None) => unreachable!(),
 		// only one variant with fields
-		(None, Some(ParseData::Alternatives(mut alt))) if alt.len() == 1 => Ok(alt.remove(0)),
+		(
+			None,
+			Some(ParseData {
+				ty: ParseDataType::Alternatives { mut alts },
+				..
+			})
+		) if alts.len() == 1 => Ok(ParseData {
+			name: Some(ident.to_lit_str()),
+			doc: attrs.doc.clone(),
+			ty: alts.remove(0).ty
+		}),
 		// only variants with fields
 		(None, Some(data)) => Ok(data),
 		// variants with and without fields
-		(Some(data), Some(ParseData::Alternatives(mut alt))) => {
-			alt.push(data);
-			Ok(ParseData::Alternatives(alt))
+		(Some(data_strings), Some(mut data_types)) => {
+			let alts = match &mut data_types.ty {
+				ParseDataType::Alternatives { alts } => alts,
+				// data_types always produces Alternatives
+				_ => unreachable!()
+			};
+			alts.push(ParseData {
+				name: None,
+				doc: Vec::new(),
+				ty: data_strings
+			});
+			Ok(data_types)
 		},
 		// no variants
 		(None, None) => Err(syn::Error::new(
 			inum.brace_token.span,
 			"#[derive(OpenapiType)] does not support enums with no variants"
-		)),
-		// data_types always produces Alternatives
-		_ => unreachable!()
+		))
 	}
 }
 

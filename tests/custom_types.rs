@@ -274,6 +274,7 @@ test_type!(EnumUntagged = {
 		"$ref": "#/components/schemas/EnumUntagged__Success"
 	}, {
 		"type": "object",
+		"nullable": true,
 		"additionalProperties": false
 	}]
 }, {

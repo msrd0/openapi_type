@@ -1,4 +1,4 @@
-use crate::parser::{ParseData, ParseDataField, TypeOrInline};
+use crate::parser::{ParseData, ParseDataField, ParseDataType, TypeOrInline};
 use proc_macro2::TokenStream;
 use quote::{quote, quote_spanned};
 use syn::{spanned::Spanned, LitStr};
@@ -15,11 +15,13 @@ fn gen_doc_option(doc: &[String]) -> TokenStream {
 
 impl ParseData {
 	pub(super) fn gen_visit_impl(&self) -> TokenStream {
-		match self {
-			Self::Struct { name, doc, fields } => gen_struct(name.as_ref(), &doc, fields),
-			Self::Enum { name, doc, variants } => gen_enum(name.as_ref(), &doc, variants),
-			Self::Alternatives(alt) => gen_alt(alt),
-			Self::Unit { name, doc } => gen_unit(name.as_ref(), &doc)
+		let name = self.name.as_ref();
+		let doc = &self.doc;
+		match &self.ty {
+			ParseDataType::Struct { fields } => gen_struct(name, doc, fields),
+			ParseDataType::Enum { variants } => gen_enum(name, doc, variants),
+			ParseDataType::Alternatives { alts } => gen_alt(name, doc, alts),
+			ParseDataType::Unit => gen_unit(name, doc)
 		}
 	}
 }
@@ -123,10 +125,37 @@ fn gen_enum(name: Option<&LitStr>, doc: &[String], variants: &[LitStr]) -> Token
 	}
 }
 
-fn gen_alt(alt: &[ParseData]) -> TokenStream {
+fn gen_alt(name: Option<&LitStr>, doc: &[String], alt: &[ParseData]) -> TokenStream {
+	let str = path!(::core::primitive::str);
+	let string = path!(::std::string::String);
+	let option = path!(::core::option::Option);
+
+	let name = match name {
+		Some(name) => quote!(#option::Some(#name)),
+		None => quote!(#option::None)
+	};
+	let doc = gen_doc_option(doc);
+
 	let impls = alt.into_iter().map(|alt| alt.gen_visit_impl());
 	quote! {
+		const OBJECT_NAME: #option<&'static #str> = #name;
+		const OBJECT_DOC: #option<&'static #str> = #doc;
+
 		let alt_visitor = ::openapi_type::Visitor::visit_alternatives(visitor);
+
+		if let #option::Some(object_name) = OBJECT_NAME {
+			::openapi_type::AlternativesVisitor::visit_name(
+				alt_visitor,
+				#string::from(object_name)
+			);
+		}
+		if let #option::Some(object_doc) = OBJECT_DOC {
+			::openapi_type::AlternativesVisitor::visit_description(
+				alt_visitor,
+				#string::from(object_doc)
+			);
+		}
+
 		#({
 			let visitor = ::openapi_type::AlternativesVisitor::visit_alternative(alt_visitor);
 			#impls

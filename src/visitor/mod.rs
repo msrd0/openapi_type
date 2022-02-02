@@ -68,5 +68,9 @@ pub trait ObjectVisitor: seal::Sealed {
 pub trait AlternativesVisitor: seal::Sealed {
 	type Visitor: Visitor;
 
+	fn visit_name(&mut self, name: String);
+
+	fn visit_description(&mut self, description: String);
+
 	fn visit_alternative(&mut self) -> &mut Self::Visitor;
 }

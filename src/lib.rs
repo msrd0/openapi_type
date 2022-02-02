@@ -75,7 +75,7 @@ pub use openapiv3 as openapi;
 mod impls;
 mod visitor;
 
-pub use visitor::{ObjectVisitor, OpenapiSchema, OpenapiVisitor, Visitor};
+pub use visitor::{AlternativesVisitor, ObjectVisitor, OpenapiSchema, OpenapiVisitor, Visitor};
 
 /// This trait needs to be implemented by every type that is being used in the OpenAPI Spec. It gives
 /// access to the [OpenapiSchema] of this type. It is provided for primitive types, String and the

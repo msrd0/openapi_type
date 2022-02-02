@@ -74,7 +74,8 @@ pub enum OpenapiVisitor {
 		len: Option<usize>,
 		unique_items: bool
 	},
-	Object(Object)
+	Object(Object),
+	Alternatives(Alternatives)
 }
 
 fn add_dependencies(dependencies: &mut IndexMap<String, OpenapiSchema>, other: &mut IndexMap<String, OpenapiSchema>) {
@@ -266,7 +267,27 @@ impl OpenapiVisitor {
 				})
 			},
 
-			Self::Object(obj) => Some(obj.into_schema())
+			Self::Object(obj) => Some(obj.into_schema()),
+
+			Self::Alternatives(alt) => {
+				let mut dependencies = IndexMap::new();
+				Some(OpenapiSchema {
+					schema: Schema {
+						schema_data: Default::default(),
+						schema_kind: SchemaKind::OneOf {
+							one_of: alt
+								.0
+								.into_iter()
+								.filter_map(|ty| {
+									ty.into_schema()
+										.map(|schema| inline_if_unnamed(&mut dependencies, schema, None))
+								})
+								.collect()
+						}
+					},
+					dependencies
+				})
+			}
 		}
 	}
 
@@ -284,6 +305,7 @@ impl Visitor for OpenapiVisitor {
 	type OptionVisitor = Self;
 	type ArrayVisitor = Self;
 	type ObjectVisitor = Object;
+	type AlternativesVisitor = Alternatives;
 
 	fn visit_unit_struct(&mut self, name: Option<String>, description: Option<String>) {
 		self.panic_if_non_empty();
@@ -374,6 +396,15 @@ impl Visitor for OpenapiVisitor {
 		*self = Self::Object(Object::default());
 		match self {
 			Self::Object(obj) => obj,
+			_ => unreachable!()
+		}
+	}
+
+	fn visit_alternatives(&mut self) -> &mut Alternatives {
+		self.panic_if_non_empty();
+		*self = Self::Alternatives(Alternatives::default());
+		match self {
+			Self::Alternatives(alt) => alt,
 			_ => unreachable!()
 		}
 	}
@@ -510,5 +541,19 @@ impl ObjectVisitor for Object {
 			Additional::Schema(ref mut schema) => schema,
 			_ => unreachable!()
 		}
+	}
+}
+
+#[derive(Debug, Default)]
+pub struct Alternatives(Vec<OpenapiVisitor>);
+
+impl seal::Sealed for Alternatives {}
+
+impl AlternativesVisitor for Alternatives {
+	type Visitor = OpenapiVisitor;
+
+	fn visit_alternative(&mut self) -> &mut OpenapiVisitor {
+		self.0.push(OpenapiVisitor::new());
+		self.0.last_mut().unwrap_or_else(|| unreachable!())
 	}
 }

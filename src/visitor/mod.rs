@@ -11,6 +11,7 @@ pub trait Visitor: seal::Sealed {
 	type OptionVisitor: Visitor;
 	type ArrayVisitor: Visitor;
 	type ObjectVisitor: ObjectVisitor;
+	type AlternativesVisitor: AlternativesVisitor;
 
 	fn visit_unit(&mut self) {
 		self.visit_unit_struct(None, None);
@@ -45,6 +46,8 @@ pub trait Visitor: seal::Sealed {
 	fn visit_array(&mut self, len: Option<usize>, unique_items: bool) -> &mut Self::ArrayVisitor;
 
 	fn visit_object(&mut self) -> &mut Self::ObjectVisitor;
+
+	fn visit_alternatives(&mut self) -> &mut Self::AlternativesVisitor;
 }
 
 pub trait ObjectVisitor: seal::Sealed {
@@ -60,4 +63,10 @@ pub trait ObjectVisitor: seal::Sealed {
 	fn visit_deny_additional(&mut self);
 
 	fn visit_additional(&mut self) -> &mut Self::ValueVisitor;
+}
+
+pub trait AlternativesVisitor: seal::Sealed {
+	type Visitor: Visitor;
+
+	fn visit_alternative(&mut self) -> &mut Self::Visitor;
 }

@@ -80,7 +80,7 @@ fn gen_struct(name: Option<&LitStr>, doc: &[String], fields: &[ParseDataField]) 
 		const OBJECT_NAME: #option<&'static #str> = #name;
 		const OBJECT_DOC: #option<&'static #str> = #doc;
 
-		let object_visitor = visitor.visit_object();
+		let object_visitor = ::openapi_type::Visitor::visit_object(visitor);
 
 		if let #option::Some(object_name) = OBJECT_NAME {
 			::openapi_type::ObjectVisitor::visit_name(
@@ -114,7 +114,8 @@ fn gen_enum(name: Option<&LitStr>, doc: &[String], variants: &[LitStr]) -> Token
 		const ENUM_NAME: #option<&'static #str> = #name;
 		const ENUM_DOC: #option<&'static #str> = #doc;
 
-		visitor.visit_enum(
+		::openapi_type::Visitor::visit_enum(
+			visitor,
 			ENUM_NAME.map(#string::from),
 			ENUM_DOC.map(#string::from),
 			[#(#string::from(#variants)),*]
@@ -123,8 +124,13 @@ fn gen_enum(name: Option<&LitStr>, doc: &[String], variants: &[LitStr]) -> Token
 }
 
 fn gen_alt(alt: &[ParseData]) -> TokenStream {
+	let impls = alt.into_iter().map(|alt| alt.gen_visit_impl());
 	quote! {
-		unimplemented!("alt codegen is currently not implemented")
+		let alt_visitor = ::openapi_type::Visitor::visit_alternatives(visitor);
+		#({
+			let visitor = ::openapi_type::AlternativesVisitor::visit_alternative(alt_visitor);
+			#impls
+		})*
 	}
 }
 
@@ -143,7 +149,8 @@ fn gen_unit(name: Option<&LitStr>, doc: &[String]) -> TokenStream {
 		const OBJECT_NAME: #option<&'static #str> = #name;
 		const OBJECT_DOC: #option<&'static #str> = #doc;
 
-		let option_visitor = visitor.visit_unit_struct(
+		let option_visitor = ::openapi_type::Visitor::visit_unit_struct(
+			visitor,
 			OBJECT_NAME.map(#string::from),
 			OBJECT_DOC.map(#string::from)
 		);

@@ -139,7 +139,7 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 		match &v.fields {
 			Fields::Named(named_fields) => {
 				let fields = parse_named_fields(named_fields, attrs.rename_all.as_ref())?;
-				let struct_name = format!("{}::{}", ident, name.value());
+				let struct_name = format!("{ident}::{}", name.value());
 				// TODO add documentation here
 				types.push((name, ParseData {
 					name: Some(struct_name.to_lit_str()),
@@ -196,7 +196,7 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 						Ok(match (&attrs.tag, &attrs.content, attrs.untagged) {
 							// externally tagged (default)
 							(None, None, false) => {
-								let struct_name = format!("{}::{}::ExtTagWrapper", ident, name.value());
+								let struct_name = format!("{ident}::{}::ExtTagWrapper", name.value());
 								ParseData {
 									name: Some(struct_name.to_lit_str()),
 									doc: Vec::new(),
@@ -235,7 +235,7 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 							},
 							// adjacently tagged
 							(Some(tag), Some(content), false) => {
-								let struct_name = format!("{}::{}::AdjTagWrapper", ident, name.value());
+								let struct_name = format!("{ident}::{}::AdjTagWrapper", name.value());
 								ParseData {
 									name: Some(struct_name.to_lit_str()),
 									doc: Vec::new(),

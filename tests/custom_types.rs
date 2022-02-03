@@ -32,16 +32,6 @@ test_type!(SimpleStruct = {
 });
 
 #[derive(OpenapiType)]
-#[openapi(rename = "FooBar")]
-struct StructRename;
-test_type!(StructRename = {
-	"nullable": true,
-	"type": "object",
-	"title": "FooBar",
-	"additionalProperties": false
-});
-
-#[derive(OpenapiType)]
 enum EnumWithoutFields {
 	Success,
 	Error
@@ -67,7 +57,8 @@ test_type!(EnumWithOneField = {
 			"$ref": "#/components/schemas/EnumWithOneField__Success"
 		}
 	},
-	"required": ["Success"]
+	"required": ["Success"],
+	"additionalProperties": false
 }, {
 	"EnumWithOneField__Success": {
 		"title": "EnumWithOneField::Success",
@@ -112,7 +103,8 @@ test_type!(EnumWithFields = {
 				"$ref": "#/components/schemas/EnumWithFields__Success"
 			}
 		},
-		"required": ["Success"]
+		"required": ["Success"],
+		"additionalProperties": false
 	},
 	"EnumWithFields__Error": {
 		"title": "EnumWithFields::Error",
@@ -132,7 +124,8 @@ test_type!(EnumWithFields = {
 				"$ref": "#/components/schemas/EnumWithFields__Error"
 			}
 		},
-		"required": ["Error"]
+		"required": ["Error"],
+		"additionalProperties": false
 	}
 });
 
@@ -169,7 +162,8 @@ test_type!(EnumExternallyTagged = {
 				"$ref": "#/components/schemas/EnumExternallyTagged__Success"
 			}
 		},
-		"required": ["Success"]
+		"required": ["Success"],
+		"additionalProperties": false
 	}
 });
 
@@ -193,7 +187,8 @@ test_type!(EnumInternallyTagged = {
 				"enum": ["Empty", "Error"]
 			}
 		},
-		"required": ["ty"]
+		"required": ["ty"],
+		"additionalProperties": false
 	}]
 }, {
 	"EnumInternallyTagged__Success": {
@@ -231,7 +226,8 @@ test_type!(EnumAdjacentlyTagged = {
 				"enum": ["Empty", "Error"]
 			}
 		},
-		"required": ["ty"]
+		"required": ["ty"],
+		"additionalProperties": false
 	}]
 }, {
 	"EnumAdjacentlyTagged__Success": {
@@ -256,7 +252,8 @@ test_type!(EnumAdjacentlyTagged = {
 				"$ref": "#/components/schemas/EnumAdjacentlyTagged__Success"
 			}
 		},
-		"required": ["ty", "ct"]
+		"required": ["ty", "ct"],
+		"additionalProperties": false
 	}
 });
 

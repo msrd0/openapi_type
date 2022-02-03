@@ -29,9 +29,16 @@ pub(super) struct ParseData {
 }
 
 pub(super) enum ParseDataType {
-	Struct { fields: Vec<ParseDataField> },
-	Enum { variants: Vec<LitStr> },
-	Alternatives { alts: Vec<ParseData> },
+	Struct {
+		fields: Vec<ParseDataField>,
+		deny_unknown_fields: bool
+	},
+	Enum {
+		variants: Vec<LitStr>
+	},
+	Alternatives {
+		alts: Vec<ParseData>
+	},
 	Unit
 }
 
@@ -115,7 +122,10 @@ pub(super) fn parse_struct(ident: &Ident, strukt: &DataStruct, attrs: &Container
 			Ok(ParseData {
 				name: Some(name),
 				doc: attrs.doc.clone(),
-				ty: ParseDataType::Struct { fields }
+				ty: ParseDataType::Struct {
+					fields,
+					deny_unknown_fields: attrs.deny_unknown_fields
+				}
 			})
 		},
 		Fields::Unnamed(unnamed_fields) => Err(syn::Error::new(
@@ -144,7 +154,12 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 				types.push((name, ParseData {
 					name: Some(struct_name.to_lit_str()),
 					doc: Vec::new(),
-					ty: ParseDataType::Struct { fields }
+					ty: ParseDataType::Struct {
+						fields,
+						// serde seems to only allow this attribute on the outer
+						// container, not on a per-variant basis
+						deny_unknown_fields: attrs.deny_unknown_fields
+					}
 				}));
 			},
 			Fields::Unnamed(unnamed_fields) => {
@@ -174,7 +189,8 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 						ty: ParseDataType::Enum { variants: strings }
 					}),
 					flatten: false
-				}]
+				}],
+				deny_unknown_fields: true
 			},
 			// untagged
 			(None, None, true) => ParseDataType::Unit,
@@ -206,7 +222,8 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 											doc: Vec::new(),
 											ty: TypeOrInline::Inline(data),
 											flatten: false
-										}]
+										}],
+										deny_unknown_fields: true
 									}
 								}
 							},
@@ -214,7 +231,7 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 							(Some(tag), None, false) => {
 								match &mut data {
 									ParseData {
-										ty: ParseDataType::Struct { fields },
+										ty: ParseDataType::Struct { fields, .. },
 										..
 									} => fields.push(ParseDataField {
 										name: tag.clone(),
@@ -257,7 +274,8 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 												ty: TypeOrInline::Inline(data),
 												flatten: false
 											},
-										]
+										],
+										deny_unknown_fields: true
 									}
 								}
 							},

@@ -1,9 +1,9 @@
-use crate::parser::{ParseData, ParseDataField, TypeOrInline};
+use crate::parser::{ParseData, ParseDataField, ParseDataType, TypeOrInline};
 use proc_macro2::TokenStream;
 use quote::{quote, quote_spanned};
 use syn::{spanned::Spanned, LitStr};
 
-pub(super) fn gen_doc_option(doc: &[String]) -> TokenStream {
+fn gen_doc_option(doc: &[String]) -> TokenStream {
 	let doc = doc.join("\n");
 	let doc = doc.trim();
 	if doc.is_empty() {
@@ -14,158 +14,178 @@ pub(super) fn gen_doc_option(doc: &[String]) -> TokenStream {
 }
 
 impl ParseData {
-	pub(super) fn gen_schema(&self) -> TokenStream {
-		match self {
-			Self::Struct { name, fields } => gen_struct(name.as_ref(), fields),
-			Self::Enum(variants) => gen_enum(variants),
-			Self::Alternatives(alt) => gen_alt(alt),
-			Self::Unit => gen_unit()
+	pub(super) fn gen_visit_impl(&self) -> TokenStream {
+		let name = self.name.as_ref();
+		let doc = &self.doc;
+		match &self.ty {
+			ParseDataType::Struct { fields } => gen_struct(name, doc, fields),
+			ParseDataType::Enum { variants } => gen_enum(name, doc, variants),
+			ParseDataType::Alternatives { alts } => gen_alt(name, doc, alts),
+			ParseDataType::Unit => gen_unit(name, doc)
 		}
 	}
 }
 
-fn gen_struct(name: Option<&LitStr>, fields: &[ParseDataField]) -> TokenStream {
-	let openapi = path!(::openapi_type::openapi);
+fn gen_struct(name: Option<&LitStr>, doc: &[String], fields: &[ParseDataField]) -> TokenStream {
+	let str = path!(::core::primitive::str);
+	let string = path!(::std::string::String);
 	let option = path!(::core::option::Option);
 
 	let name = match name {
-		Some(name) => quote!(#option::Some(::std::string::String::from(#name))),
+		Some(name) => quote!(#option::Some(#name)),
 		None => quote!(#option::None)
 	};
+	let doc = gen_doc_option(doc);
 
 	let fields = fields.iter().map(|f| {
 		let name = &f.name;
 		let doc = gen_doc_option(&f.doc);
-		let schema = match &f.ty {
+		let visit = match &f.ty {
 			TypeOrInline::Type(ty) => {
-				quote_spanned!(ty.span() => <#ty as ::openapi_type::OpenapiType>::schema())
+				quote_spanned!(ty.span() => <#ty as ::openapi_type::OpenapiType>::visit_type)
 			},
-			TypeOrInline::Inline(data) => data.gen_schema()
+			TypeOrInline::Inline(data) => {
+				let visit_impl = data.gen_visit_impl();
+				quote! {
+					{
+						fn visit_type<__openapi_type_V>(visitor: &mut __openapi_type_V)
+						where
+							__openapi_type_V: ::openapi_type::Visitor
+						{
+							#visit_impl
+						}
+						visit_type
+					}
+				}
+			}
 		};
 
 		if f.flatten {
 			quote!({
-				let field_schema = #schema;
-				::openapi_type::private::flatten(
-					&mut dependencies,
-					&mut properties,
-					&mut required,
-					field_schema
-				);
+				let visitor = ::openapi_type::ObjectVisitor::visit_flatten_field(object_visitor);
+				let field_visit_type = #visit;
+				field_visit_type(visitor)
 			})
 		} else {
 			quote!({
-				const FIELD_NAME: &::core::primitive::str = #name;
-				const FIELD_DOC: #option<&'static ::core::primitive::str> = #doc;
+				const FIELD_NAME: &#str = #name;
+				const FIELD_DOC: #option<&'static #str> = #doc;
 
-				let mut field_schema = #schema;
-
-				// fields in OpenAPI are nullable by default
-				match field_schema.nullable {
-					true => field_schema.nullable = false,
-					false => required.push(::std::string::String::from(FIELD_NAME))
-				};
-
-				let field_schema = ::openapi_type::private::inline_if_unnamed(
-					&mut dependencies, field_schema, FIELD_DOC
+				let field_visit_type = #visit;
+				let field_visitor = ::openapi_type::ObjectVisitor::visit_field(
+					object_visitor,
+					#string::from(FIELD_NAME),
+					FIELD_DOC.map(#string::from)
 				);
-				let field_schema = match field_schema {
-					#openapi::ReferenceOr::Item(schema) => {
-						#openapi::ReferenceOr::Item(::std::boxed::Box::new(schema))
-					},
-					#openapi::ReferenceOr::Reference { reference } => {
-						#openapi::ReferenceOr::Reference { reference }
-					}
-				};
-
-				properties.insert(
-					::std::string::String::from(FIELD_NAME),
-					field_schema
-				);
+				field_visit_type(field_visitor);
 			})
 		}
 	});
 
 	quote! {
-		{
-			let mut properties = ::openapi_type::private::Properties::new();
-			let mut required = ::openapi_type::private::Required::new();
+		const OBJECT_NAME: #option<&'static #str> = #name;
+		const OBJECT_DOC: #option<&'static #str> = #doc;
 
-			#(#fields)*
+		let object_visitor = ::openapi_type::Visitor::visit_object(visitor);
 
-			let mut schema = ::openapi_type::OpenapiSchema::new(
-				#openapi::SchemaKind::Type(
-					#openapi::Type::Object(
-						#openapi::ObjectType {
-							properties,
-							required,
-							.. ::std::default::Default::default()
-						}
-					)
-				)
+		if let #option::Some(object_name) = OBJECT_NAME {
+			::openapi_type::ObjectVisitor::visit_name(
+				object_visitor,
+				#string::from(object_name)
 			);
-			schema.name = #name;
-			schema
 		}
+		if let #option::Some(object_doc) = OBJECT_DOC {
+			::openapi_type::ObjectVisitor::visit_description(
+				object_visitor,
+				#string::from(object_doc)
+			);
+		}
+
+		#(#fields)*
 	}
 }
 
-fn gen_enum(variants: &[LitStr]) -> TokenStream {
-	let openapi = path!(::openapi_type::openapi);
+fn gen_enum(name: Option<&LitStr>, doc: &[String], variants: &[LitStr]) -> TokenStream {
+	let str = path!(::core::primitive::str);
+	let string = path!(::std::string::String);
+	let option = path!(::core::option::Option);
+
+	let name = match name {
+		Some(name) => quote!(#option::Some(#name)),
+		None => quote!(#option::None)
+	};
+	let doc = gen_doc_option(doc);
+
 	quote! {
-		{
-			let mut enumeration = <::std::vec::Vec<::std::option::Option<::std::string::String>>>::new();
-			#(enumeration.push(::std::option::Option::Some(::std::string::String::from(#variants)));)*
-			::openapi_type::OpenapiSchema::new(
-				#openapi::SchemaKind::Type(
-					#openapi::Type::String(
-						#openapi::StringType {
-							enumeration,
-							.. ::std::default::Default::default()
-						}
-					)
-				)
-			)
-		}
+		const ENUM_NAME: #option<&'static #str> = #name;
+		const ENUM_DOC: #option<&'static #str> = #doc;
+
+		::openapi_type::Visitor::visit_enum(
+			visitor,
+			ENUM_NAME.map(#string::from),
+			ENUM_DOC.map(#string::from),
+			[#(#string::from(#variants)),*]
+		);
 	}
 }
 
-fn gen_alt(alt: &[ParseData]) -> TokenStream {
-	let openapi = path!(::openapi_type::openapi);
-	let schema = alt.iter().map(|data| data.gen_schema());
-	quote! {
-		{
-			let mut alternatives = <::std::vec::Vec<
-				#openapi::ReferenceOr<#openapi::Schema>
-			>>::new();
-			#(alternatives.push({
-				let alt_schema = #schema;
-				::openapi_type::private::inline_if_unnamed(&mut dependencies, alt_schema, None)
-			});)*
+fn gen_alt(name: Option<&LitStr>, doc: &[String], alt: &[ParseData]) -> TokenStream {
+	let str = path!(::core::primitive::str);
+	let string = path!(::std::string::String);
+	let option = path!(::core::option::Option);
 
-			::openapi_type::OpenapiSchema::new(
-				#openapi::SchemaKind::OneOf {
-					one_of: alternatives
-				}
-			)
+	let name = match name {
+		Some(name) => quote!(#option::Some(#name)),
+		None => quote!(#option::None)
+	};
+	let doc = gen_doc_option(doc);
+
+	let impls = alt.into_iter().map(|alt| alt.gen_visit_impl());
+	quote! {
+		const OBJECT_NAME: #option<&'static #str> = #name;
+		const OBJECT_DOC: #option<&'static #str> = #doc;
+
+		let alt_visitor = ::openapi_type::Visitor::visit_alternatives(visitor);
+
+		if let #option::Some(object_name) = OBJECT_NAME {
+			::openapi_type::AlternativesVisitor::visit_name(
+				alt_visitor,
+				#string::from(object_name)
+			);
 		}
+		if let #option::Some(object_doc) = OBJECT_DOC {
+			::openapi_type::AlternativesVisitor::visit_description(
+				alt_visitor,
+				#string::from(object_doc)
+			);
+		}
+
+		#({
+			let visitor = ::openapi_type::AlternativesVisitor::visit_alternative(alt_visitor);
+			#impls
+		})*
 	}
 }
 
-fn gen_unit() -> TokenStream {
-	let openapi = path!(::openapi_type::openapi);
+fn gen_unit(name: Option<&LitStr>, doc: &[String]) -> TokenStream {
+	let str = path!(::core::primitive::str);
+	let string = path!(::std::string::String);
+	let option = path!(::core::option::Option);
+
+	let name = match name {
+		Some(name) => quote!(#option::Some(#name)),
+		None => quote!(#option::None)
+	};
+	let doc = gen_doc_option(doc);
+
 	quote! {
-		::openapi_type::OpenapiSchema::new(
-			#openapi::SchemaKind::Type(
-				#openapi::Type::Object(
-					#openapi::ObjectType {
-						additional_properties: ::std::option::Option::Some(
-							#openapi::AdditionalProperties::Any(false)
-						),
-						.. ::std::default::Default::default()
-					}
-				)
-			)
-		)
+		const OBJECT_NAME: #option<&'static #str> = #name;
+		const OBJECT_DOC: #option<&'static #str> = #doc;
+
+		let option_visitor = ::openapi_type::Visitor::visit_unit_struct(
+			visitor,
+			OBJECT_NAME.map(#string::from),
+			OBJECT_DOC.map(#string::from)
+		);
 	}
 }

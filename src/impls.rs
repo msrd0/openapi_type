@@ -1,240 +1,250 @@
-use crate::{OpenapiSchema, OpenapiType};
+use crate::{ObjectVisitor, OpenapiType, Visitor};
 use indexmap::{IndexMap, IndexSet};
-use openapiv3::{
-	AdditionalProperties, ArrayType, IntegerType, NumberFormat, NumberType, ObjectType, ReferenceOr, SchemaKind,
-	StringFormat, StringType, Type, VariantOrUnknownOrEmpty
-};
 use serde_json::Value;
 use std::{
-	collections::{BTreeMap, BTreeSet, HashMap, HashSet},
-	hash::BuildHasher,
+	collections::{BTreeMap, BTreeSet, HashMap, HashSet, LinkedList, VecDeque},
+	ffi::{CStr, CString},
 	num::{NonZeroU128, NonZeroU16, NonZeroU32, NonZeroU64, NonZeroU8, NonZeroUsize}
 };
 
-macro_rules! impl_openapi_type {
-	($($($ty:ident)::+ $(<$($generic:ident : $bound:path),+>)?),* => $schema:expr) => {
+impl OpenapiType for () {
+	fn visit_type<V: Visitor>(visitor: &mut V) {
+		visitor.visit_unit();
+	}
+}
+
+impl OpenapiType for Value {
+	fn visit_type<V: Visitor>(visitor: &mut V) {
+		visitor.visit_any();
+	}
+}
+
+impl OpenapiType for bool {
+	fn visit_type<V: Visitor>(visitor: &mut V) {
+		visitor.visit_bool();
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+macro_rules! int {
+	($($ty:ident($minimum:expr, $byte:expr);)+) => {
 		$(
-			impl $(<$($generic : $bound),+>)? OpenapiType for $($ty)::+ $(<$($generic),+>)? {
-				fn schema() -> OpenapiSchema {
-					$schema
+			impl OpenapiType for $ty {
+				fn visit_type<V: Visitor>(visitor: &mut V) {
+					visitor.visit_int($byte, $minimum);
 				}
 			}
-		)*
-	};
-}
-
-type Unit = ();
-impl_openapi_type!(Unit => {
-	OpenapiSchema::new(SchemaKind::Type(Type::Object(ObjectType {
-		additional_properties: Some(AdditionalProperties::Any(false)),
-		..Default::default()
-	})))
-});
-
-impl_openapi_type!(Value => {
-	OpenapiSchema {
-		nullable: true,
-		description: None,
-		name: None,
-		schema: SchemaKind::Any(Default::default()),
-		dependencies: Default::default()
-	}
-});
-
-impl_openapi_type!(bool => OpenapiSchema::new(SchemaKind::Type(Type::Boolean {})));
-
-#[inline]
-fn int_schema(minimum: Option<i64>, bits: Option<i64>) -> OpenapiSchema {
-	OpenapiSchema::new(SchemaKind::Type(Type::Integer(IntegerType {
-		minimum,
-		format: bits
-			.map(|bits| VariantOrUnknownOrEmpty::Unknown(format!("int{}", bits)))
-			.unwrap_or(VariantOrUnknownOrEmpty::Empty),
-		..Default::default()
-	})))
-}
-
-impl_openapi_type!(isize => int_schema(None, None));
-impl_openapi_type!(i8 => int_schema(None, Some(8)));
-impl_openapi_type!(i16 => int_schema(None, Some(16)));
-impl_openapi_type!(i32 => int_schema(None, Some(32)));
-impl_openapi_type!(i64 => int_schema(None, Some(64)));
-impl_openapi_type!(i128 => int_schema(None, Some(128)));
-
-impl_openapi_type!(usize => int_schema(Some(0), None));
-impl_openapi_type!(u8 => int_schema(Some(0), Some(8)));
-impl_openapi_type!(u16 => int_schema(Some(0), Some(16)));
-impl_openapi_type!(u32 => int_schema(Some(0), Some(32)));
-impl_openapi_type!(u64 => int_schema(Some(0), Some(64)));
-impl_openapi_type!(u128 => int_schema(Some(0), Some(128)));
-
-impl_openapi_type!(NonZeroUsize => int_schema(Some(1), None));
-impl_openapi_type!(NonZeroU8 => int_schema(Some(1), Some(8)));
-impl_openapi_type!(NonZeroU16 => int_schema(Some(1), Some(16)));
-impl_openapi_type!(NonZeroU32 => int_schema(Some(1), Some(32)));
-impl_openapi_type!(NonZeroU64 => int_schema(Some(1), Some(64)));
-impl_openapi_type!(NonZeroU128 => int_schema(Some(1), Some(128)));
-
-#[inline]
-fn float_schema(format: NumberFormat) -> OpenapiSchema {
-	OpenapiSchema::new(SchemaKind::Type(Type::Number(NumberType {
-		format: VariantOrUnknownOrEmpty::Item(format),
-		..Default::default()
-	})))
-}
-
-impl_openapi_type!(f32 => float_schema(NumberFormat::Float));
-impl_openapi_type!(f64 => float_schema(NumberFormat::Double));
-
-#[inline]
-fn str_schema(format: VariantOrUnknownOrEmpty<StringFormat>) -> OpenapiSchema {
-	OpenapiSchema::new(SchemaKind::Type(Type::String(StringType {
-		format,
-		..Default::default()
-	})))
-}
-
-impl_openapi_type!(String, str => str_schema(VariantOrUnknownOrEmpty::Empty));
-
-#[cfg(feature = "chrono")]
-impl_openapi_type!(chrono::Date<T: chrono::TimeZone>, chrono::NaiveDate => {
-	str_schema(VariantOrUnknownOrEmpty::Item(StringFormat::Date))
-});
-
-#[cfg(feature = "time")]
-impl_openapi_type!(time::Date => {
-	str_schema(VariantOrUnknownOrEmpty::Item(StringFormat::Date))
-});
-
-#[cfg(feature = "chrono")]
-impl_openapi_type!(chrono::DateTime<T: chrono::TimeZone>, chrono::NaiveDateTime => {
-	str_schema(VariantOrUnknownOrEmpty::Item(StringFormat::DateTime))
-});
-
-#[cfg(feature = "time")]
-impl_openapi_type!(time::OffsetDateTime, time::PrimitiveDateTime => {
-	str_schema(VariantOrUnknownOrEmpty::Item(StringFormat::DateTime))
-});
-
-#[cfg(feature = "uuid")]
-impl_openapi_type!(uuid::Uuid => {
-	str_schema(VariantOrUnknownOrEmpty::Unknown("uuid".to_owned()))
-});
-
-impl_openapi_type!(Option<T: OpenapiType> => {
-	let schema = T::schema();
-	let mut dependencies = schema.dependencies.clone();
-	let schema = match schema.name.clone() {
-		Some(name) => {
-			let reference = ReferenceOr::Reference {
-				reference: format!("#/components/schemas/{}", name)
-			};
-			dependencies.insert(name, schema);
-			SchemaKind::AllOf { all_of: vec![reference] }
-		},
-		None => schema.schema
-	};
-
-	OpenapiSchema {
-		nullable: true,
-		name: None,
-		description: None,
-		schema,
-		dependencies
-	}
-});
-
-#[inline]
-fn array_schema<T: OpenapiType>(unique_items: bool) -> OpenapiSchema {
-	let schema = T::schema();
-	let mut dependencies = schema.dependencies.clone();
-
-	let items = match schema.name.clone() {
-		Some(name) => {
-			let reference = ReferenceOr::Reference {
-				reference: format!("#/components/schemas/{}", name)
-			};
-			dependencies.insert(name, schema);
-			reference
-		},
-		None => ReferenceOr::Item(Box::new(schema.into_schema()))
-	};
-
-	OpenapiSchema {
-		nullable: false,
-		name: None,
-		description: None,
-		schema: SchemaKind::Type(Type::Array(ArrayType {
-			items: Some(items),
-			min_items: None,
-			max_items: None,
-			unique_items
-		})),
-		dependencies
+		)+
 	}
 }
 
-impl_openapi_type!(Vec<T: OpenapiType> => array_schema::<T>(false));
-impl_openapi_type!(BTreeSet<T: OpenapiType>, IndexSet<T: OpenapiType>, HashSet<T: OpenapiType, S: BuildHasher> => {
-	array_schema::<T>(true)
-});
+int! {
+	isize(None, None);
+	i8(None, Some(1));
+	i16(None, Some(2));
+	i32(None, Some(4));
+	i64(None, Some(8));
+	i128(None, Some(16));
 
-#[inline]
-fn map_schema<K: OpenapiType, T: OpenapiType>() -> OpenapiSchema {
-	let key_schema = K::schema();
-	let mut dependencies = key_schema.dependencies.clone();
+	usize(Some(0), None);
+	u8(Some(0), Some(1));
+	u16(Some(0), Some(2));
+	u32(Some(0), Some(4));
+	u64(Some(0), Some(8));
+	u128(Some(0), Some(16));
 
-	let keys = match key_schema.name.clone() {
-		Some(name) => {
-			let reference = ReferenceOr::Reference {
-				reference: format!("#/components/schemas/{}", name)
-			};
-			dependencies.insert(name, key_schema);
-			reference
-		},
-		None => ReferenceOr::Item(Box::new(key_schema.into_schema()))
-	};
+	NonZeroUsize(Some(1), None);
+	NonZeroU8(Some(1), Some(1));
+	NonZeroU16(Some(1), Some(2));
+	NonZeroU32(Some(1), Some(4));
+	NonZeroU64(Some(1), Some(8));
+	NonZeroU128(Some(1), Some(16));
+}
 
-	let schema = T::schema();
-	dependencies.extend(schema.dependencies.iter().map(|(k, v)| (k.clone(), v.clone())));
+////////////////////////////////////////////////////////////////////////////////
 
-	let items = Box::new(match schema.name.clone() {
-		Some(name) => {
-			let reference = ReferenceOr::Reference {
-				reference: format!("#/components/schemas/{}", name)
-			};
-			dependencies.insert(name, schema);
-			reference
-		},
-		None => ReferenceOr::Item(schema.into_schema())
-	});
-
-	let mut properties = IndexMap::new();
-	properties.insert("default".to_owned(), keys);
-
-	OpenapiSchema {
-		nullable: false,
-		name: None,
-		description: None,
-		schema: SchemaKind::Type(Type::Object(ObjectType {
-			properties,
-			required: vec!["default".to_owned()],
-			additional_properties: Some(AdditionalProperties::Schema(items)),
-			..Default::default()
-		})),
-		dependencies
+macro_rules! number {
+	($($ty:ident($byte:expr);)+) => {
+		$(
+			impl OpenapiType for $ty {
+				fn visit_type<V: Visitor>(visitor: &mut V) {
+					visitor.visit_number($byte);
+				}
+			}
+		)+
 	}
 }
 
-impl_openapi_type!(
-	BTreeMap<K: OpenapiType, T: OpenapiType>,
-	HashMap<K: OpenapiType, T: OpenapiType, S: BuildHasher>,
-	IndexMap<K: OpenapiType, T: OpenapiType>
-	=> map_schema::<K, T>()
-);
+number! {
+	f32(Some(4));
+	f64(Some(8));
+}
 
-#[cfg(feature = "linked-hash-map")]
-impl_openapi_type!(
-	linked_hash_map::LinkedHashMap<K: OpenapiType, T: OpenapiType, S: BuildHasher>
-	=> map_schema::<K, T>()
-);
+////////////////////////////////////////////////////////////////////////////////
+
+impl OpenapiType for char {
+	fn visit_type<V: Visitor>(visitor: &mut V) {
+		visitor.visit_char();
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+macro_rules! string {
+	($($ty:ident;)+) => {
+		$(
+			impl OpenapiType for $ty {
+				fn visit_type<V: Visitor>(visitor: &mut V) {
+					visitor.visit_string();
+				}
+			}
+		)+
+	}
+}
+
+string! {
+	String;
+	str;
+	CString;
+	CStr;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+#[cfg(feature = "uuid08")]
+impl OpenapiType for uuid08::Uuid {
+	fn visit_type<V: Visitor>(visitor: &mut V) {
+		visitor.visit_uuid();
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+#[cfg(any(feature = "time03", feature = "chrono04"))]
+macro_rules! date {
+	($($($ty:ident)::+ $(<$arg:ident: $bound:path>)?;)+) => {
+		$(
+			impl$(<$arg: $bound>)? OpenapiType for $($ty)::+$(<$arg>)? {
+				fn visit_type<V: Visitor>(visitor: &mut V) {
+					visitor.visit_date();
+				}
+			}
+		)+
+	}
+}
+
+#[cfg(feature = "time03")]
+date! {
+	time03::Date;
+}
+
+#[cfg(feature = "chrono04")]
+date! {
+	chrono04::Date<T: chrono04::TimeZone>;
+	chrono04::NaiveDate;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+#[cfg(any(feature = "time03", feature = "chrono04"))]
+macro_rules! datetime {
+	($($($ty:ident)::+ $(<$arg:ident: $bound:path>)?;)+) => {
+		$(
+			impl$(<$arg: $bound>)? OpenapiType for $($ty)::+$(<$arg>)? {
+				fn visit_type<V: Visitor>(visitor: &mut V) {
+					visitor.visit_datetime();
+				}
+			}
+		)+
+	}
+}
+
+#[cfg(feature = "time03")]
+datetime! {
+	time03::OffsetDateTime;
+	time03::PrimitiveDateTime;
+}
+
+#[cfg(feature = "chrono04")]
+datetime! {
+	chrono04::DateTime<T: chrono04::TimeZone>;
+	chrono04::NaiveDateTime;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+impl<T: OpenapiType> OpenapiType for Option<T> {
+	fn visit_type<V: Visitor>(visitor: &mut V) {
+		let v = visitor.visit_option();
+		T::visit_type(v);
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+macro_rules! array {
+	($($($ty:ident)::+ $(<$($arg:ident),+>)? ($unique_items:literal, $inner:ident);)+) => {
+		$(
+			impl$(<$($arg),+>)? OpenapiType for $($ty)::+$(<$($arg),+>)?
+			where
+				$inner: OpenapiType
+			{
+				fn visit_type<V: Visitor>(visitor: &mut V) {
+					let v = visitor.visit_array(None, $unique_items);
+					<$inner as OpenapiType>::visit_type(v);
+				}
+			}
+		)+
+	}
+}
+
+type Array<T> = [T];
+
+array! {
+	Array<T>(false, T);
+	LinkedList<T>(false, T);
+	Vec<T>(false, T);
+	VecDeque<T>(false, T);
+
+	BTreeSet<T>(true, T);
+	HashSet<T, S>(true, T);
+	IndexSet<T>(true, T);
+}
+
+impl<T: OpenapiType, const N: usize> OpenapiType for [T; N] {
+	fn visit_type<V: Visitor>(visitor: &mut V) {
+		let v = visitor.visit_array(Some(N), false);
+		T::visit_type(v);
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+macro_rules! map {
+	($($($ty:ident)::+ $(<$($arg:ident$(: $bound:path)?),+>)? ($inner:ident);)+) => {
+		$(
+			impl$(<$($arg$(: $bound)?),+>)? OpenapiType for $($ty)::+$(<$($arg),+>)?
+			where
+				$inner: OpenapiType
+			{
+				fn visit_type<Vi: Visitor>(visitor: &mut Vi) {
+					let obj = visitor.visit_object();
+					let v = obj.visit_additional();
+					<$inner as OpenapiType>::visit_type(v);
+				}
+			}
+		)+
+	}
+}
+
+map! {
+	BTreeMap<K, V>(V);
+	HashMap<K, V, S>(V);
+	IndexMap<K, V, S>(V);
+}
+
+#[cfg(feature = "linked-hash-map05")]
+map! {
+	linked_hash_map05::LinkedHashMap<K, V, S>(V);
+}

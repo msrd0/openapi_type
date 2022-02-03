@@ -8,7 +8,7 @@ name = "openapi_type"
 version = "0.3.1"
 authors = ["Dominic Meiser <git@msrd0.de>"]
 edition = "2021"
-rust-version = "1.56"
+rust-version = "1.58"
 description = "OpenAPI type information for Rust structs and enums"
 keywords = ["openapi", "type"]
 license = "Apache-2.0"
@@ -16,17 +16,24 @@ repository = "https://github.com/msrd0/openapi_type"
 readme = "crates-io.md"
 include = ["src/**/*", "LICENSE", "crates-io.md"]
 
+[features]
+chrono = ["chrono04"]
+linked-hash-map = ["linked-hash-map05"]
+time = ["time03"]
+uuid = ["uuid08"]
+
 [dependencies]
 indexmap = "1.7"
 openapi_type_derive = { path = "./derive", version = "0.3.0" }
 openapiv3 = "1.0"
+readonly = "0.2"
 serde_json = "1.0"
 
 # optional dependencies / features
-chrono = { version = "0.4.19", default-features = false, optional = true }
-linked-hash-map = { version = "0.5.4", optional = true }
-time = { version = "0.3.4", features = ["serde-human-readable"], optional = true }
-uuid = { version = "0.8.2", optional = true }
+chrono04 = { package = "chrono", version = "0.4", default-features = false, optional = true }
+linked-hash-map05 = { package = "linked-hash-map", version = "0.5", optional = true }
+time03 = { package = "time", version = "0.3", features = ["serde-human-readable"], optional = true }
+uuid08 = { package = "uuid", version = "0.8", optional = true }
 
 [dev-dependencies]
 paste = "1.0"

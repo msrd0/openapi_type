@@ -1,11 +1,5 @@
 error[E0277]: the trait bound `Bar: OpenapiType` is not satisfied
-   --> tests/fail/not_openapitype.rs:5:7
-    |
-5   |     bar: Bar
-    |          ^^^ the trait `OpenapiType` is not implemented for `Bar`
-    |
-note: required by `schema`
-   --> src/lib.rs
-    |
-    |     fn schema() -> OpenapiSchema;
-    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ --> tests/fail/not_openapitype.rs:5:7
+  |
+5 |     bar: Bar
+  |          ^^^ the trait `OpenapiType` is not implemented for `Bar`

@@ -13,7 +13,7 @@ macro_rules! test_type {
 				#[test]
 				fn [<$($ty:lower)_+ $($($(_$generic:lower)+)+)? >]() {
 					let schema = <$($ty)::+ $(<$($($generic)::+),+>)? as OpenapiType>::schema();
-					let schema = openapi_type::OpenapiSchema::into_schema(schema);
+					let schema = &schema.schema;
 					let schema_json = serde_json::to_value(&schema).unwrap();
 					let expected = serde_json::json!($json);
 					pretty_assertions::assert_eq!(schema_json, expected);
@@ -25,6 +25,7 @@ macro_rules! test_type {
 
 type Unit = ();
 test_type!(Unit = {
+	"nullable": true,
 	"type": "object",
 	"additionalProperties": false
 });
@@ -158,34 +159,34 @@ test_type!(String = {
 	"type": "string"
 });
 
-#[cfg(feature = "uuid")]
-test_type!(uuid::Uuid = {
+#[cfg(feature = "uuid08")]
+test_type!(uuid08::Uuid = {
 	"type": "string",
 	"format": "uuid"
 });
 
 // ### date/time
 
-#[cfg(feature = "chrono")]
-test_type!(chrono::Date<chrono::FixedOffset>, chrono::Date<chrono::Utc>, chrono::NaiveDate = {
+#[cfg(feature = "chrono04")]
+test_type!(chrono04::Date<chrono04::FixedOffset>, chrono04::Date<chrono04::Utc>, chrono04::NaiveDate = {
 	"type": "string",
 	"format": "date"
 });
 
-#[cfg(feature = "time")]
-test_type!(time::Date = {
+#[cfg(feature = "time03")]
+test_type!(time03::Date = {
 	"type": "string",
 	"format": "date"
 });
 
-#[cfg(feature = "chrono")]
-test_type!(chrono::DateTime<chrono::FixedOffset>, chrono::DateTime<chrono::Utc>, chrono::NaiveDateTime = {
+#[cfg(feature = "chrono04")]
+test_type!(chrono04::DateTime<chrono04::FixedOffset>, chrono04::DateTime<chrono04::Utc>, chrono04::NaiveDateTime = {
 	"type": "string",
 	"format": "date-time"
 });
 
-#[cfg(feature = "time")]
-test_type!(time::OffsetDateTime, time::PrimitiveDateTime = {
+#[cfg(feature = "time03")]
+test_type!(time03::OffsetDateTime, time03::PrimitiveDateTime = {
 	"type": "string",
 	"format": "date-time"
 });
@@ -214,26 +215,14 @@ test_type!(BTreeSet<String>, IndexSet<String>, HashSet<String> = {
 
 test_type!(BTreeMap<isize, String>, HashMap<isize, String>, IndexMap<isize, String> = {
 	"type": "object",
-	"properties": {
-		"default": {
-			"type": "integer"
-		}
-	},
-	"required": ["default"],
 	"additionalProperties": {
 		"type": "string"
 	}
 });
 
-#[cfg(feature = "linked-hash-map")]
-test_type!(linked_hash_map::LinkedHashMap<isize, String> = {
+#[cfg(feature = "linked-hash-map05")]
+test_type!(linked_hash_map05::LinkedHashMap<isize, String> = {
 	"type": "object",
-	"properties": {
-		"default": {
-			"type": "integer"
-		}
-	},
-	"required": ["default"],
 	"additionalProperties": {
 		"type": "string"
 	}

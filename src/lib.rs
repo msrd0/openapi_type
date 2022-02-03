@@ -24,8 +24,8 @@ struct FooBar {
 	foo: String,
 	bar: u64
 }
-# let schema = FooBar::schema().into_schema();
-# let schema_json = serde_json::to_value(&schema).unwrap();
+# let schema = FooBar::schema();
+# let schema_json = serde_json::to_value(&schema.schema).unwrap();
 # assert_eq!(schema_json, serde_json::json!({
 #   "type": "object",
 #   "title": "FooBar",
@@ -73,63 +73,9 @@ pub use openapi_type_derive::OpenapiType;
 pub use openapiv3 as openapi;
 
 mod impls;
-#[doc(hidden)]
-pub mod private;
+mod visitor;
 
-use indexmap::IndexMap;
-use openapi::{Schema, SchemaData, SchemaKind};
-
-/// This struct is used to generate the OpenAPI specification for a particular type. It is already
-/// made available for all primitives and some other types from the rust standard library, and
-/// you can also make your own types provide one through the [OpenapiType] trait and derive macro.
-///
-/// Note that this struct is marked non-exhaustive. This means that new attributes might be added
-/// at any point in time without a breaking change. The only way to obtain a value is through the
-/// [OpenapiSchema::new] method.
-#[derive(Debug, Clone, PartialEq)]
-#[non_exhaustive]
-pub struct OpenapiSchema {
-	/// The name of this schema. If it is None, the schema will be inlined.
-	pub name: Option<String>,
-	/// The description of this schema. Optional and only makes sense when a [`name`](Self::name)
-	/// is set as well.
-	pub description: Option<String>,
-	/// Whether this particular schema is nullable. Note that there is no guarantee that this will
-	/// make it into the final specification, it might just be interpreted as a hint to make it
-	/// an optional parameter.
-	pub nullable: bool,
-	/// The actual OpenAPI schema.
-	pub schema: SchemaKind,
-	/// Other schemas that this schema depends on. They will be included in the final OpenAPI Spec
-	/// along with this schema.
-	pub dependencies: IndexMap<String, OpenapiSchema>
-}
-
-impl OpenapiSchema {
-	/// Create a new schema that has no name.
-	pub fn new(schema: SchemaKind) -> Self {
-		Self {
-			name: None,
-			description: None,
-			nullable: false,
-			schema,
-			dependencies: IndexMap::new()
-		}
-	}
-
-	/// Convert this schema to a [Schema] that can be serialized to the OpenAPI Spec.
-	pub fn into_schema(self) -> Schema {
-		Schema {
-			schema_data: SchemaData {
-				nullable: self.nullable,
-				title: self.name,
-				description: self.description,
-				..Default::default()
-			},
-			schema_kind: self.schema
-		}
-	}
-}
+pub use visitor::{AlternativesVisitor, ObjectVisitor, OpenapiSchema, OpenapiVisitor, Visitor};
 
 /// This trait needs to be implemented by every type that is being used in the OpenAPI Spec. It gives
 /// access to the [OpenapiSchema] of this type. It is provided for primitive types, String and the
@@ -144,11 +90,19 @@ impl OpenapiSchema {
 /// }
 /// ```
 pub trait OpenapiType {
-	fn schema() -> OpenapiSchema;
+	fn visit_type<V: Visitor>(visitor: &mut V);
+
+	fn schema() -> OpenapiSchema {
+		let mut visitor = OpenapiVisitor::new();
+		Self::visit_type(&mut visitor);
+		visitor
+			.into_schema()
+			.expect("The OpenapiType implementation failed to call the visitor")
+	}
 }
 
 impl<'a, T: ?Sized + OpenapiType> OpenapiType for &'a T {
-	fn schema() -> OpenapiSchema {
-		T::schema()
+	fn visit_type<V: Visitor>(visitor: &mut V) {
+		T::visit_type(visitor)
 	}
 }

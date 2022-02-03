@@ -23,8 +23,8 @@ impl<T> Boxed for ReferenceOr<T> {
 	}
 }
 
-#[readonly::make]
 #[derive(Debug)]
+#[non_exhaustive]
 pub struct OpenapiSchema {
 	pub schema: Schema,
 	pub dependencies: IndexMap<String, OpenapiSchema>

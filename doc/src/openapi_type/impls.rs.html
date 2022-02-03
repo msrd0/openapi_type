@@ -239,246 +239,266 @@
 <span id="238">238</span>
 <span id="239">239</span>
 <span id="240">240</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">OpenapiSchema</span>, <span class="ident">OpenapiType</span>};
+<span id="241">241</span>
+<span id="242">242</span>
+<span id="243">243</span>
+<span id="244">244</span>
+<span id="245">245</span>
+<span id="246">246</span>
+<span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+</pre><pre class="rust"><code><span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">ObjectVisitor</span>, <span class="ident">OpenapiType</span>, <span class="ident">Visitor</span>};
 <span class="kw">use</span> <span class="ident">indexmap</span>::{<span class="ident">IndexMap</span>, <span class="ident">IndexSet</span>};
-<span class="kw">use</span> <span class="ident">openapiv3</span>::{
-	<span class="ident">AdditionalProperties</span>, <span class="ident">ArrayType</span>, <span class="ident">IntegerType</span>, <span class="ident">NumberFormat</span>, <span class="ident">NumberType</span>, <span class="ident">ObjectType</span>, <span class="ident">ReferenceOr</span>, <span class="ident">SchemaKind</span>,
-	<span class="ident">StringFormat</span>, <span class="ident">StringType</span>, <span class="ident">Type</span>, <span class="ident">VariantOrUnknownOrEmpty</span>
-};
 <span class="kw">use</span> <span class="ident">serde_json::Value</span>;
 <span class="kw">use</span> <span class="ident">std</span>::{
-	<span class="ident">collections</span>::{<span class="ident">BTreeMap</span>, <span class="ident">BTreeSet</span>, <span class="ident">HashMap</span>, <span class="ident">HashSet</span>},
-	<span class="ident">hash::BuildHasher</span>,
+	<span class="ident">collections</span>::{<span class="ident">BTreeMap</span>, <span class="ident">BTreeSet</span>, <span class="ident">HashMap</span>, <span class="ident">HashSet</span>, <span class="ident">LinkedList</span>, <span class="ident">VecDeque</span>},
+	<span class="ident">ffi</span>::{<span class="ident">CStr</span>, <span class="ident">CString</span>},
 	<span class="ident">num</span>::{<span class="ident">NonZeroU128</span>, <span class="ident">NonZeroU16</span>, <span class="ident">NonZeroU32</span>, <span class="ident">NonZeroU64</span>, <span class="ident">NonZeroU8</span>, <span class="ident">NonZeroUsize</span>}
 };
 
-<span class="macro">macro_rules!</span> <span class="ident">impl_openapi_type</span> {
-	($($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">ty</span>:<span class="ident">ident</span>)::<span class="op">+</span> $(<span class="op">&lt;</span>$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">generic</span>:<span class="ident">ident</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">bound</span>:<span class="ident">path</span>),<span class="op">+</span><span class="op">&gt;</span>)<span class="question-mark">?</span>),<span class="op">*</span> =&gt; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">schema</span>:<span class="ident">expr</span>) =&gt; {
+<span class="kw">impl</span> <span class="ident">OpenapiType</span> <span class="kw">for</span> () {
+	<span class="kw">fn</span> <span class="ident">visit_type</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Visitor</span><span class="op">&gt;</span>(<span class="ident">visitor</span>: <span class="kw-2">&amp;mut</span> <span class="ident">V</span>) {
+		<span class="ident">visitor</span>.<span class="ident">visit_unit</span>();
+	}
+}
+
+<span class="kw">impl</span> <span class="ident">OpenapiType</span> <span class="kw">for</span> <span class="ident">Value</span> {
+	<span class="kw">fn</span> <span class="ident">visit_type</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Visitor</span><span class="op">&gt;</span>(<span class="ident">visitor</span>: <span class="kw-2">&amp;mut</span> <span class="ident">V</span>) {
+		<span class="ident">visitor</span>.<span class="ident">visit_any</span>();
+	}
+}
+
+<span class="kw">impl</span> <span class="ident">OpenapiType</span> <span class="kw">for</span> <span class="ident">bool</span> {
+	<span class="kw">fn</span> <span class="ident">visit_type</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Visitor</span><span class="op">&gt;</span>(<span class="ident">visitor</span>: <span class="kw-2">&amp;mut</span> <span class="ident">V</span>) {
+		<span class="ident">visitor</span>.<span class="ident">visit_bool</span>();
+	}
+}
+
+<span class="comment">////////////////////////////////////////////////////////////////////////////////</span>
+
+<span class="macro">macro_rules!</span> <span class="ident">int</span> {
+	($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">ty</span>:<span class="ident">ident</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">minimum</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">byte</span>:<span class="ident">expr</span>);)<span class="op">+</span>) =&gt; {
 		$(
-			<span class="kw">impl</span> $(<span class="op">&lt;</span>$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">generic</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">bound</span>),<span class="op">+</span><span class="op">&gt;</span>)<span class="question-mark">?</span> <span class="ident">OpenapiType</span> <span class="kw">for</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">ty</span>)::<span class="op">+</span> $(<span class="op">&lt;</span>$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">generic</span>),<span class="op">+</span><span class="op">&gt;</span>)<span class="question-mark">?</span> {
-				<span class="kw">fn</span> <span class="ident">schema</span>() -&gt; <span class="ident">OpenapiSchema</span> {
-					<span class="macro-nonterminal">$</span><span class="macro-nonterminal">schema</span>
+			<span class="kw">impl</span> <span class="ident">OpenapiType</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ty</span> {
+				<span class="kw">fn</span> <span class="ident">visit_type</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Visitor</span><span class="op">&gt;</span>(<span class="ident">visitor</span>: <span class="kw-2">&amp;mut</span> <span class="ident">V</span>) {
+					<span class="ident">visitor</span>.<span class="ident">visit_int</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">byte</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">minimum</span>);
 				}
 			}
-		)<span class="op">*</span>
-	};
-}
-
-<span class="kw">type</span> <span class="ident">Unit</span> <span class="op">=</span> ();
-<span class="macro">impl_openapi_type!</span>(<span class="ident">Unit</span> =&gt; {
-	<span class="ident">OpenapiSchema::new</span>(<span class="ident">SchemaKind::Type</span>(<span class="ident">Type::Object</span>(<span class="ident">ObjectType</span> {
-		<span class="ident">additional_properties</span>: <span class="prelude-val">Some</span>(<span class="ident">AdditionalProperties::Any</span>(<span class="bool-val">false</span>)),
-		..<span class="ident">Default::default</span>()
-	})))
-});
-
-<span class="macro">impl_openapi_type!</span>(<span class="ident">Value</span> =&gt; {
-	<span class="ident">OpenapiSchema</span> {
-		<span class="ident">nullable</span>: <span class="bool-val">true</span>,
-		<span class="ident">description</span>: <span class="prelude-val">None</span>,
-		<span class="ident">name</span>: <span class="prelude-val">None</span>,
-		<span class="ident">schema</span>: <span class="ident">SchemaKind::Any</span>(<span class="ident">Default::default</span>()),
-		<span class="ident">dependencies</span>: <span class="ident">Default::default</span>()
-	}
-});
-
-<span class="macro">impl_openapi_type!</span>(<span class="ident">bool</span> =&gt; <span class="ident">OpenapiSchema::new</span>(<span class="ident">SchemaKind::Type</span>(<span class="ident">Type::Boolean</span> {})));
-
-<span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">fn</span> <span class="ident">int_schema</span>(<span class="ident">minimum</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>, <span class="ident">bits</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>) -&gt; <span class="ident">OpenapiSchema</span> {
-	<span class="ident">OpenapiSchema::new</span>(<span class="ident">SchemaKind::Type</span>(<span class="ident">Type::Integer</span>(<span class="ident">IntegerType</span> {
-		<span class="ident">minimum</span>,
-		<span class="ident">format</span>: <span class="ident">bits</span>
-			.<span class="ident">map</span>(<span class="op">|</span><span class="ident">bits</span><span class="op">|</span> <span class="ident">VariantOrUnknownOrEmpty::Unknown</span>(<span class="macro">format!</span>(<span class="string">&quot;int{}&quot;</span>, <span class="ident">bits</span>)))
-			.<span class="ident">unwrap_or</span>(<span class="ident">VariantOrUnknownOrEmpty::Empty</span>),
-		..<span class="ident">Default::default</span>()
-	})))
-}
-
-<span class="macro">impl_openapi_type!</span>(<span class="ident">isize</span> =&gt; <span class="ident">int_schema</span>(<span class="prelude-val">None</span>, <span class="prelude-val">None</span>));
-<span class="macro">impl_openapi_type!</span>(<span class="ident">i8</span> =&gt; <span class="ident">int_schema</span>(<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="number">8</span>)));
-<span class="macro">impl_openapi_type!</span>(<span class="ident">i16</span> =&gt; <span class="ident">int_schema</span>(<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="number">16</span>)));
-<span class="macro">impl_openapi_type!</span>(<span class="ident">i32</span> =&gt; <span class="ident">int_schema</span>(<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="number">32</span>)));
-<span class="macro">impl_openapi_type!</span>(<span class="ident">i64</span> =&gt; <span class="ident">int_schema</span>(<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="number">64</span>)));
-<span class="macro">impl_openapi_type!</span>(<span class="ident">i128</span> =&gt; <span class="ident">int_schema</span>(<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="number">128</span>)));
-
-<span class="macro">impl_openapi_type!</span>(<span class="ident">usize</span> =&gt; <span class="ident">int_schema</span>(<span class="prelude-val">Some</span>(<span class="number">0</span>), <span class="prelude-val">None</span>));
-<span class="macro">impl_openapi_type!</span>(<span class="ident">u8</span> =&gt; <span class="ident">int_schema</span>(<span class="prelude-val">Some</span>(<span class="number">0</span>), <span class="prelude-val">Some</span>(<span class="number">8</span>)));
-<span class="macro">impl_openapi_type!</span>(<span class="ident">u16</span> =&gt; <span class="ident">int_schema</span>(<span class="prelude-val">Some</span>(<span class="number">0</span>), <span class="prelude-val">Some</span>(<span class="number">16</span>)));
-<span class="macro">impl_openapi_type!</span>(<span class="ident">u32</span> =&gt; <span class="ident">int_schema</span>(<span class="prelude-val">Some</span>(<span class="number">0</span>), <span class="prelude-val">Some</span>(<span class="number">32</span>)));
-<span class="macro">impl_openapi_type!</span>(<span class="ident">u64</span> =&gt; <span class="ident">int_schema</span>(<span class="prelude-val">Some</span>(<span class="number">0</span>), <span class="prelude-val">Some</span>(<span class="number">64</span>)));
-<span class="macro">impl_openapi_type!</span>(<span class="ident">u128</span> =&gt; <span class="ident">int_schema</span>(<span class="prelude-val">Some</span>(<span class="number">0</span>), <span class="prelude-val">Some</span>(<span class="number">128</span>)));
-
-<span class="macro">impl_openapi_type!</span>(<span class="ident">NonZeroUsize</span> =&gt; <span class="ident">int_schema</span>(<span class="prelude-val">Some</span>(<span class="number">1</span>), <span class="prelude-val">None</span>));
-<span class="macro">impl_openapi_type!</span>(<span class="ident">NonZeroU8</span> =&gt; <span class="ident">int_schema</span>(<span class="prelude-val">Some</span>(<span class="number">1</span>), <span class="prelude-val">Some</span>(<span class="number">8</span>)));
-<span class="macro">impl_openapi_type!</span>(<span class="ident">NonZeroU16</span> =&gt; <span class="ident">int_schema</span>(<span class="prelude-val">Some</span>(<span class="number">1</span>), <span class="prelude-val">Some</span>(<span class="number">16</span>)));
-<span class="macro">impl_openapi_type!</span>(<span class="ident">NonZeroU32</span> =&gt; <span class="ident">int_schema</span>(<span class="prelude-val">Some</span>(<span class="number">1</span>), <span class="prelude-val">Some</span>(<span class="number">32</span>)));
-<span class="macro">impl_openapi_type!</span>(<span class="ident">NonZeroU64</span> =&gt; <span class="ident">int_schema</span>(<span class="prelude-val">Some</span>(<span class="number">1</span>), <span class="prelude-val">Some</span>(<span class="number">64</span>)));
-<span class="macro">impl_openapi_type!</span>(<span class="ident">NonZeroU128</span> =&gt; <span class="ident">int_schema</span>(<span class="prelude-val">Some</span>(<span class="number">1</span>), <span class="prelude-val">Some</span>(<span class="number">128</span>)));
-
-<span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">fn</span> <span class="ident">float_schema</span>(<span class="ident">format</span>: <span class="ident">NumberFormat</span>) -&gt; <span class="ident">OpenapiSchema</span> {
-	<span class="ident">OpenapiSchema::new</span>(<span class="ident">SchemaKind::Type</span>(<span class="ident">Type::Number</span>(<span class="ident">NumberType</span> {
-		<span class="ident">format</span>: <span class="ident">VariantOrUnknownOrEmpty::Item</span>(<span class="ident">format</span>),
-		..<span class="ident">Default::default</span>()
-	})))
-}
-
-<span class="macro">impl_openapi_type!</span>(<span class="ident">f32</span> =&gt; <span class="ident">float_schema</span>(<span class="ident">NumberFormat::Float</span>));
-<span class="macro">impl_openapi_type!</span>(<span class="ident">f64</span> =&gt; <span class="ident">float_schema</span>(<span class="ident">NumberFormat::Double</span>));
-
-<span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">fn</span> <span class="ident">str_schema</span>(<span class="ident">format</span>: <span class="ident">VariantOrUnknownOrEmpty</span><span class="op">&lt;</span><span class="ident">StringFormat</span><span class="op">&gt;</span>) -&gt; <span class="ident">OpenapiSchema</span> {
-	<span class="ident">OpenapiSchema::new</span>(<span class="ident">SchemaKind::Type</span>(<span class="ident">Type::String</span>(<span class="ident">StringType</span> {
-		<span class="ident">format</span>,
-		..<span class="ident">Default::default</span>()
-	})))
-}
-
-<span class="macro">impl_openapi_type!</span>(<span class="ident">String</span>, <span class="ident">str</span> =&gt; <span class="ident">str_schema</span>(<span class="ident">VariantOrUnknownOrEmpty::Empty</span>));
-
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;chrono&quot;</span>)]</span>
-<span class="macro">impl_openapi_type!</span>(<span class="ident">chrono::Date</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">chrono::TimeZone</span><span class="op">&gt;</span>, <span class="ident">chrono::NaiveDate</span> =&gt; {
-	<span class="ident">str_schema</span>(<span class="ident">VariantOrUnknownOrEmpty::Item</span>(<span class="ident">StringFormat::Date</span>))
-});
-
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;time&quot;</span>)]</span>
-<span class="macro">impl_openapi_type!</span>(<span class="ident">time::Date</span> =&gt; {
-	<span class="ident">str_schema</span>(<span class="ident">VariantOrUnknownOrEmpty::Item</span>(<span class="ident">StringFormat::Date</span>))
-});
-
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;chrono&quot;</span>)]</span>
-<span class="macro">impl_openapi_type!</span>(<span class="ident">chrono::DateTime</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">chrono::TimeZone</span><span class="op">&gt;</span>, <span class="ident">chrono::NaiveDateTime</span> =&gt; {
-	<span class="ident">str_schema</span>(<span class="ident">VariantOrUnknownOrEmpty::Item</span>(<span class="ident">StringFormat::DateTime</span>))
-});
-
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;time&quot;</span>)]</span>
-<span class="macro">impl_openapi_type!</span>(<span class="ident">time::OffsetDateTime</span>, <span class="ident">time::PrimitiveDateTime</span> =&gt; {
-	<span class="ident">str_schema</span>(<span class="ident">VariantOrUnknownOrEmpty::Item</span>(<span class="ident">StringFormat::DateTime</span>))
-});
-
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;uuid&quot;</span>)]</span>
-<span class="macro">impl_openapi_type!</span>(<span class="ident">uuid::Uuid</span> =&gt; {
-	<span class="ident">str_schema</span>(<span class="ident">VariantOrUnknownOrEmpty::Unknown</span>(<span class="string">&quot;uuid&quot;</span>.<span class="ident">to_owned</span>()))
-});
-
-<span class="macro">impl_openapi_type!</span>(<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">OpenapiType</span><span class="op">&gt;</span> =&gt; {
-	<span class="kw">let</span> <span class="ident">schema</span> <span class="op">=</span> <span class="ident">T::schema</span>();
-	<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">dependencies</span> <span class="op">=</span> <span class="ident">schema</span>.<span class="ident">dependencies</span>.<span class="ident">clone</span>();
-	<span class="kw">let</span> <span class="ident">schema</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">schema</span>.<span class="ident">name</span>.<span class="ident">clone</span>() {
-		<span class="prelude-val">Some</span>(<span class="ident">name</span>) =&gt; {
-			<span class="kw">let</span> <span class="ident">reference</span> <span class="op">=</span> <span class="ident">ReferenceOr::Reference</span> {
-				<span class="ident">reference</span>: <span class="macro">format!</span>(<span class="string">&quot;#/components/schemas/{}&quot;</span>, <span class="ident">name</span>)
-			};
-			<span class="ident">dependencies</span>.<span class="ident">insert</span>(<span class="ident">name</span>, <span class="ident">schema</span>);
-			<span class="ident">SchemaKind::AllOf</span> { <span class="ident">all_of</span>: <span class="macro">vec!</span>[<span class="ident">reference</span>] }
-		},
-		<span class="prelude-val">None</span> =&gt; <span class="ident">schema</span>.<span class="ident">schema</span>
-	};
-
-	<span class="ident">OpenapiSchema</span> {
-		<span class="ident">nullable</span>: <span class="bool-val">true</span>,
-		<span class="ident">name</span>: <span class="prelude-val">None</span>,
-		<span class="ident">description</span>: <span class="prelude-val">None</span>,
-		<span class="ident">schema</span>,
-		<span class="ident">dependencies</span>
-	}
-});
-
-<span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">fn</span> <span class="ident">array_schema</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">OpenapiType</span><span class="op">&gt;</span>(<span class="ident">unique_items</span>: <span class="ident">bool</span>) -&gt; <span class="ident">OpenapiSchema</span> {
-	<span class="kw">let</span> <span class="ident">schema</span> <span class="op">=</span> <span class="ident">T::schema</span>();
-	<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">dependencies</span> <span class="op">=</span> <span class="ident">schema</span>.<span class="ident">dependencies</span>.<span class="ident">clone</span>();
-
-	<span class="kw">let</span> <span class="ident">items</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">schema</span>.<span class="ident">name</span>.<span class="ident">clone</span>() {
-		<span class="prelude-val">Some</span>(<span class="ident">name</span>) =&gt; {
-			<span class="kw">let</span> <span class="ident">reference</span> <span class="op">=</span> <span class="ident">ReferenceOr::Reference</span> {
-				<span class="ident">reference</span>: <span class="macro">format!</span>(<span class="string">&quot;#/components/schemas/{}&quot;</span>, <span class="ident">name</span>)
-			};
-			<span class="ident">dependencies</span>.<span class="ident">insert</span>(<span class="ident">name</span>, <span class="ident">schema</span>);
-			<span class="ident">reference</span>
-		},
-		<span class="prelude-val">None</span> =&gt; <span class="ident">ReferenceOr::Item</span>(<span class="ident">Box::new</span>(<span class="ident">schema</span>.<span class="ident">into_schema</span>()))
-	};
-
-	<span class="ident">OpenapiSchema</span> {
-		<span class="ident">nullable</span>: <span class="bool-val">false</span>,
-		<span class="ident">name</span>: <span class="prelude-val">None</span>,
-		<span class="ident">description</span>: <span class="prelude-val">None</span>,
-		<span class="ident">schema</span>: <span class="ident">SchemaKind::Type</span>(<span class="ident">Type::Array</span>(<span class="ident">ArrayType</span> {
-			<span class="ident">items</span>: <span class="prelude-val">Some</span>(<span class="ident">items</span>),
-			<span class="ident">min_items</span>: <span class="prelude-val">None</span>,
-			<span class="ident">max_items</span>: <span class="prelude-val">None</span>,
-			<span class="ident">unique_items</span>
-		})),
-		<span class="ident">dependencies</span>
+		)<span class="op">+</span>
 	}
 }
 
-<span class="macro">impl_openapi_type!</span>(<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">OpenapiType</span><span class="op">&gt;</span> =&gt; <span class="ident">array_schema</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="bool-val">false</span>));
-<span class="macro">impl_openapi_type!</span>(<span class="ident">BTreeSet</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">OpenapiType</span><span class="op">&gt;</span>, <span class="ident">IndexSet</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">OpenapiType</span><span class="op">&gt;</span>, <span class="ident">HashSet</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">OpenapiType</span>, <span class="ident">S</span>: <span class="ident">BuildHasher</span><span class="op">&gt;</span> =&gt; {
-	<span class="ident">array_schema</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="bool-val">true</span>)
-});
+<span class="macro">int!</span> {
+	<span class="ident">isize</span>(<span class="prelude-val">None</span>, <span class="prelude-val">None</span>);
+	<span class="ident">i8</span>(<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="number">1</span>));
+	<span class="ident">i16</span>(<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="number">2</span>));
+	<span class="ident">i32</span>(<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="number">4</span>));
+	<span class="ident">i64</span>(<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="number">8</span>));
+	<span class="ident">i128</span>(<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="number">16</span>));
 
-<span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">fn</span> <span class="ident">map_schema</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="ident">OpenapiType</span>, <span class="ident">T</span>: <span class="ident">OpenapiType</span><span class="op">&gt;</span>() -&gt; <span class="ident">OpenapiSchema</span> {
-	<span class="kw">let</span> <span class="ident">key_schema</span> <span class="op">=</span> <span class="ident">K::schema</span>();
-	<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">dependencies</span> <span class="op">=</span> <span class="ident">key_schema</span>.<span class="ident">dependencies</span>.<span class="ident">clone</span>();
+	<span class="ident">usize</span>(<span class="prelude-val">Some</span>(<span class="number">0</span>), <span class="prelude-val">None</span>);
+	<span class="ident">u8</span>(<span class="prelude-val">Some</span>(<span class="number">0</span>), <span class="prelude-val">Some</span>(<span class="number">1</span>));
+	<span class="ident">u16</span>(<span class="prelude-val">Some</span>(<span class="number">0</span>), <span class="prelude-val">Some</span>(<span class="number">2</span>));
+	<span class="ident">u32</span>(<span class="prelude-val">Some</span>(<span class="number">0</span>), <span class="prelude-val">Some</span>(<span class="number">4</span>));
+	<span class="ident">u64</span>(<span class="prelude-val">Some</span>(<span class="number">0</span>), <span class="prelude-val">Some</span>(<span class="number">8</span>));
+	<span class="ident">u128</span>(<span class="prelude-val">Some</span>(<span class="number">0</span>), <span class="prelude-val">Some</span>(<span class="number">16</span>));
 
-	<span class="kw">let</span> <span class="ident">keys</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">key_schema</span>.<span class="ident">name</span>.<span class="ident">clone</span>() {
-		<span class="prelude-val">Some</span>(<span class="ident">name</span>) =&gt; {
-			<span class="kw">let</span> <span class="ident">reference</span> <span class="op">=</span> <span class="ident">ReferenceOr::Reference</span> {
-				<span class="ident">reference</span>: <span class="macro">format!</span>(<span class="string">&quot;#/components/schemas/{}&quot;</span>, <span class="ident">name</span>)
-			};
-			<span class="ident">dependencies</span>.<span class="ident">insert</span>(<span class="ident">name</span>, <span class="ident">key_schema</span>);
-			<span class="ident">reference</span>
-		},
-		<span class="prelude-val">None</span> =&gt; <span class="ident">ReferenceOr::Item</span>(<span class="ident">Box::new</span>(<span class="ident">key_schema</span>.<span class="ident">into_schema</span>()))
-	};
+	<span class="ident">NonZeroUsize</span>(<span class="prelude-val">Some</span>(<span class="number">1</span>), <span class="prelude-val">None</span>);
+	<span class="ident">NonZeroU8</span>(<span class="prelude-val">Some</span>(<span class="number">1</span>), <span class="prelude-val">Some</span>(<span class="number">1</span>));
+	<span class="ident">NonZeroU16</span>(<span class="prelude-val">Some</span>(<span class="number">1</span>), <span class="prelude-val">Some</span>(<span class="number">2</span>));
+	<span class="ident">NonZeroU32</span>(<span class="prelude-val">Some</span>(<span class="number">1</span>), <span class="prelude-val">Some</span>(<span class="number">4</span>));
+	<span class="ident">NonZeroU64</span>(<span class="prelude-val">Some</span>(<span class="number">1</span>), <span class="prelude-val">Some</span>(<span class="number">8</span>));
+	<span class="ident">NonZeroU128</span>(<span class="prelude-val">Some</span>(<span class="number">1</span>), <span class="prelude-val">Some</span>(<span class="number">16</span>));
+}
 
-	<span class="kw">let</span> <span class="ident">schema</span> <span class="op">=</span> <span class="ident">T::schema</span>();
-	<span class="ident">dependencies</span>.<span class="ident">extend</span>(<span class="ident">schema</span>.<span class="ident">dependencies</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">k</span>, <span class="ident">v</span>)<span class="op">|</span> (<span class="ident">k</span>.<span class="ident">clone</span>(), <span class="ident">v</span>.<span class="ident">clone</span>())));
+<span class="comment">////////////////////////////////////////////////////////////////////////////////</span>
 
-	<span class="kw">let</span> <span class="ident">items</span> <span class="op">=</span> <span class="ident">Box::new</span>(<span class="kw">match</span> <span class="ident">schema</span>.<span class="ident">name</span>.<span class="ident">clone</span>() {
-		<span class="prelude-val">Some</span>(<span class="ident">name</span>) =&gt; {
-			<span class="kw">let</span> <span class="ident">reference</span> <span class="op">=</span> <span class="ident">ReferenceOr::Reference</span> {
-				<span class="ident">reference</span>: <span class="macro">format!</span>(<span class="string">&quot;#/components/schemas/{}&quot;</span>, <span class="ident">name</span>)
-			};
-			<span class="ident">dependencies</span>.<span class="ident">insert</span>(<span class="ident">name</span>, <span class="ident">schema</span>);
-			<span class="ident">reference</span>
-		},
-		<span class="prelude-val">None</span> =&gt; <span class="ident">ReferenceOr::Item</span>(<span class="ident">schema</span>.<span class="ident">into_schema</span>())
-	});
-
-	<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">properties</span> <span class="op">=</span> <span class="ident">IndexMap::new</span>();
-	<span class="ident">properties</span>.<span class="ident">insert</span>(<span class="string">&quot;default&quot;</span>.<span class="ident">to_owned</span>(), <span class="ident">keys</span>);
-
-	<span class="ident">OpenapiSchema</span> {
-		<span class="ident">nullable</span>: <span class="bool-val">false</span>,
-		<span class="ident">name</span>: <span class="prelude-val">None</span>,
-		<span class="ident">description</span>: <span class="prelude-val">None</span>,
-		<span class="ident">schema</span>: <span class="ident">SchemaKind::Type</span>(<span class="ident">Type::Object</span>(<span class="ident">ObjectType</span> {
-			<span class="ident">properties</span>,
-			<span class="ident">required</span>: <span class="macro">vec!</span>[<span class="string">&quot;default&quot;</span>.<span class="ident">to_owned</span>()],
-			<span class="ident">additional_properties</span>: <span class="prelude-val">Some</span>(<span class="ident">AdditionalProperties::Schema</span>(<span class="ident">items</span>)),
-			..<span class="ident">Default::default</span>()
-		})),
-		<span class="ident">dependencies</span>
+<span class="macro">macro_rules!</span> <span class="ident">number</span> {
+	($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">ty</span>:<span class="ident">ident</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">byte</span>:<span class="ident">expr</span>);)<span class="op">+</span>) =&gt; {
+		$(
+			<span class="kw">impl</span> <span class="ident">OpenapiType</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ty</span> {
+				<span class="kw">fn</span> <span class="ident">visit_type</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Visitor</span><span class="op">&gt;</span>(<span class="ident">visitor</span>: <span class="kw-2">&amp;mut</span> <span class="ident">V</span>) {
+					<span class="ident">visitor</span>.<span class="ident">visit_number</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">byte</span>);
+				}
+			}
+		)<span class="op">+</span>
 	}
 }
 
-<span class="macro">impl_openapi_type!</span>(
-	<span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="ident">OpenapiType</span>, <span class="ident">T</span>: <span class="ident">OpenapiType</span><span class="op">&gt;</span>,
-	<span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="ident">OpenapiType</span>, <span class="ident">T</span>: <span class="ident">OpenapiType</span>, <span class="ident">S</span>: <span class="ident">BuildHasher</span><span class="op">&gt;</span>,
-	<span class="ident">IndexMap</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="ident">OpenapiType</span>, <span class="ident">T</span>: <span class="ident">OpenapiType</span><span class="op">&gt;</span>
-	=&gt; <span class="ident">map_schema</span>::<span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">T</span><span class="op">&gt;</span>()
-);
+<span class="macro">number!</span> {
+	<span class="ident">f32</span>(<span class="prelude-val">Some</span>(<span class="number">4</span>));
+	<span class="ident">f64</span>(<span class="prelude-val">Some</span>(<span class="number">8</span>));
+}
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;linked-hash-map&quot;</span>)]</span>
-<span class="macro">impl_openapi_type!</span>(
-	<span class="ident">linked_hash_map::LinkedHashMap</span><span class="op">&lt;</span><span class="ident">K</span>: <span class="ident">OpenapiType</span>, <span class="ident">T</span>: <span class="ident">OpenapiType</span>, <span class="ident">S</span>: <span class="ident">BuildHasher</span><span class="op">&gt;</span>
-	=&gt; <span class="ident">map_schema</span>::<span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">T</span><span class="op">&gt;</span>()
-);
+<span class="comment">////////////////////////////////////////////////////////////////////////////////</span>
+
+<span class="kw">impl</span> <span class="ident">OpenapiType</span> <span class="kw">for</span> <span class="ident">char</span> {
+	<span class="kw">fn</span> <span class="ident">visit_type</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Visitor</span><span class="op">&gt;</span>(<span class="ident">visitor</span>: <span class="kw-2">&amp;mut</span> <span class="ident">V</span>) {
+		<span class="ident">visitor</span>.<span class="ident">visit_char</span>();
+	}
+}
+
+<span class="comment">////////////////////////////////////////////////////////////////////////////////</span>
+
+<span class="macro">macro_rules!</span> <span class="ident">string</span> {
+	($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">ty</span>:<span class="ident">ident</span>;)<span class="op">+</span>) =&gt; {
+		$(
+			<span class="kw">impl</span> <span class="ident">OpenapiType</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">ty</span> {
+				<span class="kw">fn</span> <span class="ident">visit_type</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Visitor</span><span class="op">&gt;</span>(<span class="ident">visitor</span>: <span class="kw-2">&amp;mut</span> <span class="ident">V</span>) {
+					<span class="ident">visitor</span>.<span class="ident">visit_string</span>();
+				}
+			}
+		)<span class="op">+</span>
+	}
+}
+
+<span class="macro">string!</span> {
+	<span class="ident">String</span>;
+	<span class="ident">str</span>;
+	<span class="ident">CString</span>;
+	<span class="ident">CStr</span>;
+}
+
+<span class="comment">////////////////////////////////////////////////////////////////////////////////</span>
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;uuid08&quot;</span>)]</span>
+<span class="kw">impl</span> <span class="ident">OpenapiType</span> <span class="kw">for</span> <span class="ident">uuid08::Uuid</span> {
+	<span class="kw">fn</span> <span class="ident">visit_type</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Visitor</span><span class="op">&gt;</span>(<span class="ident">visitor</span>: <span class="kw-2">&amp;mut</span> <span class="ident">V</span>) {
+		<span class="ident">visitor</span>.<span class="ident">visit_uuid</span>();
+	}
+}
+
+<span class="comment">////////////////////////////////////////////////////////////////////////////////</span>
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;time03&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;chrono04&quot;</span>))]</span>
+<span class="macro">macro_rules!</span> <span class="ident">date</span> {
+	($($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">ty</span>:<span class="ident">ident</span>)::<span class="op">+</span> $(<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg</span>:<span class="ident">ident</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">bound</span>:<span class="ident">path</span><span class="op">&gt;</span>)<span class="question-mark">?</span>;)<span class="op">+</span>) =&gt; {
+		$(
+			<span class="kw">impl</span>$(<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">bound</span><span class="op">&gt;</span>)<span class="question-mark">?</span> <span class="ident">OpenapiType</span> <span class="kw">for</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">ty</span>)::<span class="op">+</span>$(<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg</span><span class="op">&gt;</span>)<span class="question-mark">?</span> {
+				<span class="kw">fn</span> <span class="ident">visit_type</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Visitor</span><span class="op">&gt;</span>(<span class="ident">visitor</span>: <span class="kw-2">&amp;mut</span> <span class="ident">V</span>) {
+					<span class="ident">visitor</span>.<span class="ident">visit_date</span>();
+				}
+			}
+		)<span class="op">+</span>
+	}
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;time03&quot;</span>)]</span>
+<span class="macro">date!</span> {
+	<span class="ident">time03::Date</span>;
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;chrono04&quot;</span>)]</span>
+<span class="macro">date!</span> {
+	<span class="ident">chrono04::Date</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">chrono04::TimeZone</span><span class="op">&gt;</span>;
+	<span class="ident">chrono04::NaiveDate</span>;
+}
+
+<span class="comment">////////////////////////////////////////////////////////////////////////////////</span>
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;time03&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;chrono04&quot;</span>))]</span>
+<span class="macro">macro_rules!</span> <span class="ident">datetime</span> {
+	($($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">ty</span>:<span class="ident">ident</span>)::<span class="op">+</span> $(<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg</span>:<span class="ident">ident</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">bound</span>:<span class="ident">path</span><span class="op">&gt;</span>)<span class="question-mark">?</span>;)<span class="op">+</span>) =&gt; {
+		$(
+			<span class="kw">impl</span>$(<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">bound</span><span class="op">&gt;</span>)<span class="question-mark">?</span> <span class="ident">OpenapiType</span> <span class="kw">for</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">ty</span>)::<span class="op">+</span>$(<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg</span><span class="op">&gt;</span>)<span class="question-mark">?</span> {
+				<span class="kw">fn</span> <span class="ident">visit_type</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Visitor</span><span class="op">&gt;</span>(<span class="ident">visitor</span>: <span class="kw-2">&amp;mut</span> <span class="ident">V</span>) {
+					<span class="ident">visitor</span>.<span class="ident">visit_datetime</span>();
+				}
+			}
+		)<span class="op">+</span>
+	}
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;time03&quot;</span>)]</span>
+<span class="macro">datetime!</span> {
+	<span class="ident">time03::OffsetDateTime</span>;
+	<span class="ident">time03::PrimitiveDateTime</span>;
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;chrono04&quot;</span>)]</span>
+<span class="macro">datetime!</span> {
+	<span class="ident">chrono04::DateTime</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">chrono04::TimeZone</span><span class="op">&gt;</span>;
+	<span class="ident">chrono04::NaiveDateTime</span>;
+}
+
+<span class="comment">////////////////////////////////////////////////////////////////////////////////</span>
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">OpenapiType</span><span class="op">&gt;</span> <span class="ident">OpenapiType</span> <span class="kw">for</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+	<span class="kw">fn</span> <span class="ident">visit_type</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Visitor</span><span class="op">&gt;</span>(<span class="ident">visitor</span>: <span class="kw-2">&amp;mut</span> <span class="ident">V</span>) {
+		<span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="ident">visitor</span>.<span class="ident">visit_option</span>();
+		<span class="ident">T::visit_type</span>(<span class="ident">v</span>);
+	}
+}
+
+<span class="comment">////////////////////////////////////////////////////////////////////////////////</span>
+
+<span class="macro">macro_rules!</span> <span class="ident">array</span> {
+	($($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">ty</span>:<span class="ident">ident</span>)::<span class="op">+</span> $(<span class="op">&lt;</span>$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg</span>:<span class="ident">ident</span>),<span class="op">+</span><span class="op">&gt;</span>)<span class="question-mark">?</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">unique_items</span>:<span class="ident">literal</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">inner</span>:<span class="ident">ident</span>);)<span class="op">+</span>) =&gt; {
+		$(
+			<span class="kw">impl</span>$(<span class="op">&lt;</span>$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg</span>),<span class="op">+</span><span class="op">&gt;</span>)<span class="question-mark">?</span> <span class="ident">OpenapiType</span> <span class="kw">for</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">ty</span>)::<span class="op">+</span>$(<span class="op">&lt;</span>$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg</span>),<span class="op">+</span><span class="op">&gt;</span>)<span class="question-mark">?</span>
+			<span class="kw">where</span>
+				<span class="macro-nonterminal">$</span><span class="macro-nonterminal">inner</span>: <span class="ident">OpenapiType</span>
+			{
+				<span class="kw">fn</span> <span class="ident">visit_type</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Visitor</span><span class="op">&gt;</span>(<span class="ident">visitor</span>: <span class="kw-2">&amp;mut</span> <span class="ident">V</span>) {
+					<span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="ident">visitor</span>.<span class="ident">visit_array</span>(<span class="prelude-val">None</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">unique_items</span>);
+					<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">inner</span> <span class="kw">as</span> <span class="ident">OpenapiType</span><span class="op">&gt;</span><span class="ident">::visit_type</span>(<span class="ident">v</span>);
+				}
+			}
+		)<span class="op">+</span>
+	}
+}
+
+<span class="kw">type</span> <span class="ident">Array</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="op">=</span> [<span class="ident">T</span>];
+
+<span class="macro">array!</span> {
+	<span class="ident">Array</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="bool-val">false</span>, <span class="ident">T</span>);
+	<span class="ident">LinkedList</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="bool-val">false</span>, <span class="ident">T</span>);
+	<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="bool-val">false</span>, <span class="ident">T</span>);
+	<span class="ident">VecDeque</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="bool-val">false</span>, <span class="ident">T</span>);
+
+	<span class="ident">BTreeSet</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="bool-val">true</span>, <span class="ident">T</span>);
+	<span class="ident">HashSet</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span><span class="op">&gt;</span>(<span class="bool-val">true</span>, <span class="ident">T</span>);
+	<span class="ident">IndexSet</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="bool-val">true</span>, <span class="ident">T</span>);
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">OpenapiType</span>, <span class="kw">const</span> <span class="ident">N</span>: <span class="ident">usize</span><span class="op">&gt;</span> <span class="ident">OpenapiType</span> <span class="kw">for</span> [<span class="ident">T</span>; <span class="ident">N</span>] {
+	<span class="kw">fn</span> <span class="ident">visit_type</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Visitor</span><span class="op">&gt;</span>(<span class="ident">visitor</span>: <span class="kw-2">&amp;mut</span> <span class="ident">V</span>) {
+		<span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="ident">visitor</span>.<span class="ident">visit_array</span>(<span class="prelude-val">Some</span>(<span class="ident">N</span>), <span class="bool-val">false</span>);
+		<span class="ident">T::visit_type</span>(<span class="ident">v</span>);
+	}
+}
+
+<span class="comment">////////////////////////////////////////////////////////////////////////////////</span>
+
+<span class="macro">macro_rules!</span> <span class="ident">map</span> {
+	($($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">ty</span>:<span class="ident">ident</span>)::<span class="op">+</span> $(<span class="op">&lt;</span>$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg</span>:<span class="ident">ident</span>$(: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">bound</span>:<span class="ident">path</span>)<span class="question-mark">?</span>),<span class="op">+</span><span class="op">&gt;</span>)<span class="question-mark">?</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">inner</span>:<span class="ident">ident</span>);)<span class="op">+</span>) =&gt; {
+		$(
+			<span class="kw">impl</span>$(<span class="op">&lt;</span>$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg</span>$(: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">bound</span>)<span class="question-mark">?</span>),<span class="op">+</span><span class="op">&gt;</span>)<span class="question-mark">?</span> <span class="ident">OpenapiType</span> <span class="kw">for</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">ty</span>)::<span class="op">+</span>$(<span class="op">&lt;</span>$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">arg</span>),<span class="op">+</span><span class="op">&gt;</span>)<span class="question-mark">?</span>
+			<span class="kw">where</span>
+				<span class="macro-nonterminal">$</span><span class="macro-nonterminal">inner</span>: <span class="ident">OpenapiType</span>
+			{
+				<span class="kw">fn</span> <span class="ident">visit_type</span><span class="op">&lt;</span><span class="ident">Vi</span>: <span class="ident">Visitor</span><span class="op">&gt;</span>(<span class="ident">visitor</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Vi</span>) {
+					<span class="kw">let</span> <span class="ident">obj</span> <span class="op">=</span> <span class="ident">visitor</span>.<span class="ident">visit_object</span>();
+					<span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="ident">obj</span>.<span class="ident">visit_additional</span>();
+					<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">inner</span> <span class="kw">as</span> <span class="ident">OpenapiType</span><span class="op">&gt;</span><span class="ident">::visit_type</span>(<span class="ident">v</span>);
+				}
+			}
+		)<span class="op">+</span>
+	}
+}
+
+<span class="macro">map!</span> {
+	<span class="ident">BTreeMap</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span>(<span class="ident">V</span>);
+	<span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span>, <span class="ident">S</span><span class="op">&gt;</span>(<span class="ident">V</span>);
+	<span class="ident">IndexMap</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span>, <span class="ident">S</span><span class="op">&gt;</span>(<span class="ident">V</span>);
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;linked-hash-map05&quot;</span>)]</span>
+<span class="macro">map!</span> {
+	<span class="ident">linked_hash_map05::LinkedHashMap</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span>, <span class="ident">S</span><span class="op">&gt;</span>(<span class="ident">V</span>);
+}
 </code></pre></div>
 </section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="openapi_type" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
 </body></html>

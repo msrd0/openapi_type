@@ -70,7 +70,7 @@ interested in.
 
 pub use indexmap;
 pub use openapi_type_derive::OpenapiType;
-pub use openapiv3 as openapi;
+pub use openapiv3;
 
 mod impls;
 mod visitor;

@@ -9,8 +9,8 @@
 	<a href="https://msrd0.github.io/openapi_type/doc/openapi_type/index.html">
 		<img alt="rustdoc" src="https://img.shields.io/badge/docs-main-blue.svg"/>
 	</a>
-    <a href="https://blog.rust-lang.org/2021/10/21/Rust-1.56.0.html">
-        <img alt="Rust 1.56+" src="https://img.shields.io/badge/rustc-1.56+-orange.svg"/>
+    <a href="https://blog.rust-lang.org/2022/01/13/Rust-1.58.0.html">
+        <img alt="Rust 1.58+" src="https://img.shields.io/badge/rustc-1.58+-orange.svg"/>
     </a>
 	<a href="https://www.apache.org/licenses/LICENSE-2.0">
 		<img alt="License Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-blue.svg"/>
@@ -98,5 +98,5 @@ limitations under the License.
  [contributors]: https://github.com/msrd0/openapi_type/graphs/contributors
  [__link0]: https://docs.rs/openapi_type/0.3.1/openapi_type/?search=openapi_type::OpenapiType
  [__link1]: https://docs.rs/openapi_type/0.3.1/openapi_type/?search=openapi_type::OpenapiType::schema
- [__link2]: https://docs.rs/openapi_type/0.3.1/openapi_type/?search=openapi_type::OpenapiSchema
- [__link3]: https://docs.rs/openapi_type/0.3.1/openapi_type/?search=openapi_type::OpenapiSchema::dependencies
+ [__link2]: https://docs.rs/openapi_type/0.3.1/openapi_type/?search=openapi_type::visitor::OpenapiSchema
+ [__link3]: https://docs.rs/openapi_type/0.3.1/openapi_type/?search=openapi_type::visitor::OpenapiSchema::dependencies

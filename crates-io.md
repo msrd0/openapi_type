@@ -1,4 +1,4 @@
-# openapi_type [![Rust 1.56+](https://img.shields.io/badge/rustc-1.56+-orange.svg)](https://blog.rust-lang.org/2021/10/21/Rust-1.56.0.html) [![License Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0) [![GitHub](https://img.shields.io/badge/Code-On%20Github-blue?logo=GitHub)](https://github.com/msrd0/openapi_type)
+# openapi_type [![Rust 1.58+](https://img.shields.io/badge/rustc-1.58+-orange.svg)](https://blog.rust-lang.org/2022/01/13/Rust-1.58.0.html) [![License Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0) [![GitHub](https://img.shields.io/badge/Code-On%20Github-blue?logo=GitHub)](https://github.com/msrd0/openapi_type)
 
 This crate gives static type information for primitives and commonly used types from the standard library and other commonly used libraries `chrono`, `indexmap`, `linked-hash-map`, `time` and `uuid` when the according feature is enabled. Also, it provides a derive macro for structs and enums to gain access to their static type information at runtime.
 
@@ -69,5 +69,5 @@ limitations under the License.
  [contributors]: https://github.com/msrd0/openapi_type/graphs/contributors
  [__link0]: https://docs.rs/openapi_type/0.3.1/openapi_type/?search=openapi_type::OpenapiType
  [__link1]: https://docs.rs/openapi_type/0.3.1/openapi_type/?search=openapi_type::OpenapiType::schema
- [__link2]: https://docs.rs/openapi_type/0.3.1/openapi_type/?search=openapi_type::OpenapiSchema
- [__link3]: https://docs.rs/openapi_type/0.3.1/openapi_type/?search=openapi_type::OpenapiSchema::dependencies
+ [__link2]: https://docs.rs/openapi_type/0.3.1/openapi_type/?search=openapi_type::visitor::OpenapiSchema
+ [__link3]: https://docs.rs/openapi_type/0.3.1/openapi_type/?search=openapi_type::visitor::OpenapiSchema::dependencies

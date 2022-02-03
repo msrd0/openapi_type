@@ -161,13 +161,13 @@ macro_rules! datetime {
 }
 
 #[cfg(feature = "time03")]
-date! {
+datetime! {
 	time03::OffsetDateTime;
 	time03::PrimitiveDateTime;
 }
 
 #[cfg(feature = "chrono04")]
-date! {
+datetime! {
 	chrono04::DateTime<T: chrono04::TimeZone>;
 	chrono04::NaiveDateTime;
 }
@@ -244,7 +244,7 @@ map! {
 	IndexMap<K, V, S>(V);
 }
 
-#[cfg(feature = "linked-hash-map04")]
+#[cfg(feature = "linked-hash-map05")]
 map! {
-	linked_hash_map04::LinkedHashMap<K, V, S>(V);
+	linked_hash_map05::LinkedHashMap<K, V, S>(V);
 }

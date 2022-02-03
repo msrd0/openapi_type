@@ -159,34 +159,34 @@ test_type!(String = {
 	"type": "string"
 });
 
-#[cfg(feature = "uuid")]
-test_type!(uuid::Uuid = {
+#[cfg(feature = "uuid08")]
+test_type!(uuid08::Uuid = {
 	"type": "string",
 	"format": "uuid"
 });
 
 // ### date/time
 
-#[cfg(feature = "chrono")]
-test_type!(chrono::Date<chrono::FixedOffset>, chrono::Date<chrono::Utc>, chrono::NaiveDate = {
+#[cfg(feature = "chrono04")]
+test_type!(chrono04::Date<chrono04::FixedOffset>, chrono04::Date<chrono04::Utc>, chrono04::NaiveDate = {
 	"type": "string",
 	"format": "date"
 });
 
-#[cfg(feature = "time")]
-test_type!(time::Date = {
+#[cfg(feature = "time03")]
+test_type!(time03::Date = {
 	"type": "string",
 	"format": "date"
 });
 
-#[cfg(feature = "chrono")]
-test_type!(chrono::DateTime<chrono::FixedOffset>, chrono::DateTime<chrono::Utc>, chrono::NaiveDateTime = {
+#[cfg(feature = "chrono04")]
+test_type!(chrono04::DateTime<chrono04::FixedOffset>, chrono04::DateTime<chrono04::Utc>, chrono04::NaiveDateTime = {
 	"type": "string",
 	"format": "date-time"
 });
 
-#[cfg(feature = "time")]
-test_type!(time::OffsetDateTime, time::PrimitiveDateTime = {
+#[cfg(feature = "time03")]
+test_type!(time03::OffsetDateTime, time03::PrimitiveDateTime = {
 	"type": "string",
 	"format": "date-time"
 });
@@ -220,8 +220,8 @@ test_type!(BTreeMap<isize, String>, HashMap<isize, String>, IndexMap<isize, Stri
 	}
 });
 
-#[cfg(feature = "linked-hash-map")]
-test_type!(linked_hash_map::LinkedHashMap<isize, String> = {
+#[cfg(feature = "linked-hash-map05")]
+test_type!(linked_hash_map05::LinkedHashMap<isize, String> = {
 	"type": "object",
 	"additionalProperties": {
 		"type": "string"

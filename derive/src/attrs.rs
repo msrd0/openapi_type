@@ -32,7 +32,8 @@ pub(super) struct ContainerAttributes {
 	pub(super) rename_all: Option<LitStr>,
 	pub(super) tag: Option<LitStr>,
 	pub(super) content: Option<LitStr>,
-	pub(super) untagged: bool
+	pub(super) untagged: bool,
+	pub(super) deny_unknown_fields: bool
 }
 
 impl ContainerAttributes {
@@ -58,6 +59,10 @@ impl ContainerAttributes {
 
 				Meta::Path(path) if path.is_ident("untagged") => {
 					self.untagged = true;
+				},
+
+				Meta::Path(path) if path.is_ident("deny_unknown_fields") => {
+					self.deny_unknown_fields = true;
 				},
 
 				meta => unknown(meta, error_on_unknown)?

@@ -18,7 +18,10 @@ impl ParseData {
 		let name = self.name.as_ref();
 		let doc = &self.doc;
 		match &self.ty {
-			ParseDataType::Struct { fields } => gen_struct(name, doc, fields),
+			ParseDataType::Struct {
+				fields,
+				deny_unknown_fields
+			} => gen_struct(name, doc, fields, *deny_unknown_fields),
 			ParseDataType::Enum { variants } => gen_enum(name, doc, variants),
 			ParseDataType::Alternatives { alts } => gen_alt(name, doc, alts),
 			ParseDataType::Unit => gen_unit(name, doc)
@@ -26,7 +29,7 @@ impl ParseData {
 	}
 }
 
-fn gen_struct(name: Option<&LitStr>, doc: &[String], fields: &[ParseDataField]) -> TokenStream {
+fn gen_struct(name: Option<&LitStr>, doc: &[String], fields: &[ParseDataField], deny_unknown_fields: bool) -> TokenStream {
 	let str = path!(::core::primitive::str);
 	let string = path!(::std::string::String);
 	let option = path!(::core::option::Option);
@@ -99,6 +102,9 @@ fn gen_struct(name: Option<&LitStr>, doc: &[String], fields: &[ParseDataField]) 
 				object_visitor,
 				#string::from(object_doc)
 			);
+		}
+		if #deny_unknown_fields {
+			::openapi_type::ObjectVisitor::visit_deny_additional(object_visitor);
 		}
 
 		#(#fields)*

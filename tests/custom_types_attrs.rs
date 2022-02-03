@@ -3,6 +3,23 @@ use openapi_type::OpenapiType;
 
 include!("util/test_type.rs");
 
+#[derive(OpenapiType)]
+#[openapi(deny_unknown_fields)]
+struct StructDenyUnknown {
+	foo: String
+}
+test_type!(StructDenyUnknown = {
+	"type": "object",
+	"title": "StructDenyUnknown",
+	"properties": {
+		"foo": {
+			"type": "string"
+		}
+	},
+	"required": ["foo"],
+	"additionalProperties": false
+});
+
 /// Very cool struct!
 #[derive(OpenapiType)]
 struct StructDoc {
@@ -63,7 +80,8 @@ test_type!(EnumDoc = {
 				"$ref": "#/components/schemas/EnumDoc__Message"
 			}
 		},
-		"required": ["Message"]
+		"required": ["Message"],
+		"additionalProperties": false
 	}
 });
 

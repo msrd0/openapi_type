@@ -80,6 +80,8 @@
 <span id="79">79</span>
 <span id="80">80</span>
 <span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
 </pre><pre class="rust"><code><span class="kw">mod</span> <span class="ident">never</span>;
 <span class="kw">mod</span> <span class="ident">openapi</span>;
 
@@ -120,6 +122,8 @@
 	<span class="kw">fn</span> <span class="ident">visit_date</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>);
 
 	<span class="kw">fn</span> <span class="ident">visit_datetime</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>);
+
+	<span class="kw">fn</span> <span class="ident">visit_binary</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>);
 
 	<span class="kw">fn</span> <span class="ident">visit_option</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="ident"><span class="self">Self</span>::OptionVisitor</span>;
 

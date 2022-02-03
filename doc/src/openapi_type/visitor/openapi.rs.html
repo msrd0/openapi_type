@@ -697,6 +697,24 @@
 <span id="696">696</span>
 <span id="697">697</span>
 <span id="698">698</span>
+<span id="699">699</span>
+<span id="700">700</span>
+<span id="701">701</span>
+<span id="702">702</span>
+<span id="703">703</span>
+<span id="704">704</span>
+<span id="705">705</span>
+<span id="706">706</span>
+<span id="707">707</span>
+<span id="708">708</span>
+<span id="709">709</span>
+<span id="710">710</span>
+<span id="711">711</span>
+<span id="712">712</span>
+<span id="713">713</span>
+<span id="714">714</span>
+<span id="715">715</span>
+<span id="716">716</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">never::Never</span>, <span class="ident">seal</span>, <span class="ident">AlternativesVisitor</span>, <span class="ident">ObjectVisitor</span>, <span class="ident">Visitor</span>};
 <span class="kw">use</span> <span class="ident">indexmap</span>::{<span class="ident">map::Entry</span>, <span class="ident">IndexMap</span>};
 <span class="kw">use</span> <span class="ident">openapiv3</span>::{
@@ -762,6 +780,7 @@
 	<span class="ident">Uuid</span>,
 	<span class="ident">Date</span>,
 	<span class="ident">DateTime</span>,
+	<span class="ident">Binary</span>,
 
 	<span class="prelude-ty">Option</span>(<span class="ident">Box</span><span class="op">&lt;</span><span class="ident">OpenapiVisitor</span><span class="op">&gt;</span>),
 	<span class="ident">Enum</span> {
@@ -906,6 +925,14 @@
 				}))
 			})),
 
+			<span class="ident"><span class="self">Self</span>::Binary</span> =&gt; <span class="prelude-val">Some</span>(<span class="ident">OpenapiSchema::new</span>(<span class="ident">Schema</span> {
+				<span class="ident">schema_data</span>: <span class="ident">Default::default</span>(),
+				<span class="ident">schema_kind</span>: <span class="ident">SchemaKind::Type</span>(<span class="ident">Type::String</span>(<span class="ident">StringType</span> {
+					<span class="ident">format</span>: <span class="ident">VariantOrUnknownOrEmpty::Item</span>(<span class="ident">StringFormat::Binary</span>),
+					..<span class="ident">Default::default</span>()
+				}))
+			})),
+
 			<span class="ident"><span class="self">Self</span>::Option</span>(<span class="ident">opt</span>) =&gt; <span class="ident">opt</span>
 				.<span class="ident">into_schema</span>()
 				.<span class="ident">map</span>(<span class="op">|</span><span class="kw-2">mut</span> <span class="ident">schema</span><span class="op">|</span> <span class="kw">match</span> <span class="ident">schema</span>.<span class="ident">schema</span>.<span class="ident">schema_data</span>.<span class="ident">title</span>.<span class="ident">as_deref</span>() {
@@ -1037,6 +1064,11 @@
 	<span class="kw">fn</span> <span class="ident">visit_datetime</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
 		<span class="self">self</span>.<span class="ident">panic_if_non_empty</span>();
 		<span class="kw-2">*</span><span class="self">self</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::DateTime</span>;
+	}
+
+	<span class="kw">fn</span> <span class="ident">visit_binary</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
+		<span class="self">self</span>.<span class="ident">panic_if_non_empty</span>();
+		<span class="kw-2">*</span><span class="self">self</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::Binary</span>;
 	}
 
 	<span class="kw">fn</span> <span class="ident">visit_option</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="self">Self</span> {
@@ -1312,6 +1344,10 @@
 
 	<span class="kw">fn</span> <span class="ident">visit_datetime</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
 		<span class="self">self</span>.<span class="ident">panic</span>(<span class="string">&quot;a datetime&quot;</span>)
+	}
+
+	<span class="kw">fn</span> <span class="ident">visit_binary</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
+		<span class="self">self</span>.<span class="ident">panic</span>(<span class="string">&quot;binary&quot;</span>)
 	}
 
 	<span class="kw">fn</span> <span class="ident">visit_option</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="ident">Never</span> {

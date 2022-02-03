@@ -1,9 +1,10 @@
-use super::*;
+use super::{never::Never, seal, AlternativesVisitor, ObjectVisitor, Visitor};
 use indexmap::{map::Entry, IndexMap};
 use openapiv3::{
 	AdditionalProperties, ArrayType, IntegerFormat, IntegerType, NumberFormat, NumberType, ObjectType, ReferenceOr, Schema,
 	SchemaData, SchemaKind, StringFormat, StringType, Type, VariantOrUnknownOrEmpty
 };
+use std::fmt::Display;
 
 trait Boxed {
 	type Boxed;
@@ -421,16 +422,34 @@ pub struct Object {
 	name: Option<String>,
 	description: Option<String>,
 	fields: IndexMap<String, Field>,
+	flatten_fields: Vec<Flatten>,
 	additional: Additional
 }
 
 impl Object {
+	fn fields(mut fields: IndexMap<String, Field>, flatten_fields: Vec<Flatten>) -> IndexMap<String, Field> {
+		for obj in flatten_fields.into_iter().map(|f| f.obj) {
+			if matches!(obj.additional, Additional::Schema(_)) {
+				unimplemented!("flatten for maps is not currently implemented");
+			}
+
+			for (name, schema) in Self::fields(obj.fields, obj.flatten_fields) {
+				if fields.contains_key(&name) {
+					panic!("flatten produced multiple fields with name {name:?}");
+				}
+				let old_value = fields.insert(name, schema);
+				debug_assert!(old_value.is_none());
+			}
+		}
+		fields
+	}
+
 	fn into_schema(self) -> OpenapiSchema {
 		let mut properties = IndexMap::new();
 		let mut required = Vec::new();
 		let mut dependencies = IndexMap::new();
 
-		for (field_name, field) in self.fields {
+		for (field_name, field) in Self::fields(self.fields, self.flatten_fields) {
 			let mut schema = field
 				.visitor
 				.into_schema()
@@ -473,6 +492,7 @@ impl seal::Sealed for Object {}
 
 impl ObjectVisitor for Object {
 	type FieldVisitor = OpenapiVisitor;
+	type FlattenVisitor = Flatten;
 	type ValueVisitor = OpenapiVisitor;
 
 	fn visit_name(&mut self, name: String) {
@@ -503,6 +523,11 @@ impl ObjectVisitor for Object {
 		}
 	}
 
+	fn visit_flatten_field(&mut self) -> &mut Flatten {
+		self.flatten_fields.push(Flatten::default());
+		self.flatten_fields.last_mut().unwrap_or_else(|| unreachable!())
+	}
+
 	fn visit_deny_additional(&mut self) {
 		if !matches!(self.additional, Additional::Allow) {
 			panic!(
@@ -523,6 +548,94 @@ impl ObjectVisitor for Object {
 			Additional::Schema(ref mut schema) => schema,
 			_ => unreachable!()
 		}
+	}
+}
+
+#[derive(Debug, Default)]
+pub struct Flatten {
+	obj: Object
+}
+
+impl Flatten {
+	#[track_caller]
+	fn panic<T: Display>(&self, got: T) -> ! {
+		panic!("can only flatten structs and maps (got {got})")
+	}
+}
+
+impl seal::Sealed for Flatten {}
+
+impl Visitor for Flatten {
+	type OptionVisitor = Never;
+	type ArrayVisitor = Never;
+	type ObjectVisitor = Object;
+	type AlternativesVisitor = Never;
+
+	fn visit_unit(&mut self) {
+		self.panic("a unit")
+	}
+
+	fn visit_unit_struct(&mut self, _name: Option<String>, _description: Option<String>) {
+		self.panic("a unit struct")
+	}
+
+	fn visit_any(&mut self) {
+		self.panic("any")
+	}
+
+	fn visit_bool(&mut self) {
+		self.panic("a boolean")
+	}
+
+	fn visit_int(&mut self, _byte: Option<u32>, _minimum: Option<i64>) {
+		self.panic("an integer")
+	}
+
+	fn visit_number(&mut self, _byte: Option<u32>) {
+		self.panic("a number")
+	}
+
+	fn visit_char(&mut self) {
+		self.panic("a char")
+	}
+
+	fn visit_string(&mut self) {
+		self.panic("a string")
+	}
+
+	fn visit_uuid(&mut self) {
+		self.panic("a uuid")
+	}
+
+	fn visit_date(&mut self) {
+		self.panic("a date")
+	}
+
+	fn visit_datetime(&mut self) {
+		self.panic("a datetime")
+	}
+
+	fn visit_option(&mut self) -> &mut Never {
+		self.panic("an option")
+	}
+
+	fn visit_enum<I>(&mut self, _name: Option<String>, _description: Option<String>, _variants: I)
+	where
+		I: IntoIterator<Item = String>
+	{
+		self.panic("an enum")
+	}
+
+	fn visit_array(&mut self, _len: Option<usize>, _unique_items: bool) -> &mut Never {
+		self.panic("an array")
+	}
+
+	fn visit_object(&mut self) -> &mut Object {
+		&mut self.obj
+	}
+
+	fn visit_alternatives(&mut self) -> &mut Never {
+		self.panic("alternatives")
 	}
 }
 

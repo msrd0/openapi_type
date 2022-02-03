@@ -1,4 +1,6 @@
+mod never;
 mod openapi;
+
 pub use openapi::{OpenapiSchema, OpenapiVisitor};
 
 mod seal {
@@ -52,6 +54,7 @@ pub trait Visitor: seal::Sealed {
 
 pub trait ObjectVisitor: seal::Sealed {
 	type FieldVisitor: Visitor;
+	type FlattenVisitor: Visitor;
 	type ValueVisitor: Visitor;
 
 	fn visit_name(&mut self, name: String);
@@ -59,6 +62,8 @@ pub trait ObjectVisitor: seal::Sealed {
 	fn visit_description(&mut self, description: String);
 
 	fn visit_field(&mut self, name: String, doc: Option<String>) -> &mut Self::FieldVisitor;
+
+	fn visit_flatten_field(&mut self) -> &mut Self::FlattenVisitor;
 
 	fn visit_deny_additional(&mut self);
 

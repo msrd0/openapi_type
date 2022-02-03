@@ -61,7 +61,11 @@ fn gen_struct(name: Option<&LitStr>, doc: &[String], fields: &[ParseDataField]) 
 		};
 
 		if f.flatten {
-			quote!(unimplemented!("#[serde(flatten)] codegen is currently not implemented"))
+			quote!({
+				let visitor = ::openapi_type::ObjectVisitor::visit_flatten_field(object_visitor);
+				let field_visit_type = #visit;
+				field_visit_type(visitor)
+			})
 		} else {
 			quote!({
 				const FIELD_NAME: &#str = #name;

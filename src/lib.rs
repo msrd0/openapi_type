@@ -24,8 +24,8 @@ struct FooBar {
 	foo: String,
 	bar: u64
 }
-# let schema = FooBar::schema().into_schema();
-# let schema_json = serde_json::to_value(&schema).unwrap();
+# let schema = FooBar::schema();
+# let schema_json = serde_json::to_value(&schema.schema).unwrap();
 # assert_eq!(schema_json, serde_json::json!({
 #   "type": "object",
 #   "title": "FooBar",

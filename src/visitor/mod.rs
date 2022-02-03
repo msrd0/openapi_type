@@ -39,6 +39,8 @@ pub trait Visitor: seal::Sealed {
 
 	fn visit_datetime(&mut self);
 
+	fn visit_binary(&mut self);
+
 	fn visit_option(&mut self) -> &mut Self::OptionVisitor;
 
 	fn visit_enum<I>(&mut self, name: Option<String>, description: Option<String>, variants: I)

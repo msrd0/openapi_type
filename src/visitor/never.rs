@@ -55,6 +55,10 @@ impl Visitor for Never {
 		unreachable!()
 	}
 
+	fn visit_binary(&mut self) {
+		unreachable!()
+	}
+
 	fn visit_option(&mut self) -> &mut Self {
 		unreachable!()
 	}

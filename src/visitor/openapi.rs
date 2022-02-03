@@ -63,6 +63,7 @@ pub enum OpenapiVisitor {
 	Uuid,
 	Date,
 	DateTime,
+	Binary,
 
 	Option(Box<OpenapiVisitor>),
 	Enum {
@@ -207,6 +208,14 @@ impl OpenapiVisitor {
 				}))
 			})),
 
+			Self::Binary => Some(OpenapiSchema::new(Schema {
+				schema_data: Default::default(),
+				schema_kind: SchemaKind::Type(Type::String(StringType {
+					format: VariantOrUnknownOrEmpty::Item(StringFormat::Binary),
+					..Default::default()
+				}))
+			})),
+
 			Self::Option(opt) => opt
 				.into_schema()
 				.map(|mut schema| match schema.schema.schema_data.title.as_deref() {
@@ -338,6 +347,11 @@ impl Visitor for OpenapiVisitor {
 	fn visit_datetime(&mut self) {
 		self.panic_if_non_empty();
 		*self = Self::DateTime;
+	}
+
+	fn visit_binary(&mut self) {
+		self.panic_if_non_empty();
+		*self = Self::Binary;
 	}
 
 	fn visit_option(&mut self) -> &mut Self {
@@ -613,6 +627,10 @@ impl Visitor for Flatten {
 
 	fn visit_datetime(&mut self) {
 		self.panic("a datetime")
+	}
+
+	fn visit_binary(&mut self) {
+		self.panic("binary")
 	}
 
 	fn visit_option(&mut self) -> &mut Never {

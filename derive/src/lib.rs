@@ -1,6 +1,8 @@
+#![allow(clippy::into_iter_on_ref)]
 #![warn(missing_debug_implementations, rust_2018_idioms)]
 #![deny(rustdoc::broken_intra_doc_links)]
 #![forbid(unsafe_code)]
+
 //! This crate defines the macros for `#[derive(OpenapiType)]`.
 
 use proc_macro::TokenStream;

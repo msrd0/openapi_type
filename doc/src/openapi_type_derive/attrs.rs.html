@@ -129,6 +129,11 @@
 <span id="128">128</span>
 <span id="129">129</span>
 <span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
+<span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::util::ExpectLit</span>;
 <span class="kw">use</span> <span class="ident">syn</span>::{<span class="ident">punctuated::Punctuated</span>, <span class="ident">spanned::Spanned</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">Attribute</span>, <span class="ident">LitStr</span>, <span class="ident">Meta</span>, <span class="ident">Token</span>};
 
@@ -163,7 +168,8 @@
 	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="ident">rename_all</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">LitStr</span><span class="op">&gt;</span>,
 	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="ident">tag</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">LitStr</span><span class="op">&gt;</span>,
 	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="ident">content</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">LitStr</span><span class="op">&gt;</span>,
-	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="ident">untagged</span>: <span class="ident">bool</span>
+	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="ident">untagged</span>: <span class="ident">bool</span>,
+	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="ident">deny_unknown_fields</span>: <span class="ident">bool</span>
 }
 
 <span class="kw">impl</span> <span class="ident">ContainerAttributes</span> {
@@ -189,6 +195,10 @@
 
 				<span class="ident">Meta::Path</span>(<span class="ident">path</span>) <span class="kw">if</span> <span class="ident">path</span>.<span class="ident">is_ident</span>(<span class="string">&quot;untagged&quot;</span>) =&gt; {
 					<span class="self">self</span>.<span class="ident">untagged</span> <span class="op">=</span> <span class="bool-val">true</span>;
+				},
+
+				<span class="ident">Meta::Path</span>(<span class="ident">path</span>) <span class="kw">if</span> <span class="ident">path</span>.<span class="ident">is_ident</span>(<span class="string">&quot;deny_unknown_fields&quot;</span>) =&gt; {
+					<span class="self">self</span>.<span class="ident">deny_unknown_fields</span> <span class="op">=</span> <span class="bool-val">true</span>;
 				},
 
 				<span class="ident">meta</span> =&gt; <span class="ident">unknown</span>(<span class="ident">meta</span>, <span class="ident">error_on_unknown</span>)<span class="question-mark">?</span>

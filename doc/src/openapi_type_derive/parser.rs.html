@@ -340,7 +340,6 @@
 <span id="339">339</span>
 <span id="340">340</span>
 <span id="341">341</span>
-<span id="342">342</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="kw">crate</span>::{
 	<span class="ident">attrs</span>::{<span class="ident">parse_doc_attr</span>, <span class="ident">ContainerAttributes</span>, <span class="ident">FieldAttributes</span>},
 	<span class="ident">util::ToLitStr</span>
@@ -635,12 +634,11 @@
 
 	<span class="kw">match</span> (<span class="ident">data_strings</span>, <span class="ident">data_types</span>) {
 		<span class="comment">// only variants without fields</span>
-		(<span class="prelude-val">Some</span>(<span class="ident">ParseDataType::Enum</span> { <span class="ident">variants</span> }), <span class="prelude-val">None</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">ParseData</span> {
+		(<span class="prelude-val">Some</span>(<span class="ident">ty</span>), <span class="prelude-val">None</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">ParseData</span> {
 			<span class="ident">name</span>: <span class="prelude-val">Some</span>(<span class="ident">ident</span>.<span class="ident">to_lit_str</span>()),
 			<span class="ident">doc</span>: <span class="ident">attrs</span>.<span class="ident">doc</span>.<span class="ident">clone</span>(),
-			<span class="ident">ty</span>: <span class="ident">ParseDataType::Enum</span> { <span class="ident">variants</span> }
+			<span class="ident">ty</span>
 		}),
-		(<span class="prelude-val">Some</span>(<span class="kw">_</span>), <span class="prelude-val">None</span>) =&gt; <span class="macro">unreachable!</span>(),
 		<span class="comment">// only one variant with fields</span>
 		(
 			<span class="prelude-val">None</span>,

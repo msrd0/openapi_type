@@ -292,12 +292,11 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 
 	match (data_strings, data_types) {
 		// only variants without fields
-		(Some(ParseDataType::Enum { variants }), None) => Ok(ParseData {
+		(Some(ty), None) => Ok(ParseData {
 			name: Some(ident.to_lit_str()),
 			doc: attrs.doc.clone(),
-			ty: ParseDataType::Enum { variants }
+			ty
 		}),
-		(Some(_), None) => unreachable!(),
 		// only one variant with fields
 		(
 			None,

@@ -81,16 +81,30 @@ test_type!(EnumWithOneNewtypeVariant = {
 	"title": "EnumWithOneNewtypeVariant",
 	"properties": {
 		"Success": {
-			"$ref": "#/components/schemas/EnumWithOneNewtypeVariant__Success"
+			"$ref": "#/components/schemas/SimpleStruct"
 		}
 	},
 	"required": ["Success"],
 	"additionalProperties": false
+}, {
+	"SimpleStruct": {
+		"type": "object",
+		"title": "SimpleStruct",
+		"properties": {
+			"foo": {
+				"type": "string"
+			},
+			"bar": {
+				"type": "integer"
+			}
+		},
+		"required": ["foo", "bar"]
+	}
 });
 
 #[derive(OpenapiType)]
 enum EnumWithFields {
-	Success { value: isize },
+	Success(SimpleStruct),
 	Error { msg: String }
 }
 test_type!(EnumWithFields = {
@@ -101,22 +115,12 @@ test_type!(EnumWithFields = {
 		"$ref": "#/components/schemas/EnumWithFields__Error__ExtTagWrapper"
 	}]
 }, {
-	"EnumWithFields__Success": {
-		"title": "EnumWithFields::Success",
-		"type": "object",
-		"properties": {
-			"value": {
-				"type": "integer"
-			}
-		},
-		"required": ["value"]
-	},
 	"EnumWithFields__Success__ExtTagWrapper": {
 		"title": "EnumWithFields::Success::ExtTagWrapper",
 		"type": "object",
 		"properties": {
 			"Success": {
-				"$ref": "#/components/schemas/EnumWithFields__Success"
+				"$ref": "#/components/schemas/SimpleStruct"
 			}
 		},
 		"required": ["Success"],
@@ -142,6 +146,19 @@ test_type!(EnumWithFields = {
 		},
 		"required": ["Error"],
 		"additionalProperties": false
+	},
+	"SimpleStruct": {
+		"type": "object",
+		"title": "SimpleStruct",
+		"properties": {
+			"foo": {
+				"type": "string"
+			},
+			"bar": {
+				"type": "integer"
+			}
+		},
+		"required": ["foo", "bar"]
 	}
 });
 

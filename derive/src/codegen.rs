@@ -141,7 +141,7 @@ fn gen_enum(name: Option<&LitStr>, doc: &[String], variants: &[LitStr]) -> Token
 	}
 }
 
-fn gen_alt(name: Option<&LitStr>, doc: &[String], alt: &[ParseData]) -> TokenStream {
+fn gen_alt(name: Option<&LitStr>, doc: &[String], alt: &[TypeOrInline]) -> TokenStream {
 	let str = path!(::core::primitive::str);
 	let string = path!(::std::string::String);
 	let option = path!(::core::option::Option);
@@ -152,7 +152,7 @@ fn gen_alt(name: Option<&LitStr>, doc: &[String], alt: &[ParseData]) -> TokenStr
 	};
 	let doc = gen_doc_option(doc);
 
-	let impls = alt.into_iter().map(|alt| alt.gen_visit_impl());
+	let fns = alt.into_iter().map(|alt| alt.visit_type_fn());
 	quote! {
 		const OBJECT_NAME: #option<&'static #str> = #name;
 		const OBJECT_DOC: #option<&'static #str> = #doc;
@@ -174,7 +174,8 @@ fn gen_alt(name: Option<&LitStr>, doc: &[String], alt: &[ParseData]) -> TokenStr
 
 		#({
 			let visitor = ::openapi_type::AlternativesVisitor::visit_alternative(alt_visitor);
-			#impls
+			let visit_type_fn = #fns;
+			visit_type_fn(visitor);
 		})*
 	}
 }

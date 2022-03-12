@@ -37,7 +37,7 @@ pub(super) enum ParseDataType {
 		variants: Vec<LitStr>
 	},
 	Alternatives {
-		alts: Vec<ParseData>
+		alts: Vec<TypeOrInline>
 	},
 	Unit
 }
@@ -142,7 +142,7 @@ pub(super) fn parse_struct(ident: &Ident, strukt: &DataStruct, attrs: &Container
 
 pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttributes) -> syn::Result<ParseData> {
 	let mut strings: Vec<LitStr> = Vec::new();
-	let mut types: Vec<(LitStr, ParseData)> = Vec::new();
+	let mut types: Vec<(LitStr, TypeOrInline)> = Vec::new();
 
 	for v in &inum.variants {
 		let name = v.ident.to_lit_str();
@@ -151,34 +151,24 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 				let fields = parse_named_fields(named_fields, attrs.rename_all.as_ref())?;
 				let struct_name = format!("{ident}::{}", name.value());
 				// TODO add documentation here
-				types.push((name, ParseData {
-					name: Some(struct_name.to_lit_str()),
-					doc: Vec::new(),
-					ty: ParseDataType::Struct {
-						fields,
-						// serde seems to only allow this attribute on the outer
-						// container, not on a per-variant basis
-						deny_unknown_fields: attrs.deny_unknown_fields
-					}
-				}));
+				types.push((
+					name,
+					TypeOrInline::Inline(ParseData {
+						name: Some(struct_name.to_lit_str()),
+						doc: Vec::new(),
+						ty: ParseDataType::Struct {
+							fields,
+							// serde seems to only allow this attribute on the outer
+							// container, not on a per-variant basis
+							deny_unknown_fields: attrs.deny_unknown_fields
+						}
+					})
+				));
 			},
 			Fields::Unnamed(unnamed_fields) if unnamed_fields.unnamed.len() == 1 => {
-				let struct_name = format!("{ident}::{}", name.value());
 				let ty = unnamed_fields.unnamed.first().unwrap().ty.clone();
 				// TODO add documentation here
-				types.push((name.clone(), ParseData {
-					name: Some(struct_name.to_lit_str()),
-					doc: Vec::new(),
-					ty: ParseDataType::Struct {
-						fields: vec![ParseDataField {
-							name,
-							doc: Vec::new(),
-							ty: TypeOrInline::Type(Box::new(ty)),
-							flatten: false
-						}],
-						deny_unknown_fields: attrs.deny_unknown_fields
-					}
-				}));
+				types.push((name, TypeOrInline::Type(Box::new(ty))));
 			},
 			Fields::Unnamed(unnamed_fields) => {
 				return Err(syn::Error::new(
@@ -231,27 +221,27 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 							// externally tagged (default)
 							(None, None, false) => {
 								let struct_name = format!("{ident}::{}::ExtTagWrapper", name.value());
-								ParseData {
+								TypeOrInline::Inline(ParseData {
 									name: Some(struct_name.to_lit_str()),
 									doc: Vec::new(),
 									ty: ParseDataType::Struct {
 										fields: vec![ParseDataField {
 											name,
 											doc: Vec::new(),
-											ty: TypeOrInline::Inline(data),
+											ty: data,
 											flatten: false
 										}],
 										deny_unknown_fields: true
 									}
-								}
+								})
 							},
 							// internally tagged
 							(Some(tag), None, false) => {
 								match &mut data {
-									ParseData {
+									TypeOrInline::Inline(ParseData {
 										ty: ParseDataType::Struct { fields, .. },
 										..
-									} => fields.push(ParseDataField {
+									}) => fields.push(ParseDataField {
 										name: tag.clone(),
 										doc: Vec::new(),
 										ty: TypeOrInline::Inline(ParseData {
@@ -271,7 +261,7 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 							// adjacently tagged
 							(Some(tag), Some(content), false) => {
 								let struct_name = format!("{ident}::{}::AdjTagWrapper", name.value());
-								ParseData {
+								TypeOrInline::Inline(ParseData {
 									name: Some(struct_name.to_lit_str()),
 									doc: Vec::new(),
 									ty: ParseDataType::Struct {
@@ -289,13 +279,13 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 											ParseDataField {
 												name: content.clone(),
 												doc: Vec::new(),
-												ty: TypeOrInline::Inline(data),
+												ty: data,
 												flatten: false
 											},
 										],
 										deny_unknown_fields: true
 									}
-								}
+								})
 							},
 							// untagged
 							(None, None, true) => data,
@@ -322,10 +312,13 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 				ty: ParseDataType::Alternatives { mut alts },
 				..
 			})
-		) if alts.len() == 1 => Ok(ParseData {
+		) if alts.len() == 1 && matches!(alts.first().unwrap(), TypeOrInline::Inline(..)) => Ok(ParseData {
 			name: Some(ident.to_lit_str()),
 			doc: attrs.doc.clone(),
-			ty: alts.remove(0).ty
+			ty: match alts.remove(0) {
+				TypeOrInline::Inline(data) => data.ty,
+				_ => unreachable!() // if condition above
+			}
 		}),
 		// only variants with fields
 		(None, Some(data)) => Ok(data),
@@ -336,11 +329,11 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 				// data_types always produces Alternatives
 				_ => unreachable!()
 			};
-			alts.push(ParseData {
+			alts.push(TypeOrInline::Inline(ParseData {
 				name: None,
 				doc: Vec::new(),
 				ty: data_strings
-			});
+			}));
 			Ok(data_types)
 		},
 		// no variants

@@ -96,7 +96,7 @@ limitations under the License.
 ```
 
  [contributors]: https://github.com/msrd0/openapi_type/graphs/contributors
- [__link0]: https://docs.rs/openapi_type/0.4.0/openapi_type/?search=openapi_type::OpenapiType
- [__link1]: https://docs.rs/openapi_type/0.4.0/openapi_type/?search=openapi_type::OpenapiType::schema
- [__link2]: https://docs.rs/openapi_type/0.4.0/openapi_type/?search=openapi_type::visitor::OpenapiSchema
- [__link3]: https://docs.rs/openapi_type/0.4.0/openapi_type/?search=openapi_type::visitor::OpenapiSchema::dependencies
+ [__link0]: https://docs.rs/openapi_type/0.4.1/openapi_type/?search=openapi_type::OpenapiType
+ [__link1]: https://docs.rs/openapi_type/0.4.1/openapi_type/?search=openapi_type::OpenapiType::schema
+ [__link2]: https://docs.rs/openapi_type/0.4.1/openapi_type/?search=openapi_type::visitor::OpenapiSchema
+ [__link3]: https://docs.rs/openapi_type/0.4.1/openapi_type/?search=openapi_type::visitor::OpenapiSchema::dependencies

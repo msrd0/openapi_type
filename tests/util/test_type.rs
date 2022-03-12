@@ -2,16 +2,18 @@ macro_rules! test_type {
 	($ty:ty = $json:tt) => {
 		paste::paste! {
 			#[test]
-			fn [< $ty:lower >]() {
+			fn [< $ty:lower _no_dependencies >]() {
 				let schema = <$ty as OpenapiType>::schema();
-				let schema_json = serde_json::to_value(&schema.schema).unwrap();
-				let expected = serde_json::json!($json);
-				pretty_assertions::assert_eq!(schema_json, expected);
+				assert!(
+					schema.dependencies.is_empty(),
+					"Expected dependencies to be empty, but is {:#?}",
+					schema.dependencies
+				);
 			}
 		}
 	};
 	($ty:ty = $json:tt, {$($dep_name:literal: $dep_json:tt),*}) => {
-		test_type!($ty = $json);
+		test_type!(@internal $ty = $json);
 		paste::paste! {
 			#[test]
 			fn [< $ty:lower _dependencies >]() {
@@ -27,4 +29,15 @@ macro_rules! test_type {
 			}
 		}
 	};
+	(@internal $ty:ty = $json:tt) => {
+		paste::paste! {
+			#[test]
+			fn [< $ty:lower >]() {
+				let schema = <$ty as OpenapiType>::schema();
+				let schema_json = serde_json::to_value(&schema.schema).unwrap();
+				let expected = serde_json::json!($json);
+				pretty_assertions::assert_eq!(schema_json, expected);
+			}
+		}
+	}
 }

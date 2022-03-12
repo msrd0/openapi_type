@@ -162,6 +162,24 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 					}
 				}));
 			},
+			Fields::Unnamed(unnamed_fields) if unnamed_fields.unnamed.len() == 1 => {
+				let struct_name = format!("{ident}::{}", name.value());
+				let ty = unnamed_fields.unnamed.first().unwrap().ty.clone();
+				// TODO add documentation here
+				types.push((name.clone(), ParseData {
+					name: Some(struct_name.to_lit_str()),
+					doc: Vec::new(),
+					ty: ParseDataType::Struct {
+						fields: vec![ParseDataField {
+							name,
+							doc: Vec::new(),
+							ty: TypeOrInline::Type(Box::new(ty)),
+							flatten: false
+						}],
+						deny_unknown_fields: attrs.deny_unknown_fields
+					}
+				}));
+			},
 			Fields::Unnamed(unnamed_fields) => {
 				return Err(syn::Error::new(
 					unnamed_fields.span(),

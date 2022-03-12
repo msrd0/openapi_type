@@ -29,6 +29,30 @@ impl ParseData {
 	}
 }
 
+impl TypeOrInline {
+	fn visit_type_fn(&self) -> TokenStream {
+		match self {
+			Self::Type(ty) => {
+				quote_spanned!(ty.span() => <#ty as ::openapi_type::OpenapiType>::visit_type)
+			},
+			Self::Inline(data) => {
+				let visit_impl = data.gen_visit_impl();
+				quote! {
+					{
+						fn visit_type<__openapi_type_V>(visitor: &mut __openapi_type_V)
+						where
+							__openapi_type_V: ::openapi_type::Visitor
+						{
+							#visit_impl
+						}
+						visit_type
+					}
+				}
+			}
+		}
+	}
+}
+
 fn gen_struct(name: Option<&LitStr>, doc: &[String], fields: &[ParseDataField], deny_unknown_fields: bool) -> TokenStream {
 	let str = path!(::core::primitive::str);
 	let string = path!(::std::string::String);
@@ -43,25 +67,7 @@ fn gen_struct(name: Option<&LitStr>, doc: &[String], fields: &[ParseDataField], 
 	let fields = fields.iter().map(|f| {
 		let name = &f.name;
 		let doc = gen_doc_option(&f.doc);
-		let visit = match &f.ty {
-			TypeOrInline::Type(ty) => {
-				quote_spanned!(ty.span() => <#ty as ::openapi_type::OpenapiType>::visit_type)
-			},
-			TypeOrInline::Inline(data) => {
-				let visit_impl = data.gen_visit_impl();
-				quote! {
-					{
-						fn visit_type<__openapi_type_V>(visitor: &mut __openapi_type_V)
-						where
-							__openapi_type_V: ::openapi_type::Visitor
-						{
-							#visit_impl
-						}
-						visit_type
-					}
-				}
-			}
-		};
+		let visit = f.ty.visit_type_fn();
 
 		if f.flatten {
 			quote!({

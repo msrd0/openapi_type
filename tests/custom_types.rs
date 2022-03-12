@@ -73,6 +73,22 @@ test_type!(EnumWithOneField = {
 });
 
 #[derive(OpenapiType)]
+enum EnumWithOneNewtypeVariant {
+	Success(SimpleStruct)
+}
+test_type!(EnumWithOneNewtypeVariant = {
+	"type": "object",
+	"title": "EnumWithOneNewtypeVariant",
+	"properties": {
+		"Success": {
+			"$ref": "#/components/schemas/EnumWithOneNewtypeVariant__Success"
+		}
+	},
+	"required": ["Success"],
+	"additionalProperties": false
+});
+
+#[derive(OpenapiType)]
 enum EnumWithFields {
 	Success { value: isize },
 	Error { msg: String }

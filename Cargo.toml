@@ -38,4 +38,4 @@ uuid08 = { package = "uuid", version = "0.8", optional = true }
 paste = "1.0"
 pretty_assertions = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-trybuild = "=1.0.56"
+trybuild = "=1.0.59"

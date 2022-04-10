@@ -2,6 +2,7 @@ use crate::parser::{ParseData, ParseDataField, ParseDataType, TypeOrInline};
 use proc_macro2::TokenStream;
 use quote::{quote, quote_spanned};
 use syn::{spanned::Spanned, LitStr};
+use syn_path::path;
 
 fn gen_doc_option(doc: &[String]) -> TokenStream {
 	let doc = doc.join("\n");

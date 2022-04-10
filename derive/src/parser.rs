@@ -8,6 +8,7 @@ use syn::{
 	punctuated::Punctuated, spanned::Spanned as _, AngleBracketedGenericArguments, DataEnum, DataStruct, DataUnion, Fields,
 	FieldsNamed, GenericArgument, LitStr, PathArguments, Type, TypePath
 };
+use syn_path::path;
 
 pub(super) enum TypeOrInline {
 	Type(Box<Type>),

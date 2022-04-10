@@ -9,13 +9,12 @@ use proc_macro::TokenStream;
 use proc_macro2::TokenStream as TokenStream2;
 use quote::quote;
 use syn::{parse_macro_input, Data, DeriveInput, TraitBound, TraitBoundModifier, TypeParamBound};
-
-#[macro_use]
-mod util;
+use syn_path::path;
 
 mod attrs;
 mod codegen;
 mod parser;
+mod util;
 
 use attrs::*;
 use parser::*;

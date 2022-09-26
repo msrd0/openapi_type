@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["timestamp","Treat an [`OffsetDateTime`] as a Unix timestamp for the purposes of serde."]]});
+window.SIDEBAR_ITEMS = {"mod":[["timestamp","Treat an [`OffsetDateTime`] as a Unix timestamp for the purposes of serde."]]};

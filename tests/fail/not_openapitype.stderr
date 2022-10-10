@@ -3,3 +3,14 @@ error[E0277]: the trait bound `Bar: OpenapiType` is not satisfied
   |
 5 |     bar: Bar
   |          ^^^ the trait `OpenapiType` is not implemented for `Bar`
+  |
+  = help: the following other types implement trait `OpenapiType`:
+            &'a T
+            ()
+            BTreeMap<K, V>
+            BTreeSet<T>
+            CStr
+            CString
+            Foo
+            HashMap<K, V, S>
+          and $N others

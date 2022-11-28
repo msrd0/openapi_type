@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/openapiv3-1.0.1/src/parameter.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>parameter.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../openapiv3/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../openapiv3/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../openapiv3/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/openapiv3-1.0.1/src/parameter.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>parameter.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../openapiv3/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../openapiv3/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../openapiv3/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -230,237 +230,237 @@
 <span id="230">230</span>
 <span id="231">231</span>
 <span id="232">232</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="kw">crate</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="ident">indexmap::IndexMap</span>;
-<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
+</pre><pre class="rust"><code><span class="kw">use crate</span>::<span class="kw-2">*</span>;
+<span class="kw">use </span>indexmap::IndexMap;
+<span class="kw">use </span>serde::{Deserialize, Serialize};
 
-<span class="doccomment">/// Describes a single operation parameter.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// A unique parameter is defined by a combination of a name and location.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">PartialEq</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ParameterData</span> {
-    <span class="doccomment">/// REQUIRED. The name of the parameter. Parameter names are case sensitive.</span>
-    <span class="doccomment">/// If in is &quot;path&quot;, the name field MUST correspond to the associated path</span>
-    <span class="doccomment">/// segment from the path field in the Paths Object. See Path Templating for</span>
-    <span class="doccomment">/// further information.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// If in is &quot;header&quot; and the name field is &quot;Accept&quot;, &quot;Content-Type&quot; or</span>
-    <span class="doccomment">/// &quot;Authorization&quot;, the parameter definition SHALL be ignored.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// For all other cases, the name corresponds to the parameter name</span>
-    <span class="doccomment">/// used by the in property.</span>
-    <span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">String</span>,
-    <span class="doccomment">/// A brief description of the parameter. This could</span>
-    <span class="doccomment">/// contain examples of use. CommonMark syntax MAY be</span>
-    <span class="doccomment">/// used for rich text representation.</span>
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">description</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// Determines whether this parameter is mandatory.</span>
-    <span class="doccomment">/// If the parameter location is &quot;path&quot;, this property</span>
-    <span class="doccomment">/// is REQUIRED and its value MUST be true. Otherwise,</span>
-    <span class="doccomment">/// the property MAY be included and its default value</span>
-    <span class="doccomment">/// is false.</span>
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>, <span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;is_false&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">required</span>: <span class="ident">bool</span>,
-    <span class="doccomment">/// Specifies that a parameter is deprecated and SHOULD</span>
-    <span class="doccomment">/// be transitioned out of usage.</span>
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">deprecated</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">flatten</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">format</span>: <span class="ident">ParameterSchemaOrContent</span>,
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">example</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">serde_json::Value</span><span class="op">&gt;</span>,
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>, <span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;IndexMap::is_empty&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">examples</span>: <span class="ident">IndexMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">ReferenceOr</span><span class="op">&lt;</span><span class="ident">Example</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">explode</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// Inline extensions to this object.</span>
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">flatten</span>, <span class="ident">deserialize_with</span> <span class="op">=</span> <span class="string">&quot;crate::util::deserialize_extensions&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">extensions</span>: <span class="ident">IndexMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">serde_json::Value</span><span class="op">&gt;</span>,
+<span class="doccomment">/// Describes a single operation parameter.
+///
+/// A unique parameter is defined by a combination of a name and location.
+</span><span class="attribute">#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+</span><span class="kw">pub struct </span>ParameterData {
+    <span class="doccomment">/// REQUIRED. The name of the parameter. Parameter names are case sensitive.
+    /// If in is &quot;path&quot;, the name field MUST correspond to the associated path
+    /// segment from the path field in the Paths Object. See Path Templating for
+    /// further information.
+    ///
+    /// If in is &quot;header&quot; and the name field is &quot;Accept&quot;, &quot;Content-Type&quot; or
+    /// &quot;Authorization&quot;, the parameter definition SHALL be ignored.
+    ///
+    /// For all other cases, the name corresponds to the parameter name
+    /// used by the in property.
+    </span><span class="kw">pub </span>name: String,
+    <span class="doccomment">/// A brief description of the parameter. This could
+    /// contain examples of use. CommonMark syntax MAY be
+    /// used for rich text representation.
+    </span><span class="attribute">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    </span><span class="kw">pub </span>description: <span class="prelude-ty">Option</span>&lt;String&gt;,
+    <span class="doccomment">/// Determines whether this parameter is mandatory.
+    /// If the parameter location is &quot;path&quot;, this property
+    /// is REQUIRED and its value MUST be true. Otherwise,
+    /// the property MAY be included and its default value
+    /// is false.
+    </span><span class="attribute">#[serde(default, skip_serializing_if = <span class="string">&quot;is_false&quot;</span>)]
+    </span><span class="kw">pub </span>required: bool,
+    <span class="doccomment">/// Specifies that a parameter is deprecated and SHOULD
+    /// be transitioned out of usage.
+    </span><span class="attribute">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    </span><span class="kw">pub </span>deprecated: <span class="prelude-ty">Option</span>&lt;bool&gt;,
+    <span class="attribute">#[serde(flatten)]
+    </span><span class="kw">pub </span>format: ParameterSchemaOrContent,
+    <span class="attribute">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    </span><span class="kw">pub </span>example: <span class="prelude-ty">Option</span>&lt;serde_json::Value&gt;,
+    <span class="attribute">#[serde(default, skip_serializing_if = <span class="string">&quot;IndexMap::is_empty&quot;</span>)]
+    </span><span class="kw">pub </span>examples: IndexMap&lt;String, ReferenceOr&lt;Example&gt;&gt;,
+    <span class="attribute">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    </span><span class="kw">pub </span>explode: <span class="prelude-ty">Option</span>&lt;bool&gt;,
+    <span class="doccomment">/// Inline extensions to this object.
+    </span><span class="attribute">#[serde(flatten, deserialize_with = <span class="string">&quot;crate::util::deserialize_extensions&quot;</span>)]
+    </span><span class="kw">pub </span>extensions: IndexMap&lt;String, serde_json::Value&gt;,
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">PartialEq</span>)]</span>
-<span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;camelCase&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ParameterSchemaOrContent</span> {
-    <span class="doccomment">/// The schema defining the type used for the parameter.</span>
-    <span class="ident">Schema</span>(<span class="ident">ReferenceOr</span><span class="op">&lt;</span><span class="ident">Schema</span><span class="op">&gt;</span>),
-    <span class="doccomment">/// A map containing the representations for the parameter. The key is the</span>
-    <span class="doccomment">/// media type and the value describes it. The map MUST only contain one</span>
-    <span class="doccomment">/// entry.</span>
-    <span class="ident">Content</span>(<span class="ident">Content</span>),
+<span class="attribute">#[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
+#[serde(rename_all = <span class="string">&quot;camelCase&quot;</span>)]
+</span><span class="kw">pub enum </span>ParameterSchemaOrContent {
+    <span class="doccomment">/// The schema defining the type used for the parameter.
+    </span>Schema(ReferenceOr&lt;Schema&gt;),
+    <span class="doccomment">/// A map containing the representations for the parameter. The key is the
+    /// media type and the value describes it. The map MUST only contain one
+    /// entry.
+    </span>Content(Content),
 }
 
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Content</span> <span class="op">=</span> <span class="ident">IndexMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">MediaType</span><span class="op">&gt;</span>;
+<span class="kw">pub type </span>Content = IndexMap&lt;String, MediaType&gt;;
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>)]</span>
-<span class="attribute">#[<span class="ident">serde</span>(<span class="ident">tag</span> <span class="op">=</span> <span class="string">&quot;in&quot;</span>, <span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;camelCase&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Parameter</span> {
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;camelCase&quot;</span>)]</span>
-    <span class="ident">Query</span> {
-        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">flatten</span>)]</span>
-        <span class="ident">parameter_data</span>: <span class="ident">ParameterData</span>,
-        <span class="doccomment">/// Determines whether the parameter value SHOULD allow reserved</span>
-        <span class="doccomment">/// characters, as defined by RFC3986 :/?#[]@!$&amp;&#39;()*+,;= to be included</span>
-        <span class="doccomment">/// without percent-encoding. This property only applies to parameters</span>
-        <span class="doccomment">/// with an in value of query. The default value is false.</span>
-        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>, <span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;is_false&quot;</span>)]</span>
-        <span class="ident">allow_reserved</span>: <span class="ident">bool</span>,
-        <span class="doccomment">/// Describes how the parameter value will be serialized depending on</span>
-        <span class="doccomment">/// the type of the parameter value. Default values (based on value of</span>
-        <span class="doccomment">/// in): for query - form; for path - simple; for header - simple; for</span>
-        <span class="doccomment">/// cookie - form.</span>
-        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>, <span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;SkipSerializeIfDefault::skip&quot;</span>)]</span>
-        <span class="ident">style</span>: <span class="ident">QueryStyle</span>,
-        <span class="doccomment">/// Sets the ability to pass empty-valued parameters. This is</span>
-        <span class="doccomment">/// valid only for query parameters and allows sending a parameter</span>
-        <span class="doccomment">/// with an empty value. Default value is false. If style is used,</span>
-        <span class="doccomment">/// and if behavior is n/a (cannot be serialized), the value of</span>
-        <span class="doccomment">/// allowEmptyValue SHALL be ignored.</span>
-        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;Option::is_none&quot;</span>)]</span>
-        <span class="ident">allow_empty_value</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
+<span class="attribute">#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(tag = <span class="string">&quot;in&quot;</span>, rename_all = <span class="string">&quot;camelCase&quot;</span>)]
+</span><span class="kw">pub enum </span>Parameter {
+    <span class="attribute">#[serde(rename_all = <span class="string">&quot;camelCase&quot;</span>)]
+    </span>Query {
+        <span class="attribute">#[serde(flatten)]
+        </span>parameter_data: ParameterData,
+        <span class="doccomment">/// Determines whether the parameter value SHOULD allow reserved
+        /// characters, as defined by RFC3986 :/?#[]@!$&amp;&#39;()*+,;= to be included
+        /// without percent-encoding. This property only applies to parameters
+        /// with an in value of query. The default value is false.
+        </span><span class="attribute">#[serde(default, skip_serializing_if = <span class="string">&quot;is_false&quot;</span>)]
+        </span>allow_reserved: bool,
+        <span class="doccomment">/// Describes how the parameter value will be serialized depending on
+        /// the type of the parameter value. Default values (based on value of
+        /// in): for query - form; for path - simple; for header - simple; for
+        /// cookie - form.
+        </span><span class="attribute">#[serde(default, skip_serializing_if = <span class="string">&quot;SkipSerializeIfDefault::skip&quot;</span>)]
+        </span>style: QueryStyle,
+        <span class="doccomment">/// Sets the ability to pass empty-valued parameters. This is
+        /// valid only for query parameters and allows sending a parameter
+        /// with an empty value. Default value is false. If style is used,
+        /// and if behavior is n/a (cannot be serialized), the value of
+        /// allowEmptyValue SHALL be ignored.
+        </span><span class="attribute">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+        </span>allow_empty_value: <span class="prelude-ty">Option</span>&lt;bool&gt;,
     },
-    <span class="ident">Header</span> {
-        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">flatten</span>)]</span>
-        <span class="ident">parameter_data</span>: <span class="ident">ParameterData</span>,
-        <span class="doccomment">/// Describes how the parameter value will be serialized depending on</span>
-        <span class="doccomment">/// the type of the parameter value. Default values (based on value of</span>
-        <span class="doccomment">/// in): for query - form; for path - simple; for header - simple; for</span>
-        <span class="doccomment">/// cookie - form.</span>
-        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>, <span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;SkipSerializeIfDefault::skip&quot;</span>)]</span>
-        <span class="ident">style</span>: <span class="ident">HeaderStyle</span>,
+    Header {
+        <span class="attribute">#[serde(flatten)]
+        </span>parameter_data: ParameterData,
+        <span class="doccomment">/// Describes how the parameter value will be serialized depending on
+        /// the type of the parameter value. Default values (based on value of
+        /// in): for query - form; for path - simple; for header - simple; for
+        /// cookie - form.
+        </span><span class="attribute">#[serde(default, skip_serializing_if = <span class="string">&quot;SkipSerializeIfDefault::skip&quot;</span>)]
+        </span>style: HeaderStyle,
     },
-    <span class="ident">Path</span> {
-        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">flatten</span>)]</span>
-        <span class="ident">parameter_data</span>: <span class="ident">ParameterData</span>,
-        <span class="doccomment">/// Describes how the parameter value will be serialized depending on</span>
-        <span class="doccomment">/// the type of the parameter value. Default values (based on value of</span>
-        <span class="doccomment">/// in): for query - form; for path - simple; for header - simple; for</span>
-        <span class="doccomment">/// cookie - form.</span>
-        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>, <span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;SkipSerializeIfDefault::skip&quot;</span>)]</span>
-        <span class="ident">style</span>: <span class="ident">PathStyle</span>,
+    Path {
+        <span class="attribute">#[serde(flatten)]
+        </span>parameter_data: ParameterData,
+        <span class="doccomment">/// Describes how the parameter value will be serialized depending on
+        /// the type of the parameter value. Default values (based on value of
+        /// in): for query - form; for path - simple; for header - simple; for
+        /// cookie - form.
+        </span><span class="attribute">#[serde(default, skip_serializing_if = <span class="string">&quot;SkipSerializeIfDefault::skip&quot;</span>)]
+        </span>style: PathStyle,
     },
-    <span class="ident">Cookie</span> {
-        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">flatten</span>)]</span>
-        <span class="ident">parameter_data</span>: <span class="ident">ParameterData</span>,
-        <span class="doccomment">/// Describes how the parameter value will be serialized depending on</span>
-        <span class="doccomment">/// the type of the parameter value. Default values (based on value of</span>
-        <span class="doccomment">/// in): for query - form; for path - simple; for header - simple; for</span>
-        <span class="doccomment">/// cookie - form.</span>
-        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>, <span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;SkipSerializeIfDefault::skip&quot;</span>)]</span>
-        <span class="ident">style</span>: <span class="ident">CookieStyle</span>,
+    Cookie {
+        <span class="attribute">#[serde(flatten)]
+        </span>parameter_data: ParameterData,
+        <span class="doccomment">/// Describes how the parameter value will be serialized depending on
+        /// the type of the parameter value. Default values (based on value of
+        /// in): for query - form; for path - simple; for header - simple; for
+        /// cookie - form.
+        </span><span class="attribute">#[serde(default, skip_serializing_if = <span class="string">&quot;SkipSerializeIfDefault::skip&quot;</span>)]
+        </span>style: CookieStyle,
     },
 }
 
-<span class="kw">impl</span> <span class="ident">Parameter</span> {
-    <span class="doccomment">/// Returns the `parameter_data` field of this [ParameterData].</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parameter_data</span>(<span class="self">self</span>) -&gt; <span class="ident">ParameterData</span> {
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Parameter::Query</span> {
-                <span class="ident">parameter_data</span>,
-                <span class="ident">allow_reserved</span>: <span class="kw">_</span>,
-                <span class="ident">style</span>: <span class="kw">_</span>,
-                <span class="ident">allow_empty_value</span>: <span class="kw">_</span>,
-            } =&gt; <span class="ident">parameter_data</span>,
-            <span class="ident">Parameter::Header</span> {
-                <span class="ident">parameter_data</span>,
-                <span class="ident">style</span>: <span class="kw">_</span>,
-            } =&gt; <span class="ident">parameter_data</span>,
-            <span class="ident">Parameter::Path</span> {
-                <span class="ident">parameter_data</span>,
-                <span class="ident">style</span>: <span class="kw">_</span>,
-            } =&gt; <span class="ident">parameter_data</span>,
-            <span class="ident">Parameter::Cookie</span> {
-                <span class="ident">parameter_data</span>,
-                <span class="ident">style</span>: <span class="kw">_</span>,
-            } =&gt; <span class="ident">parameter_data</span>,
+<span class="kw">impl </span>Parameter {
+    <span class="doccomment">/// Returns the `parameter_data` field of this [ParameterData].
+    </span><span class="kw">pub fn </span>parameter_data(<span class="self">self</span>) -&gt; ParameterData {
+        <span class="kw">match </span><span class="self">self </span>{
+            Parameter::Query {
+                parameter_data,
+                allow_reserved: <span class="kw">_</span>,
+                style: <span class="kw">_</span>,
+                allow_empty_value: <span class="kw">_</span>,
+            } =&gt; parameter_data,
+            Parameter::Header {
+                parameter_data,
+                style: <span class="kw">_</span>,
+            } =&gt; parameter_data,
+            Parameter::Path {
+                parameter_data,
+                style: <span class="kw">_</span>,
+            } =&gt; parameter_data,
+            Parameter::Cookie {
+                parameter_data,
+                style: <span class="kw">_</span>,
+            } =&gt; parameter_data,
         }
     }
 
-    <span class="doccomment">/// Returns the `parameter_data` field of this [ParameterData] by reference.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parameter_data_ref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">ParameterData</span> {
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Parameter::Query</span> {
-                <span class="ident">parameter_data</span>,
-                <span class="ident">allow_reserved</span>: <span class="kw">_</span>,
-                <span class="ident">style</span>: <span class="kw">_</span>,
-                <span class="ident">allow_empty_value</span>: <span class="kw">_</span>,
-            } =&gt; <span class="ident">parameter_data</span>,
-            <span class="ident">Parameter::Header</span> {
-                <span class="ident">parameter_data</span>,
-                <span class="ident">style</span>: <span class="kw">_</span>,
-            } =&gt; <span class="ident">parameter_data</span>,
-            <span class="ident">Parameter::Path</span> {
-                <span class="ident">parameter_data</span>,
-                <span class="ident">style</span>: <span class="kw">_</span>,
-            } =&gt; <span class="ident">parameter_data</span>,
-            <span class="ident">Parameter::Cookie</span> {
-                <span class="ident">parameter_data</span>,
-                <span class="ident">style</span>: <span class="kw">_</span>,
-            } =&gt; <span class="ident">parameter_data</span>,
+    <span class="doccomment">/// Returns the `parameter_data` field of this [ParameterData] by reference.
+    </span><span class="kw">pub fn </span>parameter_data_ref(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>ParameterData {
+        <span class="kw">match </span><span class="self">self </span>{
+            Parameter::Query {
+                parameter_data,
+                allow_reserved: <span class="kw">_</span>,
+                style: <span class="kw">_</span>,
+                allow_empty_value: <span class="kw">_</span>,
+            } =&gt; parameter_data,
+            Parameter::Header {
+                parameter_data,
+                style: <span class="kw">_</span>,
+            } =&gt; parameter_data,
+            Parameter::Path {
+                parameter_data,
+                style: <span class="kw">_</span>,
+            } =&gt; parameter_data,
+            Parameter::Cookie {
+                parameter_data,
+                style: <span class="kw">_</span>,
+            } =&gt; parameter_data,
         }
     }
 }
 
-<span class="kw">struct</span> <span class="ident">SkipSerializeIfDefault</span>;
-<span class="kw">impl</span> <span class="ident">SkipSerializeIfDefault</span> {
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;skip_serializing_defaults&quot;</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">skip</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">Default</span> <span class="op">+</span> <span class="ident">std::cmp::PartialEq</span><span class="op">&gt;</span>(<span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">D</span>) -&gt; <span class="ident">bool</span> {
-        <span class="ident">value</span> <span class="op">==</span> <span class="kw-2">&amp;</span><span class="ident">Default::default</span>()
+<span class="kw">struct </span>SkipSerializeIfDefault;
+<span class="kw">impl </span>SkipSerializeIfDefault {
+    <span class="attribute">#[cfg(feature = <span class="string">&quot;skip_serializing_defaults&quot;</span>)]
+    </span><span class="kw">fn </span>skip&lt;D: Default + std::cmp::PartialEq&gt;(value: <span class="kw-2">&amp;</span>D) -&gt; bool {
+        value == <span class="kw-2">&amp;</span>Default::default()
     }
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;skip_serializing_defaults&quot;</span>))]</span>
-    <span class="kw">fn</span> <span class="ident">skip</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">Default</span> <span class="op">+</span> <span class="ident">std::cmp::PartialEq</span><span class="op">&gt;</span>(<span class="ident">_value</span>: <span class="kw-2">&amp;</span><span class="ident">D</span>) -&gt; <span class="ident">bool</span> {
-        <span class="bool-val">false</span>
-    }
+    <span class="attribute">#[cfg(not(feature = <span class="string">&quot;skip_serializing_defaults&quot;</span>))]
+    </span><span class="kw">fn </span>skip&lt;D: Default + std::cmp::PartialEq&gt;(_value: <span class="kw-2">&amp;</span>D) -&gt; bool {
+        <span class="bool-val">false
+    </span>}
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>)]</span>
-<span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;camelCase&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">PathStyle</span> {
-    <span class="ident">Matrix</span>,
-    <span class="ident">Label</span>,
-    <span class="ident">Simple</span>,
+<span class="attribute">#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all = <span class="string">&quot;camelCase&quot;</span>)]
+</span><span class="kw">pub enum </span>PathStyle {
+    Matrix,
+    Label,
+    Simple,
 }
 
-<span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">PathStyle</span> {
-    <span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
-        <span class="ident">PathStyle::Simple</span>
+<span class="kw">impl </span>Default <span class="kw">for </span>PathStyle {
+    <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
+        PathStyle::Simple
     }
 }
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>)]</span>
-<span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;camelCase&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">QueryStyle</span> {
-    <span class="ident">Form</span>,
-    <span class="ident">SpaceDelimited</span>,
-    <span class="ident">PipeDelimited</span>,
-    <span class="ident">DeepObject</span>,
+<span class="attribute">#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all = <span class="string">&quot;camelCase&quot;</span>)]
+</span><span class="kw">pub enum </span>QueryStyle {
+    Form,
+    SpaceDelimited,
+    PipeDelimited,
+    DeepObject,
 }
 
-<span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">QueryStyle</span> {
-    <span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
-        <span class="ident">QueryStyle::Form</span>
+<span class="kw">impl </span>Default <span class="kw">for </span>QueryStyle {
+    <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
+        QueryStyle::Form
     }
 }
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>)]</span>
-<span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;camelCase&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">CookieStyle</span> {
-    <span class="ident">Form</span>,
+<span class="attribute">#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all = <span class="string">&quot;camelCase&quot;</span>)]
+</span><span class="kw">pub enum </span>CookieStyle {
+    Form,
 }
 
-<span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">CookieStyle</span> {
-    <span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="ident">CookieStyle</span> {
-        <span class="ident">CookieStyle::Form</span>
+<span class="kw">impl </span>Default <span class="kw">for </span>CookieStyle {
+    <span class="kw">fn </span>default() -&gt; CookieStyle {
+        CookieStyle::Form
     }
 }
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>)]</span>
-<span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;camelCase&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">HeaderStyle</span> {
-    <span class="ident">Simple</span>,
+<span class="attribute">#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[serde(rename_all = <span class="string">&quot;camelCase&quot;</span>)]
+</span><span class="kw">pub enum </span>HeaderStyle {
+    Simple,
 }
 
-<span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">HeaderStyle</span> {
-    <span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="ident">HeaderStyle</span> {
-        <span class="ident">HeaderStyle::Simple</span>
+<span class="kw">impl </span>Default <span class="kw">for </span>HeaderStyle {
+    <span class="kw">fn </span>default() -&gt; HeaderStyle {
+        HeaderStyle::Simple
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="openapiv3" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="openapiv3" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>

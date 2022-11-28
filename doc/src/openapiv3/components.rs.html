@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/openapiv3-1.0.1/src/components.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>components.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../openapiv3/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../openapiv3/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../openapiv3/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/openapiv3-1.0.1/src/components.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>components.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../openapiv3/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../openapiv3/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../openapiv3/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -40,47 +40,47 @@
 <span id="40">40</span>
 <span id="41">41</span>
 <span id="42">42</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="kw">crate</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="ident">indexmap::IndexMap</span>;
-<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
+</pre><pre class="rust"><code><span class="kw">use crate</span>::<span class="kw-2">*</span>;
+<span class="kw">use </span>indexmap::IndexMap;
+<span class="kw">use </span>serde::{Deserialize, Serialize};
 
-<span class="doccomment">/// Holds a set of reusable objects for different aspects of the OAS.</span>
-<span class="doccomment">/// All objects defined within the components object will have no effect</span>
-<span class="doccomment">/// on the API unless they are explicitly referenced from properties</span>
-<span class="doccomment">/// outside the components object.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Serialize</span>, <span class="ident">Deserialize</span>, <span class="ident">Default</span>, <span class="ident">PartialEq</span>)]</span>
-<span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;camelCase&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Components</span> {
-    <span class="doccomment">/// An object to hold reusable Security Scheme Objects.</span>
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>, <span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;IndexMap::is_empty&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">security_schemes</span>: <span class="ident">IndexMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">ReferenceOr</span><span class="op">&lt;</span><span class="ident">SecurityScheme</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// An object to hold reusable Response Objects.</span>
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>, <span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;IndexMap::is_empty&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">responses</span>: <span class="ident">IndexMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">ReferenceOr</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// An object to hold reusable Parameter Objects.</span>
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>, <span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;IndexMap::is_empty&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">parameters</span>: <span class="ident">IndexMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">ReferenceOr</span><span class="op">&lt;</span><span class="ident">Parameter</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// An object to hold reusable Example Objects.</span>
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>, <span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;IndexMap::is_empty&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">examples</span>: <span class="ident">IndexMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">ReferenceOr</span><span class="op">&lt;</span><span class="ident">Example</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// An object to hold reusable Request Body Objects.</span>
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>, <span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;IndexMap::is_empty&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">request_bodies</span>: <span class="ident">IndexMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">ReferenceOr</span><span class="op">&lt;</span><span class="ident">RequestBody</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// An object to hold reusable Header Objects.</span>
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>, <span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;IndexMap::is_empty&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">headers</span>: <span class="ident">IndexMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">ReferenceOr</span><span class="op">&lt;</span><span class="ident">Header</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// An object to hold reusable Schema Objects.</span>
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>, <span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;IndexMap::is_empty&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">schemas</span>: <span class="ident">IndexMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">ReferenceOr</span><span class="op">&lt;</span><span class="ident">Schema</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// An object to hold reusable Link Objects.</span>
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>, <span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;IndexMap::is_empty&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">links</span>: <span class="ident">IndexMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">ReferenceOr</span><span class="op">&lt;</span><span class="ident">Link</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// An object to hold reusable Callback Objects.</span>
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>, <span class="ident">skip_serializing_if</span> <span class="op">=</span> <span class="string">&quot;IndexMap::is_empty&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">callbacks</span>: <span class="ident">IndexMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">ReferenceOr</span><span class="op">&lt;</span><span class="ident">Callback</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// Inline extensions to this object.</span>
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">flatten</span>, <span class="ident">deserialize_with</span> <span class="op">=</span> <span class="string">&quot;crate::util::deserialize_extensions&quot;</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">extensions</span>: <span class="ident">IndexMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">serde_json::Value</span><span class="op">&gt;</span>,
+<span class="doccomment">/// Holds a set of reusable objects for different aspects of the OAS.
+/// All objects defined within the components object will have no effect
+/// on the API unless they are explicitly referenced from properties
+/// outside the components object.
+</span><span class="attribute">#[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]
+#[serde(rename_all = <span class="string">&quot;camelCase&quot;</span>)]
+</span><span class="kw">pub struct </span>Components {
+    <span class="doccomment">/// An object to hold reusable Security Scheme Objects.
+    </span><span class="attribute">#[serde(default, skip_serializing_if = <span class="string">&quot;IndexMap::is_empty&quot;</span>)]
+    </span><span class="kw">pub </span>security_schemes: IndexMap&lt;String, ReferenceOr&lt;SecurityScheme&gt;&gt;,
+    <span class="doccomment">/// An object to hold reusable Response Objects.
+    </span><span class="attribute">#[serde(default, skip_serializing_if = <span class="string">&quot;IndexMap::is_empty&quot;</span>)]
+    </span><span class="kw">pub </span>responses: IndexMap&lt;String, ReferenceOr&lt;Response&gt;&gt;,
+    <span class="doccomment">/// An object to hold reusable Parameter Objects.
+    </span><span class="attribute">#[serde(default, skip_serializing_if = <span class="string">&quot;IndexMap::is_empty&quot;</span>)]
+    </span><span class="kw">pub </span>parameters: IndexMap&lt;String, ReferenceOr&lt;Parameter&gt;&gt;,
+    <span class="doccomment">/// An object to hold reusable Example Objects.
+    </span><span class="attribute">#[serde(default, skip_serializing_if = <span class="string">&quot;IndexMap::is_empty&quot;</span>)]
+    </span><span class="kw">pub </span>examples: IndexMap&lt;String, ReferenceOr&lt;Example&gt;&gt;,
+    <span class="doccomment">/// An object to hold reusable Request Body Objects.
+    </span><span class="attribute">#[serde(default, skip_serializing_if = <span class="string">&quot;IndexMap::is_empty&quot;</span>)]
+    </span><span class="kw">pub </span>request_bodies: IndexMap&lt;String, ReferenceOr&lt;RequestBody&gt;&gt;,
+    <span class="doccomment">/// An object to hold reusable Header Objects.
+    </span><span class="attribute">#[serde(default, skip_serializing_if = <span class="string">&quot;IndexMap::is_empty&quot;</span>)]
+    </span><span class="kw">pub </span>headers: IndexMap&lt;String, ReferenceOr&lt;Header&gt;&gt;,
+    <span class="doccomment">/// An object to hold reusable Schema Objects.
+    </span><span class="attribute">#[serde(default, skip_serializing_if = <span class="string">&quot;IndexMap::is_empty&quot;</span>)]
+    </span><span class="kw">pub </span>schemas: IndexMap&lt;String, ReferenceOr&lt;Schema&gt;&gt;,
+    <span class="doccomment">/// An object to hold reusable Link Objects.
+    </span><span class="attribute">#[serde(default, skip_serializing_if = <span class="string">&quot;IndexMap::is_empty&quot;</span>)]
+    </span><span class="kw">pub </span>links: IndexMap&lt;String, ReferenceOr&lt;Link&gt;&gt;,
+    <span class="doccomment">/// An object to hold reusable Callback Objects.
+    </span><span class="attribute">#[serde(default, skip_serializing_if = <span class="string">&quot;IndexMap::is_empty&quot;</span>)]
+    </span><span class="kw">pub </span>callbacks: IndexMap&lt;String, ReferenceOr&lt;Callback&gt;&gt;,
+    <span class="doccomment">/// Inline extensions to this object.
+    </span><span class="attribute">#[serde(flatten, deserialize_with = <span class="string">&quot;crate::util::deserialize_extensions&quot;</span>)]
+    </span><span class="kw">pub </span>extensions: IndexMap&lt;String, serde_json::Value&gt;,
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="openapiv3" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="openapiv3" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>

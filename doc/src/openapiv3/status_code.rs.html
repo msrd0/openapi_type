@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/openapiv3-1.0.1/src/status_code.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>status_code.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../openapiv3/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../openapiv3/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../openapiv3/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/openapiv3-1.0.1/src/status_code.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>status_code.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../openapiv3/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../openapiv3/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../openapiv3/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -126,133 +126,133 @@
 <span id="126">126</span>
 <span id="127">127</span>
 <span id="128">128</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
-<span class="kw">use</span> <span class="ident">std::fmt</span>;
+</pre><pre class="rust"><code><span class="kw">use </span>serde::{Deserialize, Serialize};
+<span class="kw">use </span>std::fmt;
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Ord</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">StatusCode</span> {
-    <span class="ident">Code</span>(<span class="ident">u16</span>),
-    <span class="ident">Range</span>(<span class="ident">u16</span>),
+<span class="attribute">#[derive(Clone, Debug, Hash, PartialEq, Eq, PartialOrd, Ord)]
+</span><span class="kw">pub enum </span>StatusCode {
+    Code(u16),
+    Range(u16),
 }
 
-<span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">StatusCode</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">fmt::Result</span> {
-        <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">StatusCode::Code</span>(<span class="ident">n</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">n</span>),
-            <span class="ident">StatusCode::Range</span>(<span class="ident">n</span>) =&gt; <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}XX&quot;</span>, <span class="ident">n</span>),
+<span class="kw">impl </span>fmt::Display <span class="kw">for </span>StatusCode {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
+        <span class="kw">match </span><span class="self">self </span>{
+            StatusCode::Code(n) =&gt; <span class="macro">write!</span>(f, <span class="string">&quot;{}&quot;</span>, n),
+            StatusCode::Range(n) =&gt; <span class="macro">write!</span>(f, <span class="string">&quot;{}XX&quot;</span>, n),
         }
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="ident">Deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">StatusCode</span> {
-    <span class="kw">fn</span> <span class="ident">deserialize</span><span class="op">&lt;</span><span class="ident">D</span><span class="op">&gt;</span>(<span class="ident">deserializer</span>: <span class="ident">D</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">D::Error</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">D</span>: <span class="ident">serde::Deserializer</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span>,
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;de</span>&gt; Deserialize&lt;<span class="lifetime">&#39;de</span>&gt; <span class="kw">for </span>StatusCode {
+    <span class="kw">fn </span>deserialize&lt;D&gt;(deserializer: D) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, D::Error&gt;
+    <span class="kw">where
+        </span>D: serde::Deserializer&lt;<span class="lifetime">&#39;de</span>&gt;,
     {
-        <span class="kw">use</span> <span class="ident">serde::de</span>::{<span class="self">self</span>, <span class="ident">Unexpected</span>, <span class="ident">Visitor</span>};
+        <span class="kw">use </span>serde::de::{<span class="self">self</span>, Unexpected, Visitor};
 
-        <span class="kw">struct</span> <span class="ident">StatusCodeVisitor</span>;
+        <span class="kw">struct </span>StatusCodeVisitor;
 
-        <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="ident">Visitor</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">StatusCodeVisitor</span> {
-            <span class="kw">type</span> <span class="ident">Value</span> <span class="op">=</span> <span class="ident">StatusCode</span>;
+        <span class="kw">impl</span>&lt;<span class="lifetime">&#39;de</span>&gt; Visitor&lt;<span class="lifetime">&#39;de</span>&gt; <span class="kw">for </span>StatusCodeVisitor {
+            <span class="kw">type </span>Value = StatusCode;
 
-            <span class="kw">fn</span> <span class="ident">expecting</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">formatter</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
-                <span class="ident">formatter</span>.<span class="ident">write_str</span>(<span class="string">&quot;number between 100 and 999 (as string or integer) or a string that matches `\\dXX`&quot;</span>)
+            <span class="kw">fn </span>expecting(<span class="kw-2">&amp;</span><span class="self">self</span>, formatter: <span class="kw-2">&amp;mut </span>fmt::Formatter) -&gt; fmt::Result {
+                formatter.write_str(<span class="string">&quot;number between 100 and 999 (as string or integer) or a string that matches `\\dXX`&quot;</span>)
             }
 
-            <span class="kw">fn</span> <span class="ident">visit_i64</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">value</span>: <span class="ident">i64</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Value</span>, <span class="ident">E</span><span class="op">&gt;</span>
-            <span class="kw">where</span>
-                <span class="ident">E</span>: <span class="ident">de::Error</span>,
+            <span class="kw">fn </span>visit_i64&lt;E&gt;(<span class="self">self</span>, value: i64) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Value, E&gt;
+            <span class="kw">where
+                </span>E: de::Error,
             {
-                <span class="kw">if</span> <span class="ident">value</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">100</span> <span class="op">&amp;&amp;</span> <span class="ident">value</span> <span class="op">&lt;</span> <span class="number">1000</span> {
-                    <span class="prelude-val">Ok</span>(<span class="ident">StatusCode::Code</span>(<span class="ident">value</span> <span class="kw">as</span> <span class="ident">u16</span>))
-                } <span class="kw">else</span> {
-                    <span class="prelude-val">Err</span>(<span class="ident">E::invalid_value</span>(<span class="ident">Unexpected::Signed</span>(<span class="ident">value</span>), <span class="kw-2">&amp;</span><span class="self">self</span>))
-                }
-            }
-
-            <span class="kw">fn</span> <span class="ident">visit_u64</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">value</span>: <span class="ident">u64</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Value</span>, <span class="ident">E</span><span class="op">&gt;</span>
-            <span class="kw">where</span>
-                <span class="ident">E</span>: <span class="ident">de::Error</span>,
-            {
-                <span class="kw">if</span> <span class="ident">value</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">100</span> <span class="op">&amp;&amp;</span> <span class="ident">value</span> <span class="op">&lt;</span> <span class="number">1000</span> {
-                    <span class="prelude-val">Ok</span>(<span class="ident">StatusCode::Code</span>(<span class="ident">value</span> <span class="kw">as</span> <span class="ident">u16</span>))
-                } <span class="kw">else</span> {
-                    <span class="prelude-val">Err</span>(<span class="ident">E::invalid_value</span>(<span class="ident">Unexpected::Unsigned</span>(<span class="ident">value</span>), <span class="kw-2">&amp;</span><span class="self">self</span>))
+                <span class="kw">if </span>value &gt;= <span class="number">100 </span>&amp;&amp; value &lt; <span class="number">1000 </span>{
+                    <span class="prelude-val">Ok</span>(StatusCode::Code(value <span class="kw">as </span>u16))
+                } <span class="kw">else </span>{
+                    <span class="prelude-val">Err</span>(E::invalid_value(Unexpected::Signed(value), <span class="kw-2">&amp;</span><span class="self">self</span>))
                 }
             }
 
-            <span class="kw">fn</span> <span class="ident">visit_str</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Value</span>, <span class="ident">E</span><span class="op">&gt;</span>
-            <span class="kw">where</span>
-                <span class="ident">E</span>: <span class="ident">de::Error</span>,
+            <span class="kw">fn </span>visit_u64&lt;E&gt;(<span class="self">self</span>, value: u64) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Value, E&gt;
+            <span class="kw">where
+                </span>E: de::Error,
             {
-                <span class="kw">if</span> <span class="ident">value</span>.<span class="ident">len</span>() <span class="op">!</span><span class="op">=</span> <span class="number">3</span> {
-                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">E::invalid_value</span>(<span class="ident">Unexpected::Str</span>(<span class="ident">value</span>), <span class="kw-2">&amp;</span><span class="string">&quot;length 3&quot;</span>));
+                <span class="kw">if </span>value &gt;= <span class="number">100 </span>&amp;&amp; value &lt; <span class="number">1000 </span>{
+                    <span class="prelude-val">Ok</span>(StatusCode::Code(value <span class="kw">as </span>u16))
+                } <span class="kw">else </span>{
+                    <span class="prelude-val">Err</span>(E::invalid_value(Unexpected::Unsigned(value), <span class="kw-2">&amp;</span><span class="self">self</span>))
+                }
+            }
+
+            <span class="kw">fn </span>visit_str&lt;E&gt;(<span class="self">self</span>, value: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Value, E&gt;
+            <span class="kw">where
+                </span>E: de::Error,
+            {
+                <span class="kw">if </span>value.len() != <span class="number">3 </span>{
+                    <span class="kw">return </span><span class="prelude-val">Err</span>(E::invalid_value(Unexpected::Str(value), <span class="kw-2">&amp;</span><span class="string">&quot;length 3&quot;</span>));
                 }
 
-                <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">number</span>) <span class="op">=</span> <span class="ident">value</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>() {
-                    <span class="kw">return</span> <span class="self">self</span>.<span class="ident">visit_i64</span>(<span class="ident">number</span>);
+                <span class="kw">if let </span><span class="prelude-val">Ok</span>(number) = value.parse::&lt;i64&gt;() {
+                    <span class="kw">return </span><span class="self">self</span>.visit_i64(number);
                 }
 
-                <span class="kw">if</span> <span class="op">!</span><span class="ident">value</span>.<span class="ident">is_ascii</span>() {
-                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">E::invalid_value</span>(
-                        <span class="ident">Unexpected::Str</span>(<span class="ident">value</span>),
+                <span class="kw">if </span>!value.is_ascii() {
+                    <span class="kw">return </span><span class="prelude-val">Err</span>(E::invalid_value(
+                        Unexpected::Str(value),
                         <span class="kw-2">&amp;</span><span class="string">&quot;ascii, format `\\dXX`&quot;</span>,
                     ));
                 }
 
-                <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">as_bytes</span>().<span class="ident">to_ascii_uppercase</span>();
+                <span class="kw">let </span>v = value.as_bytes().to_ascii_uppercase();
 
-                <span class="kw">match</span> [<span class="ident">v</span>[<span class="number">0</span>], <span class="ident">v</span>[<span class="number">1</span>], <span class="ident">v</span>[<span class="number">2</span>]] {
-                    [<span class="ident">n</span>, <span class="string">b&#39;X&#39;</span>, <span class="string">b&#39;X&#39;</span>] <span class="kw">if</span> <span class="ident">n</span>.<span class="ident">is_ascii_digit</span>() =&gt; {
-                        <span class="prelude-val">Ok</span>(<span class="ident">StatusCode::Range</span>(<span class="ident">u16::from</span>(<span class="ident">n</span> <span class="op">-</span> <span class="string">b&#39;0&#39;</span>)))
+                <span class="kw">match </span>[v[<span class="number">0</span>], v[<span class="number">1</span>], v[<span class="number">2</span>]] {
+                    [n, <span class="string">b&#39;X&#39;</span>, <span class="string">b&#39;X&#39;</span>] <span class="kw">if </span>n.is_ascii_digit() =&gt; {
+                        <span class="prelude-val">Ok</span>(StatusCode::Range(u16::from(n - <span class="string">b&#39;0&#39;</span>)))
                     }
-                    <span class="kw">_</span> =&gt; <span class="prelude-val">Err</span>(<span class="ident">E::invalid_value</span>(<span class="ident">Unexpected::Str</span>(<span class="ident">value</span>), <span class="kw-2">&amp;</span><span class="string">&quot;format `\\dXX`&quot;</span>)),
+                    <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(E::invalid_value(Unexpected::Str(value), <span class="kw-2">&amp;</span><span class="string">&quot;format `\\dXX`&quot;</span>)),
                 }
             }
         }
 
-        <span class="ident">deserializer</span>.<span class="ident">deserialize_any</span>(<span class="ident">StatusCodeVisitor</span>)
+        deserializer.deserialize_any(StatusCodeVisitor)
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Serialize</span> <span class="kw">for</span> <span class="ident">StatusCode</span> {
-    <span class="kw">fn</span> <span class="ident">serialize</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">serializer</span>: <span class="ident">S</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">S::Ok</span>, <span class="ident">S::Error</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">S</span>: <span class="ident">serde::Serializer</span>,
+<span class="kw">impl </span>Serialize <span class="kw">for </span>StatusCode {
+    <span class="kw">fn </span>serialize&lt;S&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, serializer: S) -&gt; <span class="prelude-ty">Result</span>&lt;S::Ok, S::Error&gt;
+    <span class="kw">where
+        </span>S: serde::Serializer,
     {
-        <span class="ident">serializer</span>.<span class="ident">serialize_str</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">to_string</span>())
+        serializer.serialize_str(<span class="kw-2">&amp;</span><span class="self">self</span>.to_string())
     }
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::StatusCode</span>;
-    <span class="kw">use</span> <span class="ident">serde_yaml::from_str</span>;
+<span class="attribute">#[cfg(test)]
+</span><span class="kw">mod </span>tests {
+    <span class="kw">use </span><span class="kw">super</span>::StatusCode;
+    <span class="kw">use </span>serde_yaml::from_str;
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">deserialize_strings_and_numbers</span>() {
-        <span class="macro">assert_eq!</span>(<span class="ident">StatusCode::Code</span>(<span class="number">200</span>), <span class="ident">from_str</span>(<span class="string">&quot;200&quot;</span>).<span class="ident">unwrap</span>(),);
-        <span class="macro">assert_eq!</span>(<span class="ident">StatusCode::Code</span>(<span class="number">200</span>), <span class="ident">from_str</span>(<span class="string">&quot;&#39;200&#39;&quot;</span>).<span class="ident">unwrap</span>(),);
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>deserialize_strings_and_numbers() {
+        <span class="macro">assert_eq!</span>(StatusCode::Code(<span class="number">200</span>), from_str(<span class="string">&quot;200&quot;</span>).unwrap(),);
+        <span class="macro">assert_eq!</span>(StatusCode::Code(<span class="number">200</span>), from_str(<span class="string">&quot;&#39;200&#39;&quot;</span>).unwrap(),);
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="attribute">#[<span class="ident">should_panic</span> <span class="op">=</span> <span class="string">&quot;expected length 3&quot;</span>]</span>
-    <span class="kw">fn</span> <span class="ident">deserialize_invalid_code</span>() {
-        <span class="kw">let</span> <span class="kw">_</span>: <span class="ident">StatusCode</span> <span class="op">=</span> <span class="ident">from_str</span>(<span class="string">&quot;&#39;6666&#39;&quot;</span>).<span class="ident">unwrap</span>();
+    <span class="attribute">#[test]
+    #[should_panic = <span class="string">&quot;expected length 3&quot;</span>]
+    </span><span class="kw">fn </span>deserialize_invalid_code() {
+        <span class="kw">let _</span>: StatusCode = from_str(<span class="string">&quot;&#39;6666&#39;&quot;</span>).unwrap();
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">deserialize_ranges</span>() {
-        <span class="macro">assert_eq!</span>(<span class="ident">StatusCode::Range</span>(<span class="number">2</span>), <span class="ident">from_str</span>(<span class="string">&quot;2XX&quot;</span>).<span class="ident">unwrap</span>(),);
-        <span class="macro">assert_eq!</span>(<span class="ident">StatusCode::Range</span>(<span class="number">4</span>), <span class="ident">from_str</span>(<span class="string">&quot;&#39;4xx&#39;&quot;</span>).<span class="ident">unwrap</span>(),);
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>deserialize_ranges() {
+        <span class="macro">assert_eq!</span>(StatusCode::Range(<span class="number">2</span>), from_str(<span class="string">&quot;2XX&quot;</span>).unwrap(),);
+        <span class="macro">assert_eq!</span>(StatusCode::Range(<span class="number">4</span>), from_str(<span class="string">&quot;&#39;4xx&#39;&quot;</span>).unwrap(),);
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="attribute">#[<span class="ident">should_panic</span> <span class="op">=</span> <span class="string">&quot;invalid value&quot;</span>]</span>
-    <span class="kw">fn</span> <span class="ident">deserialize_invalid_range</span>() {
-        <span class="kw">let</span> <span class="kw">_</span>: <span class="ident">StatusCode</span> <span class="op">=</span> <span class="ident">from_str</span>(<span class="string">&quot;2XY&quot;</span>).<span class="ident">unwrap</span>();
+    <span class="attribute">#[test]
+    #[should_panic = <span class="string">&quot;invalid value&quot;</span>]
+    </span><span class="kw">fn </span>deserialize_invalid_range() {
+        <span class="kw">let _</span>: StatusCode = from_str(<span class="string">&quot;2XY&quot;</span>).unwrap();
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="openapiv3" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="openapiv3" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>

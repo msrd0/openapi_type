@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `derive/src/codegen.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>codegen.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../openapi_type_derive/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../openapi_type_derive/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../openapi_type_derive/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `derive/src/codegen.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>codegen.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../openapi_type_derive/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../openapi_type_derive/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../openapi_type_derive/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -203,55 +203,55 @@
 <span id="203">203</span>
 <span id="204">204</span>
 <span id="205">205</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::parser</span>::{<span class="ident">ParseData</span>, <span class="ident">ParseDataField</span>, <span class="ident">ParseDataType</span>, <span class="ident">TypeOrInline</span>};
-<span class="kw">use</span> <span class="ident">proc_macro2::TokenStream</span>;
-<span class="kw">use</span> <span class="ident">quote</span>::{<span class="ident">quote</span>, <span class="ident">quote_spanned</span>};
-<span class="kw">use</span> <span class="ident">syn</span>::{<span class="ident">spanned::Spanned</span>, <span class="ident">LitStr</span>};
-<span class="kw">use</span> <span class="ident">syn_path::path</span>;
+</pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::parser::{ParseData, ParseDataField, ParseDataType, TypeOrInline};
+<span class="kw">use </span>proc_macro2::TokenStream;
+<span class="kw">use </span>quote::{quote, quote_spanned};
+<span class="kw">use </span>syn::{spanned::Spanned, LitStr};
+<span class="kw">use </span>syn_path::path;
 
-<span class="kw">fn</span> <span class="ident">gen_doc_option</span>(<span class="ident">doc</span>: <span class="kw-2">&amp;</span>[<span class="ident">String</span>]) -&gt; <span class="ident">TokenStream</span> {
-	<span class="kw">let</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">doc</span>.<span class="ident">join</span>(<span class="string">&quot;\n&quot;</span>);
-	<span class="kw">let</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">doc</span>.<span class="ident">trim</span>();
-	<span class="kw">if</span> <span class="ident">doc</span>.<span class="ident">is_empty</span>() {
-		<span class="macro">quote!</span>(<span class="ident">::core::option::Option::None</span>)
-	} <span class="kw">else</span> {
-		<span class="macro">quote!</span>(<span class="ident">::core::option::Option::Some</span>(#<span class="ident">doc</span>))
+<span class="kw">fn </span>gen_doc_option(doc: <span class="kw-2">&amp;</span>[String]) -&gt; TokenStream {
+	<span class="kw">let </span>doc = doc.join(<span class="string">&quot;\n&quot;</span>);
+	<span class="kw">let </span>doc = doc.trim();
+	<span class="kw">if </span>doc.is_empty() {
+		<span class="macro">quote!</span>(::core::option::Option::None)
+	} <span class="kw">else </span>{
+		<span class="macro">quote!</span>(::core::option::Option::Some(#doc))
 	}
 }
 
-<span class="kw">impl</span> <span class="ident">ParseData</span> {
-	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">gen_visit_impl</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">TokenStream</span> {
-		<span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">name</span>.<span class="ident">as_ref</span>();
-		<span class="kw">let</span> <span class="ident">doc</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">doc</span>;
-		<span class="kw">match</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">ty</span> {
-			<span class="ident">ParseDataType::Struct</span> {
-				<span class="ident">fields</span>,
-				<span class="ident">deny_unknown_fields</span>
-			} =&gt; <span class="ident">gen_struct</span>(<span class="ident">name</span>, <span class="ident">doc</span>, <span class="ident">fields</span>, <span class="kw-2">*</span><span class="ident">deny_unknown_fields</span>),
-			<span class="ident">ParseDataType::Enum</span> { <span class="ident">variants</span> } =&gt; <span class="ident">gen_enum</span>(<span class="ident">name</span>, <span class="ident">doc</span>, <span class="ident">variants</span>),
-			<span class="ident">ParseDataType::Alternatives</span> { <span class="ident">alts</span> } =&gt; <span class="ident">gen_alt</span>(<span class="ident">name</span>, <span class="ident">doc</span>, <span class="ident">alts</span>),
-			<span class="ident">ParseDataType::Unit</span> =&gt; <span class="ident">gen_unit</span>(<span class="ident">name</span>, <span class="ident">doc</span>)
+<span class="kw">impl </span>ParseData {
+	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>gen_visit_impl(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; TokenStream {
+		<span class="kw">let </span>name = <span class="self">self</span>.name.as_ref();
+		<span class="kw">let </span>doc = <span class="kw-2">&amp;</span><span class="self">self</span>.doc;
+		<span class="kw">match </span><span class="kw-2">&amp;</span><span class="self">self</span>.ty {
+			ParseDataType::Struct {
+				fields,
+				deny_unknown_fields
+			} =&gt; gen_struct(name, doc, fields, <span class="kw-2">*</span>deny_unknown_fields),
+			ParseDataType::Enum { variants } =&gt; gen_enum(name, doc, variants),
+			ParseDataType::Alternatives { alts } =&gt; gen_alt(name, doc, alts),
+			ParseDataType::Unit =&gt; gen_unit(name, doc)
 		}
 	}
 }
 
-<span class="kw">impl</span> <span class="ident">TypeOrInline</span> {
-	<span class="kw">fn</span> <span class="ident">visit_type_fn</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">TokenStream</span> {
-		<span class="kw">match</span> <span class="self">self</span> {
-			<span class="ident"><span class="self">Self</span>::Type</span>(<span class="ident">ty</span>) =&gt; {
-				<span class="macro">quote_spanned!</span>(<span class="ident">ty</span>.<span class="ident">span</span>() =&gt; <span class="op">&lt;</span>#<span class="ident">ty</span> <span class="kw">as</span> <span class="ident">::openapi_type::OpenapiType</span><span class="op">&gt;</span><span class="ident">::visit_type</span>)
+<span class="kw">impl </span>TypeOrInline {
+	<span class="kw">fn </span>visit_type_fn(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; TokenStream {
+		<span class="kw">match </span><span class="self">self </span>{
+			<span class="self">Self</span>::Type(ty) =&gt; {
+				<span class="macro">quote_spanned!</span>(ty.span() =&gt; &lt;#ty <span class="kw">as </span>::openapi_type::OpenapiType&gt;::visit_type)
 			},
-			<span class="ident"><span class="self">Self</span>::Inline</span>(<span class="ident">data</span>) =&gt; {
-				<span class="kw">let</span> <span class="ident">visit_impl</span> <span class="op">=</span> <span class="ident">data</span>.<span class="ident">gen_visit_impl</span>();
-				<span class="macro">quote!</span> {
+			<span class="self">Self</span>::Inline(data) =&gt; {
+				<span class="kw">let </span>visit_impl = data.gen_visit_impl();
+				<span class="macro">quote! </span>{
 					{
-						<span class="kw">fn</span> <span class="ident">visit_type</span><span class="op">&lt;</span><span class="ident">__openapi_type_V</span><span class="op">&gt;</span>(<span class="ident">visitor</span>: <span class="kw-2">&amp;mut</span> <span class="ident">__openapi_type_V</span>)
-						<span class="kw">where</span>
-							<span class="ident">__openapi_type_V</span>: <span class="ident">::openapi_type::Visitor</span>
+						<span class="kw">fn </span>visit_type&lt;__openapi_type_V&gt;(visitor: <span class="kw-2">&amp;mut </span>__openapi_type_V)
+						<span class="kw">where
+							</span>__openapi_type_V: ::openapi_type::Visitor
 						{
-							#<span class="ident">visit_impl</span>
+							#visit_impl
 						}
-						<span class="ident">visit_type</span>
+						visit_type
 					}
 				}
 			}
@@ -259,154 +259,154 @@
 	}
 }
 
-<span class="kw">fn</span> <span class="ident">gen_struct</span>(<span class="ident">name</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">LitStr</span><span class="op">&gt;</span>, <span class="ident">doc</span>: <span class="kw-2">&amp;</span>[<span class="ident">String</span>], <span class="ident">fields</span>: <span class="kw-2">&amp;</span>[<span class="ident">ParseDataField</span>], <span class="ident">deny_unknown_fields</span>: <span class="ident">bool</span>) -&gt; <span class="ident">TokenStream</span> {
-	<span class="kw">let</span> <span class="ident">str</span> <span class="op">=</span> <span class="macro">path!</span>(<span class="ident">::core::primitive::str</span>);
-	<span class="kw">let</span> <span class="ident">string</span> <span class="op">=</span> <span class="macro">path!</span>(<span class="ident">::std::string::String</span>);
-	<span class="kw">let</span> <span class="ident">option</span> <span class="op">=</span> <span class="macro">path!</span>(<span class="ident">::core::option::Option</span>);
+<span class="kw">fn </span>gen_struct(name: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>LitStr&gt;, doc: <span class="kw-2">&amp;</span>[String], fields: <span class="kw-2">&amp;</span>[ParseDataField], deny_unknown_fields: bool) -&gt; TokenStream {
+	<span class="kw">let </span>str = <span class="macro">path!</span>(::core::primitive::str);
+	<span class="kw">let </span>string = <span class="macro">path!</span>(::std::string::String);
+	<span class="kw">let </span>option = <span class="macro">path!</span>(::core::option::Option);
 
-	<span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">name</span> {
-		<span class="prelude-val">Some</span>(<span class="ident">name</span>) =&gt; <span class="macro">quote!</span>(#<span class="ident">option::Some</span>(#<span class="ident">name</span>)),
-		<span class="prelude-val">None</span> =&gt; <span class="macro">quote!</span>(#<span class="ident">option::None</span>)
+	<span class="kw">let </span>name = <span class="kw">match </span>name {
+		<span class="prelude-val">Some</span>(name) =&gt; <span class="macro">quote!</span>(#option::Some(#name)),
+		<span class="prelude-val">None </span>=&gt; <span class="macro">quote!</span>(#option::None)
 	};
-	<span class="kw">let</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">gen_doc_option</span>(<span class="ident">doc</span>);
+	<span class="kw">let </span>doc = gen_doc_option(doc);
 
-	<span class="kw">let</span> <span class="ident">fields</span> <span class="op">=</span> <span class="ident">fields</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">f</span><span class="op">|</span> {
-		<span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">f</span>.<span class="ident">name</span>;
-		<span class="kw">let</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">gen_doc_option</span>(<span class="kw-2">&amp;</span><span class="ident">f</span>.<span class="ident">doc</span>);
-		<span class="kw">let</span> <span class="ident">visit</span> <span class="op">=</span> <span class="ident">f</span>.<span class="ident">ty</span>.<span class="ident">visit_type_fn</span>();
+	<span class="kw">let </span>fields = fields.iter().map(|f| {
+		<span class="kw">let </span>name = <span class="kw-2">&amp;</span>f.name;
+		<span class="kw">let </span>doc = gen_doc_option(<span class="kw-2">&amp;</span>f.doc);
+		<span class="kw">let </span>visit = f.ty.visit_type_fn();
 
-		<span class="kw">if</span> <span class="ident">f</span>.<span class="ident">flatten</span> {
+		<span class="kw">if </span>f.flatten {
 			<span class="macro">quote!</span>({
-				<span class="kw">let</span> <span class="ident">visitor</span> <span class="op">=</span> <span class="ident">::openapi_type::ObjectVisitor::visit_flatten_field</span>(<span class="ident">object_visitor</span>);
-				<span class="kw">let</span> <span class="ident">field_visit_type</span> <span class="op">=</span> #<span class="ident">visit</span>;
-				<span class="ident">field_visit_type</span>(<span class="ident">visitor</span>)
+				<span class="kw">let </span>visitor = ::openapi_type::ObjectVisitor::visit_flatten_field(object_visitor);
+				<span class="kw">let </span>field_visit_type = #visit;
+				field_visit_type(visitor)
 			})
-		} <span class="kw">else</span> {
+		} <span class="kw">else </span>{
 			<span class="macro">quote!</span>({
-				<span class="kw">const</span> <span class="ident">FIELD_NAME</span>: <span class="kw-2">&amp;</span>#<span class="ident">str</span> <span class="op">=</span> #<span class="ident">name</span>;
-				<span class="kw">const</span> <span class="ident">FIELD_DOC</span>: #<span class="ident">option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> #<span class="ident">str</span><span class="op">&gt;</span> <span class="op">=</span> #<span class="ident">doc</span>;
+				<span class="kw">const </span>FIELD_NAME: <span class="kw-2">&amp;</span>#str = #name;
+				<span class="kw">const </span>FIELD_DOC: #option&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>#str&gt; = #doc;
 
-				<span class="kw">let</span> <span class="ident">field_visit_type</span> <span class="op">=</span> #<span class="ident">visit</span>;
-				<span class="kw">let</span> <span class="ident">field_visitor</span> <span class="op">=</span> <span class="ident">::openapi_type::ObjectVisitor::visit_field</span>(
-					<span class="ident">object_visitor</span>,
-					#<span class="ident">string::from</span>(<span class="ident">FIELD_NAME</span>),
-					<span class="ident">FIELD_DOC</span>.<span class="ident">map</span>(#<span class="ident">string::from</span>)
+				<span class="kw">let </span>field_visit_type = #visit;
+				<span class="kw">let </span>field_visitor = ::openapi_type::ObjectVisitor::visit_field(
+					object_visitor,
+					#string::from(FIELD_NAME),
+					FIELD_DOC.map(#string::from)
 				);
-				<span class="ident">field_visit_type</span>(<span class="ident">field_visitor</span>);
+				field_visit_type(field_visitor);
 			})
 		}
 	});
 
-	<span class="macro">quote!</span> {
-		<span class="kw">const</span> <span class="ident">OBJECT_NAME</span>: #<span class="ident">option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> #<span class="ident">str</span><span class="op">&gt;</span> <span class="op">=</span> #<span class="ident">name</span>;
-		<span class="kw">const</span> <span class="ident">OBJECT_DOC</span>: #<span class="ident">option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> #<span class="ident">str</span><span class="op">&gt;</span> <span class="op">=</span> #<span class="ident">doc</span>;
+	<span class="macro">quote! </span>{
+		<span class="kw">const </span>OBJECT_NAME: #option&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>#str&gt; = #name;
+		<span class="kw">const </span>OBJECT_DOC: #option&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>#str&gt; = #doc;
 
-		<span class="kw">let</span> <span class="ident">object_visitor</span> <span class="op">=</span> <span class="ident">::openapi_type::Visitor::visit_object</span>(<span class="ident">visitor</span>);
+		<span class="kw">let </span>object_visitor = ::openapi_type::Visitor::visit_object(visitor);
 
-		<span class="kw">if</span> <span class="kw">let</span> #<span class="ident">option::Some</span>(<span class="ident">object_name</span>) <span class="op">=</span> <span class="ident">OBJECT_NAME</span> {
-			<span class="ident">::openapi_type::ObjectVisitor::visit_name</span>(
-				<span class="ident">object_visitor</span>,
-				#<span class="ident">string::from</span>(<span class="ident">object_name</span>)
+		<span class="kw">if let </span>#option::Some(object_name) = OBJECT_NAME {
+			::openapi_type::ObjectVisitor::visit_name(
+				object_visitor,
+				#string::from(object_name)
 			);
 		}
-		<span class="kw">if</span> <span class="kw">let</span> #<span class="ident">option::Some</span>(<span class="ident">object_doc</span>) <span class="op">=</span> <span class="ident">OBJECT_DOC</span> {
-			<span class="ident">::openapi_type::ObjectVisitor::visit_description</span>(
-				<span class="ident">object_visitor</span>,
-				#<span class="ident">string::from</span>(<span class="ident">object_doc</span>)
+		<span class="kw">if let </span>#option::Some(object_doc) = OBJECT_DOC {
+			::openapi_type::ObjectVisitor::visit_description(
+				object_visitor,
+				#string::from(object_doc)
 			);
 		}
-		<span class="kw">if</span> #<span class="ident">deny_unknown_fields</span> {
-			<span class="ident">::openapi_type::ObjectVisitor::visit_deny_additional</span>(<span class="ident">object_visitor</span>);
+		<span class="kw">if </span>#deny_unknown_fields {
+			::openapi_type::ObjectVisitor::visit_deny_additional(object_visitor);
 		}
 
-		#(#<span class="ident">fields</span>)<span class="op">*</span>
+		#(#fields)*
 	}
 }
 
-<span class="kw">fn</span> <span class="ident">gen_enum</span>(<span class="ident">name</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">LitStr</span><span class="op">&gt;</span>, <span class="ident">doc</span>: <span class="kw-2">&amp;</span>[<span class="ident">String</span>], <span class="ident">variants</span>: <span class="kw-2">&amp;</span>[<span class="ident">LitStr</span>]) -&gt; <span class="ident">TokenStream</span> {
-	<span class="kw">let</span> <span class="ident">str</span> <span class="op">=</span> <span class="macro">path!</span>(<span class="ident">::core::primitive::str</span>);
-	<span class="kw">let</span> <span class="ident">string</span> <span class="op">=</span> <span class="macro">path!</span>(<span class="ident">::std::string::String</span>);
-	<span class="kw">let</span> <span class="ident">option</span> <span class="op">=</span> <span class="macro">path!</span>(<span class="ident">::core::option::Option</span>);
+<span class="kw">fn </span>gen_enum(name: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>LitStr&gt;, doc: <span class="kw-2">&amp;</span>[String], variants: <span class="kw-2">&amp;</span>[LitStr]) -&gt; TokenStream {
+	<span class="kw">let </span>str = <span class="macro">path!</span>(::core::primitive::str);
+	<span class="kw">let </span>string = <span class="macro">path!</span>(::std::string::String);
+	<span class="kw">let </span>option = <span class="macro">path!</span>(::core::option::Option);
 
-	<span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">name</span> {
-		<span class="prelude-val">Some</span>(<span class="ident">name</span>) =&gt; <span class="macro">quote!</span>(#<span class="ident">option::Some</span>(#<span class="ident">name</span>)),
-		<span class="prelude-val">None</span> =&gt; <span class="macro">quote!</span>(#<span class="ident">option::None</span>)
+	<span class="kw">let </span>name = <span class="kw">match </span>name {
+		<span class="prelude-val">Some</span>(name) =&gt; <span class="macro">quote!</span>(#option::Some(#name)),
+		<span class="prelude-val">None </span>=&gt; <span class="macro">quote!</span>(#option::None)
 	};
-	<span class="kw">let</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">gen_doc_option</span>(<span class="ident">doc</span>);
+	<span class="kw">let </span>doc = gen_doc_option(doc);
 
-	<span class="macro">quote!</span> {
-		<span class="kw">const</span> <span class="ident">ENUM_NAME</span>: #<span class="ident">option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> #<span class="ident">str</span><span class="op">&gt;</span> <span class="op">=</span> #<span class="ident">name</span>;
-		<span class="kw">const</span> <span class="ident">ENUM_DOC</span>: #<span class="ident">option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> #<span class="ident">str</span><span class="op">&gt;</span> <span class="op">=</span> #<span class="ident">doc</span>;
+	<span class="macro">quote! </span>{
+		<span class="kw">const </span>ENUM_NAME: #option&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>#str&gt; = #name;
+		<span class="kw">const </span>ENUM_DOC: #option&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>#str&gt; = #doc;
 
-		<span class="ident">::openapi_type::Visitor::visit_enum</span>(
-			<span class="ident">visitor</span>,
-			<span class="ident">ENUM_NAME</span>.<span class="ident">map</span>(#<span class="ident">string::from</span>),
-			<span class="ident">ENUM_DOC</span>.<span class="ident">map</span>(#<span class="ident">string::from</span>),
-			[#(#<span class="ident">string::from</span>(#<span class="ident">variants</span>)),<span class="kw-2">*</span>]
+		::openapi_type::Visitor::visit_enum(
+			visitor,
+			ENUM_NAME.map(#string::from),
+			ENUM_DOC.map(#string::from),
+			[#(#string::from(#variants)),<span class="kw-2">*</span>]
 		);
 	}
 }
 
-<span class="kw">fn</span> <span class="ident">gen_alt</span>(<span class="ident">name</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">LitStr</span><span class="op">&gt;</span>, <span class="ident">doc</span>: <span class="kw-2">&amp;</span>[<span class="ident">String</span>], <span class="ident">alt</span>: <span class="kw-2">&amp;</span>[<span class="ident">TypeOrInline</span>]) -&gt; <span class="ident">TokenStream</span> {
-	<span class="kw">let</span> <span class="ident">str</span> <span class="op">=</span> <span class="macro">path!</span>(<span class="ident">::core::primitive::str</span>);
-	<span class="kw">let</span> <span class="ident">string</span> <span class="op">=</span> <span class="macro">path!</span>(<span class="ident">::std::string::String</span>);
-	<span class="kw">let</span> <span class="ident">option</span> <span class="op">=</span> <span class="macro">path!</span>(<span class="ident">::core::option::Option</span>);
+<span class="kw">fn </span>gen_alt(name: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>LitStr&gt;, doc: <span class="kw-2">&amp;</span>[String], alt: <span class="kw-2">&amp;</span>[TypeOrInline]) -&gt; TokenStream {
+	<span class="kw">let </span>str = <span class="macro">path!</span>(::core::primitive::str);
+	<span class="kw">let </span>string = <span class="macro">path!</span>(::std::string::String);
+	<span class="kw">let </span>option = <span class="macro">path!</span>(::core::option::Option);
 
-	<span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">name</span> {
-		<span class="prelude-val">Some</span>(<span class="ident">name</span>) =&gt; <span class="macro">quote!</span>(#<span class="ident">option::Some</span>(#<span class="ident">name</span>)),
-		<span class="prelude-val">None</span> =&gt; <span class="macro">quote!</span>(#<span class="ident">option::None</span>)
+	<span class="kw">let </span>name = <span class="kw">match </span>name {
+		<span class="prelude-val">Some</span>(name) =&gt; <span class="macro">quote!</span>(#option::Some(#name)),
+		<span class="prelude-val">None </span>=&gt; <span class="macro">quote!</span>(#option::None)
 	};
-	<span class="kw">let</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">gen_doc_option</span>(<span class="ident">doc</span>);
+	<span class="kw">let </span>doc = gen_doc_option(doc);
 
-	<span class="kw">let</span> <span class="ident">fns</span> <span class="op">=</span> <span class="ident">alt</span>.<span class="ident">into_iter</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">alt</span><span class="op">|</span> <span class="ident">alt</span>.<span class="ident">visit_type_fn</span>());
-	<span class="macro">quote!</span> {
-		<span class="kw">const</span> <span class="ident">OBJECT_NAME</span>: #<span class="ident">option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> #<span class="ident">str</span><span class="op">&gt;</span> <span class="op">=</span> #<span class="ident">name</span>;
-		<span class="kw">const</span> <span class="ident">OBJECT_DOC</span>: #<span class="ident">option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> #<span class="ident">str</span><span class="op">&gt;</span> <span class="op">=</span> #<span class="ident">doc</span>;
+	<span class="kw">let </span>fns = alt.into_iter().map(|alt| alt.visit_type_fn());
+	<span class="macro">quote! </span>{
+		<span class="kw">const </span>OBJECT_NAME: #option&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>#str&gt; = #name;
+		<span class="kw">const </span>OBJECT_DOC: #option&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>#str&gt; = #doc;
 
-		<span class="kw">let</span> <span class="ident">alt_visitor</span> <span class="op">=</span> <span class="ident">::openapi_type::Visitor::visit_alternatives</span>(<span class="ident">visitor</span>);
+		<span class="kw">let </span>alt_visitor = ::openapi_type::Visitor::visit_alternatives(visitor);
 
-		<span class="kw">if</span> <span class="kw">let</span> #<span class="ident">option::Some</span>(<span class="ident">object_name</span>) <span class="op">=</span> <span class="ident">OBJECT_NAME</span> {
-			<span class="ident">::openapi_type::AlternativesVisitor::visit_name</span>(
-				<span class="ident">alt_visitor</span>,
-				#<span class="ident">string::from</span>(<span class="ident">object_name</span>)
+		<span class="kw">if let </span>#option::Some(object_name) = OBJECT_NAME {
+			::openapi_type::AlternativesVisitor::visit_name(
+				alt_visitor,
+				#string::from(object_name)
 			);
 		}
-		<span class="kw">if</span> <span class="kw">let</span> #<span class="ident">option::Some</span>(<span class="ident">object_doc</span>) <span class="op">=</span> <span class="ident">OBJECT_DOC</span> {
-			<span class="ident">::openapi_type::AlternativesVisitor::visit_description</span>(
-				<span class="ident">alt_visitor</span>,
-				#<span class="ident">string::from</span>(<span class="ident">object_doc</span>)
+		<span class="kw">if let </span>#option::Some(object_doc) = OBJECT_DOC {
+			::openapi_type::AlternativesVisitor::visit_description(
+				alt_visitor,
+				#string::from(object_doc)
 			);
 		}
 
 		#({
-			<span class="kw">let</span> <span class="ident">visitor</span> <span class="op">=</span> <span class="ident">::openapi_type::AlternativesVisitor::visit_alternative</span>(<span class="ident">alt_visitor</span>);
-			<span class="kw">let</span> <span class="ident">visit_type_fn</span> <span class="op">=</span> #<span class="ident">fns</span>;
-			<span class="ident">visit_type_fn</span>(<span class="ident">visitor</span>);
-		})<span class="op">*</span>
+			<span class="kw">let </span>visitor = ::openapi_type::AlternativesVisitor::visit_alternative(alt_visitor);
+			<span class="kw">let </span>visit_type_fn = #fns;
+			visit_type_fn(visitor);
+		})*
 	}
 }
 
-<span class="kw">fn</span> <span class="ident">gen_unit</span>(<span class="ident">name</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">LitStr</span><span class="op">&gt;</span>, <span class="ident">doc</span>: <span class="kw-2">&amp;</span>[<span class="ident">String</span>]) -&gt; <span class="ident">TokenStream</span> {
-	<span class="kw">let</span> <span class="ident">str</span> <span class="op">=</span> <span class="macro">path!</span>(<span class="ident">::core::primitive::str</span>);
-	<span class="kw">let</span> <span class="ident">string</span> <span class="op">=</span> <span class="macro">path!</span>(<span class="ident">::std::string::String</span>);
-	<span class="kw">let</span> <span class="ident">option</span> <span class="op">=</span> <span class="macro">path!</span>(<span class="ident">::core::option::Option</span>);
+<span class="kw">fn </span>gen_unit(name: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>LitStr&gt;, doc: <span class="kw-2">&amp;</span>[String]) -&gt; TokenStream {
+	<span class="kw">let </span>str = <span class="macro">path!</span>(::core::primitive::str);
+	<span class="kw">let </span>string = <span class="macro">path!</span>(::std::string::String);
+	<span class="kw">let </span>option = <span class="macro">path!</span>(::core::option::Option);
 
-	<span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">name</span> {
-		<span class="prelude-val">Some</span>(<span class="ident">name</span>) =&gt; <span class="macro">quote!</span>(#<span class="ident">option::Some</span>(#<span class="ident">name</span>)),
-		<span class="prelude-val">None</span> =&gt; <span class="macro">quote!</span>(#<span class="ident">option::None</span>)
+	<span class="kw">let </span>name = <span class="kw">match </span>name {
+		<span class="prelude-val">Some</span>(name) =&gt; <span class="macro">quote!</span>(#option::Some(#name)),
+		<span class="prelude-val">None </span>=&gt; <span class="macro">quote!</span>(#option::None)
 	};
-	<span class="kw">let</span> <span class="ident">doc</span> <span class="op">=</span> <span class="ident">gen_doc_option</span>(<span class="ident">doc</span>);
+	<span class="kw">let </span>doc = gen_doc_option(doc);
 
-	<span class="macro">quote!</span> {
-		<span class="kw">const</span> <span class="ident">OBJECT_NAME</span>: #<span class="ident">option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> #<span class="ident">str</span><span class="op">&gt;</span> <span class="op">=</span> #<span class="ident">name</span>;
-		<span class="kw">const</span> <span class="ident">OBJECT_DOC</span>: #<span class="ident">option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> #<span class="ident">str</span><span class="op">&gt;</span> <span class="op">=</span> #<span class="ident">doc</span>;
+	<span class="macro">quote! </span>{
+		<span class="kw">const </span>OBJECT_NAME: #option&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>#str&gt; = #name;
+		<span class="kw">const </span>OBJECT_DOC: #option&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>#str&gt; = #doc;
 
-		<span class="kw">let</span> <span class="ident">option_visitor</span> <span class="op">=</span> <span class="ident">::openapi_type::Visitor::visit_unit_struct</span>(
-			<span class="ident">visitor</span>,
-			<span class="ident">OBJECT_NAME</span>.<span class="ident">map</span>(#<span class="ident">string::from</span>),
-			<span class="ident">OBJECT_DOC</span>.<span class="ident">map</span>(#<span class="ident">string::from</span>)
+		<span class="kw">let </span>option_visitor = ::openapi_type::Visitor::visit_unit_struct(
+			visitor,
+			OBJECT_NAME.map(#string::from),
+			OBJECT_DOC.map(#string::from)
 		);
 	}
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="openapi_type_derive" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="openapi_type_derive" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>

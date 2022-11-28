@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `derive/src/attrs.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>attrs.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../openapi_type_derive/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../openapi_type_derive/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../openapi_type_derive/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `derive/src/attrs.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>attrs.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../openapi_type_derive/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../openapi_type_derive/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../openapi_type_derive/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -133,140 +133,140 @@
 <span id="133">133</span>
 <span id="134">134</span>
 <span id="135">135</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::util::ExpectLit</span>;
-<span class="kw">use</span> <span class="ident">syn</span>::{<span class="ident">punctuated::Punctuated</span>, <span class="ident">spanned::Spanned</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">Attribute</span>, <span class="ident">LitStr</span>, <span class="ident">Meta</span>, <span class="ident">Token</span>};
+</pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::util::ExpectLit;
+<span class="kw">use </span>syn::{punctuated::Punctuated, spanned::Spanned <span class="kw">as _</span>, Attribute, LitStr, Meta, Token};
 
-<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">parse_doc_attr</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">Attribute</span>) -&gt; <span class="ident">syn::Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">LitStr</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-	<span class="ident">input</span>.<span class="ident">parse_meta</span>().<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">meta</span><span class="op">|</span> {
-		<span class="prelude-val">Ok</span>(<span class="kw">match</span> <span class="ident">meta</span> {
-			<span class="ident">Meta::NameValue</span>(<span class="ident">kv</span>) =&gt; <span class="prelude-val">Some</span>(<span class="ident">kv</span>.<span class="ident">lit</span>.<span class="ident">expect_str</span>()<span class="question-mark">?</span>),
-			<span class="kw">_</span> =&gt; <span class="prelude-val">None</span>
-		})
+<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>parse_doc_attr(input: <span class="kw-2">&amp;</span>Attribute) -&gt; syn::Result&lt;<span class="prelude-ty">Option</span>&lt;LitStr&gt;&gt; {
+	input.parse_meta().and_then(|meta| {
+		<span class="prelude-val">Ok</span>(<span class="kw">match </span>meta {
+			Meta::NameValue(kv) =&gt; <span class="prelude-val">Some</span>(kv.lit.expect_str()<span class="question-mark">?</span>),
+			<span class="kw">_ </span>=&gt; <span class="prelude-val">None
+		</span>})
 	})
 }
 
-<span class="kw">fn</span> <span class="ident">unknown</span>(<span class="ident">meta</span>: <span class="ident">Meta</span>, <span class="ident">error_on_unknown</span>: <span class="ident">bool</span>) -&gt; <span class="ident">syn::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-	<span class="kw">if</span> <span class="ident">error_on_unknown</span> {
-		<span class="prelude-val">Err</span>(<span class="ident">syn::Error::new</span>(
-			<span class="kw">match</span> <span class="ident">meta</span> {
-				<span class="ident">Meta::Path</span>(<span class="ident">path</span>) =&gt; <span class="ident">path</span>.<span class="ident">span</span>(),
-				<span class="ident">Meta::List</span>(<span class="ident">list</span>) =&gt; <span class="ident">list</span>.<span class="ident">span</span>(),
-				<span class="ident">Meta::NameValue</span>(<span class="ident">kv</span>) =&gt; <span class="ident">kv</span>.<span class="ident">path</span>.<span class="ident">span</span>()
+<span class="kw">fn </span>unknown(meta: Meta, error_on_unknown: bool) -&gt; syn::Result&lt;()&gt; {
+	<span class="kw">if </span>error_on_unknown {
+		<span class="prelude-val">Err</span>(syn::Error::new(
+			<span class="kw">match </span>meta {
+				Meta::Path(path) =&gt; path.span(),
+				Meta::List(list) =&gt; list.span(),
+				Meta::NameValue(kv) =&gt; kv.path.span()
 			},
-			<span class="string">&quot;Unexpected token&quot;</span>
-		))
-	} <span class="kw">else</span> {
+			<span class="string">&quot;Unexpected token&quot;
+		</span>))
+	} <span class="kw">else </span>{
 		<span class="prelude-val">Ok</span>(())
 	}
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>)]</span>
-<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">struct</span> <span class="ident">ContainerAttributes</span> {
-	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="ident">doc</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="ident">rename</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">LitStr</span><span class="op">&gt;</span>,
-	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="ident">rename_all</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">LitStr</span><span class="op">&gt;</span>,
-	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="ident">tag</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">LitStr</span><span class="op">&gt;</span>,
-	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="ident">content</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">LitStr</span><span class="op">&gt;</span>,
-	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="ident">untagged</span>: <span class="ident">bool</span>,
-	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="ident">deny_unknown_fields</span>: <span class="ident">bool</span>
+<span class="attribute">#[derive(Default)]
+</span><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">struct </span>ContainerAttributes {
+	<span class="kw">pub</span>(<span class="kw">super</span>) doc: Vec&lt;String&gt;,
+	<span class="kw">pub</span>(<span class="kw">super</span>) rename: <span class="prelude-ty">Option</span>&lt;LitStr&gt;,
+	<span class="kw">pub</span>(<span class="kw">super</span>) rename_all: <span class="prelude-ty">Option</span>&lt;LitStr&gt;,
+	<span class="kw">pub</span>(<span class="kw">super</span>) tag: <span class="prelude-ty">Option</span>&lt;LitStr&gt;,
+	<span class="kw">pub</span>(<span class="kw">super</span>) content: <span class="prelude-ty">Option</span>&lt;LitStr&gt;,
+	<span class="kw">pub</span>(<span class="kw">super</span>) untagged: bool,
+	<span class="kw">pub</span>(<span class="kw">super</span>) deny_unknown_fields: bool
 }
 
-<span class="kw">impl</span> <span class="ident">ContainerAttributes</span> {
-	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">parse_from</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">Attribute</span>, <span class="ident">error_on_unknown</span>: <span class="ident">bool</span>) -&gt; <span class="ident">syn::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="ident">tokens</span>: <span class="ident">Punctuated</span><span class="op">&lt;</span><span class="ident">Meta</span>, <span class="macro">Token!</span>[,]<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">parse_args_with</span>(<span class="ident">Punctuated::parse_terminated</span>)<span class="question-mark">?</span>;
-		<span class="kw">for</span> <span class="ident">token</span> <span class="kw">in</span> <span class="ident">tokens</span> {
-			<span class="kw">match</span> <span class="ident">token</span> {
-				<span class="ident">Meta::NameValue</span>(<span class="ident">kv</span>) <span class="kw">if</span> <span class="ident">kv</span>.<span class="ident">path</span>.<span class="ident">is_ident</span>(<span class="string">&quot;rename&quot;</span>) =&gt; {
-					<span class="self">self</span>.<span class="ident">rename</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">kv</span>.<span class="ident">lit</span>.<span class="ident">expect_str</span>()<span class="question-mark">?</span>);
+<span class="kw">impl </span>ContainerAttributes {
+	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>parse_from(<span class="kw-2">&amp;mut </span><span class="self">self</span>, input: <span class="kw-2">&amp;</span>Attribute, error_on_unknown: bool) -&gt; syn::Result&lt;()&gt; {
+		<span class="kw">let </span>tokens: Punctuated&lt;Meta, <span class="macro">Token!</span>[,]&gt; = input.parse_args_with(Punctuated::parse_terminated)<span class="question-mark">?</span>;
+		<span class="kw">for </span>token <span class="kw">in </span>tokens {
+			<span class="kw">match </span>token {
+				Meta::NameValue(kv) <span class="kw">if </span>kv.path.is_ident(<span class="string">&quot;rename&quot;</span>) =&gt; {
+					<span class="self">self</span>.rename = <span class="prelude-val">Some</span>(kv.lit.expect_str()<span class="question-mark">?</span>);
 				},
 
-				<span class="ident">Meta::NameValue</span>(<span class="ident">kv</span>) <span class="kw">if</span> <span class="ident">kv</span>.<span class="ident">path</span>.<span class="ident">is_ident</span>(<span class="string">&quot;rename_all&quot;</span>) =&gt; {
-					<span class="self">self</span>.<span class="ident">rename_all</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">kv</span>.<span class="ident">lit</span>.<span class="ident">expect_str</span>()<span class="question-mark">?</span>);
+				Meta::NameValue(kv) <span class="kw">if </span>kv.path.is_ident(<span class="string">&quot;rename_all&quot;</span>) =&gt; {
+					<span class="self">self</span>.rename_all = <span class="prelude-val">Some</span>(kv.lit.expect_str()<span class="question-mark">?</span>);
 				},
 
-				<span class="ident">Meta::NameValue</span>(<span class="ident">kv</span>) <span class="kw">if</span> <span class="ident">kv</span>.<span class="ident">path</span>.<span class="ident">is_ident</span>(<span class="string">&quot;tag&quot;</span>) =&gt; {
-					<span class="self">self</span>.<span class="ident">tag</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">kv</span>.<span class="ident">lit</span>.<span class="ident">expect_str</span>()<span class="question-mark">?</span>);
+				Meta::NameValue(kv) <span class="kw">if </span>kv.path.is_ident(<span class="string">&quot;tag&quot;</span>) =&gt; {
+					<span class="self">self</span>.tag = <span class="prelude-val">Some</span>(kv.lit.expect_str()<span class="question-mark">?</span>);
 				},
 
-				<span class="ident">Meta::NameValue</span>(<span class="ident">kv</span>) <span class="kw">if</span> <span class="ident">kv</span>.<span class="ident">path</span>.<span class="ident">is_ident</span>(<span class="string">&quot;content&quot;</span>) =&gt; {
-					<span class="self">self</span>.<span class="ident">content</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">kv</span>.<span class="ident">lit</span>.<span class="ident">expect_str</span>()<span class="question-mark">?</span>);
+				Meta::NameValue(kv) <span class="kw">if </span>kv.path.is_ident(<span class="string">&quot;content&quot;</span>) =&gt; {
+					<span class="self">self</span>.content = <span class="prelude-val">Some</span>(kv.lit.expect_str()<span class="question-mark">?</span>);
 				},
 
-				<span class="ident">Meta::Path</span>(<span class="ident">path</span>) <span class="kw">if</span> <span class="ident">path</span>.<span class="ident">is_ident</span>(<span class="string">&quot;untagged&quot;</span>) =&gt; {
-					<span class="self">self</span>.<span class="ident">untagged</span> <span class="op">=</span> <span class="bool-val">true</span>;
+				Meta::Path(path) <span class="kw">if </span>path.is_ident(<span class="string">&quot;untagged&quot;</span>) =&gt; {
+					<span class="self">self</span>.untagged = <span class="bool-val">true</span>;
 				},
 
-				<span class="ident">Meta::Path</span>(<span class="ident">path</span>) <span class="kw">if</span> <span class="ident">path</span>.<span class="ident">is_ident</span>(<span class="string">&quot;deny_unknown_fields&quot;</span>) =&gt; {
-					<span class="self">self</span>.<span class="ident">deny_unknown_fields</span> <span class="op">=</span> <span class="bool-val">true</span>;
+				Meta::Path(path) <span class="kw">if </span>path.is_ident(<span class="string">&quot;deny_unknown_fields&quot;</span>) =&gt; {
+					<span class="self">self</span>.deny_unknown_fields = <span class="bool-val">true</span>;
 				},
 
-				<span class="ident">meta</span> =&gt; <span class="ident">unknown</span>(<span class="ident">meta</span>, <span class="ident">error_on_unknown</span>)<span class="question-mark">?</span>
-			}
+				meta =&gt; unknown(meta, error_on_unknown)<span class="question-mark">?
+			</span>}
 		}
 		<span class="prelude-val">Ok</span>(())
 	}
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>)]</span>
-<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">struct</span> <span class="ident">FieldAttributes</span> {
-	<span class="doccomment">/// Use a different name for the spec than in Rust code.</span>
-	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="ident">rename</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">LitStr</span><span class="op">&gt;</span>,
-	<span class="doccomment">/// This field can be skipped during either serialization or deserialization.</span>
-	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="ident">nullable</span>: <span class="ident">bool</span>,
-	<span class="doccomment">/// This field&#39;s fields will be flattened into this field.</span>
-	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="ident">flatten</span>: <span class="ident">bool</span>,
-	<span class="doccomment">/// This field will always be skipped during serialization.</span>
-	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="ident">skip_serializing</span>: <span class="ident">bool</span>,
-	<span class="doccomment">/// This field will always be skipped during deserialization.</span>
-	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="ident">skip_deserializing</span>: <span class="ident">bool</span>
+<span class="attribute">#[derive(Default)]
+</span><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">struct </span>FieldAttributes {
+	<span class="doccomment">/// Use a different name for the spec than in Rust code.
+	</span><span class="kw">pub</span>(<span class="kw">super</span>) rename: <span class="prelude-ty">Option</span>&lt;LitStr&gt;,
+	<span class="doccomment">/// This field can be skipped during either serialization or deserialization.
+	</span><span class="kw">pub</span>(<span class="kw">super</span>) nullable: bool,
+	<span class="doccomment">/// This field&#39;s fields will be flattened into this field.
+	</span><span class="kw">pub</span>(<span class="kw">super</span>) flatten: bool,
+	<span class="doccomment">/// This field will always be skipped during serialization.
+	</span><span class="kw">pub</span>(<span class="kw">super</span>) skip_serializing: bool,
+	<span class="doccomment">/// This field will always be skipped during deserialization.
+	</span><span class="kw">pub</span>(<span class="kw">super</span>) skip_deserializing: bool
 }
 
-<span class="kw">impl</span> <span class="ident">FieldAttributes</span> {
-	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">parse_from</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">Attribute</span>, <span class="ident">error_on_unknown</span>: <span class="ident">bool</span>) -&gt; <span class="ident">syn::Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="ident">tokens</span>: <span class="ident">Punctuated</span><span class="op">&lt;</span><span class="ident">Meta</span>, <span class="macro">Token!</span>[,]<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">parse_args_with</span>(<span class="ident">Punctuated::parse_terminated</span>)<span class="question-mark">?</span>;
-		<span class="kw">for</span> <span class="ident">token</span> <span class="kw">in</span> <span class="ident">tokens</span> {
-			<span class="kw">match</span> <span class="ident">token</span> {
-				<span class="ident">Meta::NameValue</span>(<span class="ident">kv</span>) <span class="kw">if</span> <span class="ident">kv</span>.<span class="ident">path</span>.<span class="ident">is_ident</span>(<span class="string">&quot;rename&quot;</span>) =&gt; {
-					<span class="self">self</span>.<span class="ident">rename</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">kv</span>.<span class="ident">lit</span>.<span class="ident">expect_str</span>()<span class="question-mark">?</span>);
+<span class="kw">impl </span>FieldAttributes {
+	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>parse_from(<span class="kw-2">&amp;mut </span><span class="self">self</span>, input: <span class="kw-2">&amp;</span>Attribute, error_on_unknown: bool) -&gt; syn::Result&lt;()&gt; {
+		<span class="kw">let </span>tokens: Punctuated&lt;Meta, <span class="macro">Token!</span>[,]&gt; = input.parse_args_with(Punctuated::parse_terminated)<span class="question-mark">?</span>;
+		<span class="kw">for </span>token <span class="kw">in </span>tokens {
+			<span class="kw">match </span>token {
+				Meta::NameValue(kv) <span class="kw">if </span>kv.path.is_ident(<span class="string">&quot;rename&quot;</span>) =&gt; {
+					<span class="self">self</span>.rename = <span class="prelude-val">Some</span>(kv.lit.expect_str()<span class="question-mark">?</span>);
 				},
 
-				<span class="ident">Meta::Path</span>(<span class="ident">path</span>) <span class="kw">if</span> <span class="ident">path</span>.<span class="ident">is_ident</span>(<span class="string">&quot;default&quot;</span>) =&gt; {
-					<span class="self">self</span>.<span class="ident">nullable</span> <span class="op">=</span> <span class="bool-val">true</span>;
+				Meta::Path(path) <span class="kw">if </span>path.is_ident(<span class="string">&quot;default&quot;</span>) =&gt; {
+					<span class="self">self</span>.nullable = <span class="bool-val">true</span>;
 				},
 
-				<span class="ident">Meta::NameValue</span>(<span class="ident">kv</span>) <span class="kw">if</span> <span class="ident">kv</span>.<span class="ident">path</span>.<span class="ident">is_ident</span>(<span class="string">&quot;default&quot;</span>) =&gt; {
-					<span class="self">self</span>.<span class="ident">nullable</span> <span class="op">=</span> <span class="bool-val">true</span>;
+				Meta::NameValue(kv) <span class="kw">if </span>kv.path.is_ident(<span class="string">&quot;default&quot;</span>) =&gt; {
+					<span class="self">self</span>.nullable = <span class="bool-val">true</span>;
 				},
 
-				<span class="ident">Meta::Path</span>(<span class="ident">path</span>) <span class="kw">if</span> <span class="ident">path</span>.<span class="ident">is_ident</span>(<span class="string">&quot;flatten&quot;</span>) =&gt; {
-					<span class="self">self</span>.<span class="ident">flatten</span> <span class="op">=</span> <span class="bool-val">true</span>;
+				Meta::Path(path) <span class="kw">if </span>path.is_ident(<span class="string">&quot;flatten&quot;</span>) =&gt; {
+					<span class="self">self</span>.flatten = <span class="bool-val">true</span>;
 				},
 
-				<span class="ident">Meta::Path</span>(<span class="ident">path</span>) <span class="kw">if</span> <span class="ident">path</span>.<span class="ident">is_ident</span>(<span class="string">&quot;skip&quot;</span>) =&gt; {
-					<span class="self">self</span>.<span class="ident">nullable</span> <span class="op">=</span> <span class="bool-val">true</span>;
-					<span class="self">self</span>.<span class="ident">skip_serializing</span> <span class="op">=</span> <span class="bool-val">true</span>;
-					<span class="self">self</span>.<span class="ident">skip_deserializing</span> <span class="op">=</span> <span class="bool-val">true</span>;
+				Meta::Path(path) <span class="kw">if </span>path.is_ident(<span class="string">&quot;skip&quot;</span>) =&gt; {
+					<span class="self">self</span>.nullable = <span class="bool-val">true</span>;
+					<span class="self">self</span>.skip_serializing = <span class="bool-val">true</span>;
+					<span class="self">self</span>.skip_deserializing = <span class="bool-val">true</span>;
 				},
 
-				<span class="ident">Meta::Path</span>(<span class="ident">path</span>) <span class="kw">if</span> <span class="ident">path</span>.<span class="ident">is_ident</span>(<span class="string">&quot;skip_serializing&quot;</span>) =&gt; {
-					<span class="self">self</span>.<span class="ident">nullable</span> <span class="op">=</span> <span class="bool-val">true</span>;
-					<span class="self">self</span>.<span class="ident">skip_serializing</span> <span class="op">=</span> <span class="bool-val">true</span>;
+				Meta::Path(path) <span class="kw">if </span>path.is_ident(<span class="string">&quot;skip_serializing&quot;</span>) =&gt; {
+					<span class="self">self</span>.nullable = <span class="bool-val">true</span>;
+					<span class="self">self</span>.skip_serializing = <span class="bool-val">true</span>;
 				},
 
-				<span class="ident">Meta::Path</span>(<span class="ident">path</span>) <span class="kw">if</span> <span class="ident">path</span>.<span class="ident">is_ident</span>(<span class="string">&quot;skip_deserializing&quot;</span>) =&gt; {
-					<span class="self">self</span>.<span class="ident">nullable</span> <span class="op">=</span> <span class="bool-val">true</span>;
-					<span class="self">self</span>.<span class="ident">skip_deserializing</span> <span class="op">=</span> <span class="bool-val">true</span>;
+				Meta::Path(path) <span class="kw">if </span>path.is_ident(<span class="string">&quot;skip_deserializing&quot;</span>) =&gt; {
+					<span class="self">self</span>.nullable = <span class="bool-val">true</span>;
+					<span class="self">self</span>.skip_deserializing = <span class="bool-val">true</span>;
 				},
 
-				<span class="ident">Meta::NameValue</span>(<span class="ident">kv</span>) <span class="kw">if</span> <span class="ident">kv</span>.<span class="ident">path</span>.<span class="ident">is_ident</span>(<span class="string">&quot;skip_serializing_if&quot;</span>) =&gt; {
-					<span class="self">self</span>.<span class="ident">nullable</span> <span class="op">=</span> <span class="bool-val">true</span>;
+				Meta::NameValue(kv) <span class="kw">if </span>kv.path.is_ident(<span class="string">&quot;skip_serializing_if&quot;</span>) =&gt; {
+					<span class="self">self</span>.nullable = <span class="bool-val">true</span>;
 				},
 
-				<span class="ident">meta</span> =&gt; <span class="ident">unknown</span>(<span class="ident">meta</span>, <span class="ident">error_on_unknown</span>)<span class="question-mark">?</span>
-			}
+				meta =&gt; unknown(meta, error_on_unknown)<span class="question-mark">?
+			</span>}
 		}
 		<span class="prelude-val">Ok</span>(())
 	}
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="openapi_type_derive" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="openapi_type_derive" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>

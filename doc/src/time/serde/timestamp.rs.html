@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/time-0.3.16/src/serde/timestamp.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>timestamp.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" href="https://avatars0.githubusercontent.com/u/55999857"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../time/index.html"><div class="logo-container"><img src="https://avatars0.githubusercontent.com/u/55999857" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../time/index.html"><div class="logo-container">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/time-0.3.17/src/serde/timestamp.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>timestamp.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" href="https://avatars0.githubusercontent.com/u/55999857"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../time/index.html"><div class="logo-container"><img src="https://avatars0.githubusercontent.com/u/55999857" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../time/index.html"><div class="logo-container">
                     <img src="https://avatars0.githubusercontent.com/u/55999857" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../time/index.html">
                         <img src="https://avatars0.githubusercontent.com/u/55999857" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
@@ -60,65 +60,65 @@
 <span id="58">58</span>
 <span id="59">59</span>
 <span id="60">60</span>
-</pre><pre class="rust"><code><span class="doccomment">//! Treat an [`OffsetDateTime`] as a [Unix timestamp] for the purposes of serde.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Use this module in combination with serde&#39;s [`#[with]`][with] attribute.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! When deserializing, the offset is assumed to be UTC.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! [Unix timestamp]: https://en.wikipedia.org/wiki/Unix_time</span>
-<span class="doccomment">//! [with]: https://serde.rs/field-attrs.html#with</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Treat an [`OffsetDateTime`] as a [Unix timestamp] for the purposes of serde.
+//!
+//! Use this module in combination with serde&#39;s [`#[with]`][with] attribute.
+//!
+//! When deserializing, the offset is assumed to be UTC.
+//!
+//! [Unix timestamp]: https://en.wikipedia.org/wiki/Unix_time
+//! [with]: https://serde.rs/field-attrs.html#with
 
-<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">de</span>, <span class="ident">Deserialize</span>, <span class="ident">Deserializer</span>, <span class="ident">Serialize</span>, <span class="ident">Serializer</span>};
+</span><span class="kw">use </span>serde::{de, Deserialize, Deserializer, Serialize, Serializer};
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::OffsetDateTime</span>;
+<span class="kw">use </span><span class="kw">crate</span>::OffsetDateTime;
 
-<span class="doccomment">/// Serialize an `OffsetDateTime` as its Unix timestamp</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">serialize</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Serializer</span><span class="op">&gt;</span>(
-    <span class="ident">datetime</span>: <span class="kw-2">&amp;</span><span class="ident">OffsetDateTime</span>,
-    <span class="ident">serializer</span>: <span class="ident">S</span>,
-) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">S::Ok</span>, <span class="ident">S::Error</span><span class="op">&gt;</span> {
-    <span class="ident">datetime</span>.<span class="ident">unix_timestamp</span>().<span class="ident">serialize</span>(<span class="ident">serializer</span>)
+<span class="doccomment">/// Serialize an `OffsetDateTime` as its Unix timestamp
+</span><span class="kw">pub fn </span>serialize&lt;S: Serializer&gt;(
+    datetime: <span class="kw-2">&amp;</span>OffsetDateTime,
+    serializer: S,
+) -&gt; <span class="prelude-ty">Result</span>&lt;S::Ok, S::Error&gt; {
+    datetime.unix_timestamp().serialize(serializer)
 }
 
-<span class="doccomment">/// Deserialize an `OffsetDateTime` from its Unix timestamp</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">D</span>: <span class="ident">Deserializer</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">deserializer</span>: <span class="ident">D</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">OffsetDateTime</span>, <span class="ident">D::Error</span><span class="op">&gt;</span> {
-    <span class="ident">OffsetDateTime::from_unix_timestamp</span>(<span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="ident">::deserialize</span>(<span class="ident">deserializer</span>)<span class="question-mark">?</span>)
-        .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">de::Error::invalid_value</span>(<span class="ident">de::Unexpected::Signed</span>(<span class="ident">err</span>.<span class="ident">value</span>), <span class="kw-2">&amp;</span><span class="ident">err</span>))
+<span class="doccomment">/// Deserialize an `OffsetDateTime` from its Unix timestamp
+</span><span class="kw">pub fn </span>deserialize&lt;<span class="lifetime">&#39;a</span>, D: Deserializer&lt;<span class="lifetime">&#39;a</span>&gt;&gt;(deserializer: D) -&gt; <span class="prelude-ty">Result</span>&lt;OffsetDateTime, D::Error&gt; {
+    OffsetDateTime::from_unix_timestamp(&lt;<span class="kw">_</span>&gt;::deserialize(deserializer)<span class="question-mark">?</span>)
+        .map_err(|err| de::Error::invalid_value(de::Unexpected::Signed(err.value), <span class="kw-2">&amp;</span>err))
 }
 
-<span class="doccomment">/// Treat an `Option&lt;OffsetDateTime&gt;` as a [Unix timestamp] for the purposes of</span>
-<span class="doccomment">/// serde.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Use this module in combination with serde&#39;s [`#[with]`][with] attribute.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// When deserializing, the offset is assumed to be UTC.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// [Unix timestamp]: https://en.wikipedia.org/wiki/Unix_time</span>
-<span class="doccomment">/// [with]: https://serde.rs/field-attrs.html#with</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">option</span> {
-    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::wildcard_imports</span>)]</span>
-    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+<span class="doccomment">/// Treat an `Option&lt;OffsetDateTime&gt;` as a [Unix timestamp] for the purposes of
+/// serde.
+///
+/// Use this module in combination with serde&#39;s [`#[with]`][with] attribute.
+///
+/// When deserializing, the offset is assumed to be UTC.
+///
+/// [Unix timestamp]: https://en.wikipedia.org/wiki/Unix_time
+/// [with]: https://serde.rs/field-attrs.html#with
+</span><span class="kw">pub mod </span>option {
+    <span class="attribute">#[allow(clippy::wildcard_imports)]
+    </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-    <span class="doccomment">/// Serialize an `Option&lt;OffsetDateTime&gt;` as its Unix timestamp</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">serialize</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Serializer</span><span class="op">&gt;</span>(
-        <span class="ident">option</span>: <span class="kw-2">&amp;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">OffsetDateTime</span><span class="op">&gt;</span>,
-        <span class="ident">serializer</span>: <span class="ident">S</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">S::Ok</span>, <span class="ident">S::Error</span><span class="op">&gt;</span> {
-        <span class="ident">option</span>
-            .<span class="ident">map</span>(<span class="ident">OffsetDateTime::unix_timestamp</span>)
-            .<span class="ident">serialize</span>(<span class="ident">serializer</span>)
+    <span class="doccomment">/// Serialize an `Option&lt;OffsetDateTime&gt;` as its Unix timestamp
+    </span><span class="kw">pub fn </span>serialize&lt;S: Serializer&gt;(
+        option: <span class="kw-2">&amp;</span><span class="prelude-ty">Option</span>&lt;OffsetDateTime&gt;,
+        serializer: S,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;S::Ok, S::Error&gt; {
+        option
+            .map(OffsetDateTime::unix_timestamp)
+            .serialize(serializer)
     }
 
-    <span class="doccomment">/// Deserialize an `Option&lt;OffsetDateTime&gt;` from its Unix timestamp</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">D</span>: <span class="ident">Deserializer</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span>(
-        <span class="ident">deserializer</span>: <span class="ident">D</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">OffsetDateTime</span><span class="op">&gt;</span>, <span class="ident">D::Error</span><span class="op">&gt;</span> {
-        <span class="ident">Option::deserialize</span>(<span class="ident">deserializer</span>)<span class="question-mark">?</span>
-            .<span class="ident">map</span>(<span class="ident">OffsetDateTime::from_unix_timestamp</span>)
-            .<span class="ident">transpose</span>()
-            .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">de::Error::invalid_value</span>(<span class="ident">de::Unexpected::Signed</span>(<span class="ident">err</span>.<span class="ident">value</span>), <span class="kw-2">&amp;</span><span class="ident">err</span>))
+    <span class="doccomment">/// Deserialize an `Option&lt;OffsetDateTime&gt;` from its Unix timestamp
+    </span><span class="kw">pub fn </span>deserialize&lt;<span class="lifetime">&#39;a</span>, D: Deserializer&lt;<span class="lifetime">&#39;a</span>&gt;&gt;(
+        deserializer: D,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;OffsetDateTime&gt;, D::Error&gt; {
+        Option::deserialize(deserializer)<span class="question-mark">?
+            </span>.map(OffsetDateTime::from_unix_timestamp)
+            .transpose()
+            .map_err(|err| de::Error::invalid_value(de::Unexpected::Signed(err.value), <span class="kw-2">&amp;</span>err))
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="time" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="time" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>

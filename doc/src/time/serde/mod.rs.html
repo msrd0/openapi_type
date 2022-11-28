@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/time-0.3.16/src/serde/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" href="https://avatars0.githubusercontent.com/u/55999857"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../time/index.html"><div class="logo-container"><img src="https://avatars0.githubusercontent.com/u/55999857" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../time/index.html"><div class="logo-container">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/time-0.3.17/src/serde/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" href="https://avatars0.githubusercontent.com/u/55999857"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../time/index.html"><div class="logo-container"><img src="https://avatars0.githubusercontent.com/u/55999857" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../time/index.html"><div class="logo-container">
                     <img src="https://avatars0.githubusercontent.com/u/55999857" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../time/index.html">
                         <img src="https://avatars0.githubusercontent.com/u/55999857" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
@@ -356,361 +356,399 @@
 <span id="354">354</span>
 <span id="355">355</span>
 <span id="356">356</span>
-</pre><pre class="rust"><code><span class="doccomment">//! Differential formats for serde.</span>
-<span class="comment">// This also includes the serde implementations for all types. This doesn&#39;t need to be externally</span>
-<span class="comment">// documented, though.</span>
+<span id="357">357</span>
+<span id="358">358</span>
+<span id="359">359</span>
+<span id="360">360</span>
+<span id="361">361</span>
+<span id="362">362</span>
+<span id="363">363</span>
+<span id="364">364</span>
+<span id="365">365</span>
+<span id="366">366</span>
+<span id="367">367</span>
+<span id="368">368</span>
+<span id="369">369</span>
+<span id="370">370</span>
+<span id="371">371</span>
+<span id="372">372</span>
+<span id="373">373</span>
+<span id="374">374</span>
+<span id="375">375</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Differential formats for serde.
+</span><span class="comment">// This also includes the serde implementations for all types. This doesn&#39;t need to be externally
+// documented, though.
 
-<span class="comment">// Types with guaranteed stable serde representations. Strings are avoided to allow for optimal</span>
-<span class="comment">// representations in various binary forms.</span>
+// Types with guaranteed stable serde representations. Strings are avoided to allow for optimal
+// representations in various binary forms.
 
-<span class="doccomment">/// Consume the next item in a sequence.</span>
-<span class="macro">macro_rules!</span> <span class="ident">item</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">seq</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">literal</span>) =&gt; {
-        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">seq</span>.<span class="ident">next_element</span>()<span class="question-mark">?</span>
-            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="op">&lt;</span><span class="ident">A::Error</span> <span class="kw">as</span> <span class="ident">serde::de::Error</span><span class="op">&gt;</span><span class="ident">::custom</span>(<span class="macro">concat!</span>(<span class="string">&quot;expected &quot;</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>)))
+</span><span class="doccomment">/// Consume the next item in a sequence.
+</span><span class="macro">macro_rules! </span>item {
+    (<span class="macro-nonterminal">$seq</span>:expr, <span class="macro-nonterminal">$name</span>:literal) =&gt; {
+        <span class="macro-nonterminal">$seq</span>.next_element()<span class="question-mark">?
+            </span>.ok_or_else(|| &lt;A::Error <span class="kw">as </span>serde::de::Error&gt;::custom(<span class="macro">concat!</span>(<span class="string">&quot;expected &quot;</span>, <span class="macro-nonterminal">$name</span>)))
     };
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;formatting&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;parsing&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">iso8601</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;formatting&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;parsing&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">rfc2822</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;formatting&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;parsing&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">rfc3339</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">timestamp</span>;
-<span class="kw">mod</span> <span class="ident">visitor</span>;
+<span class="attribute">#[cfg(any(feature = <span class="string">&quot;formatting&quot;</span>, feature = <span class="string">&quot;parsing&quot;</span>))]
+</span><span class="kw">pub mod </span>iso8601;
+<span class="attribute">#[cfg(any(feature = <span class="string">&quot;formatting&quot;</span>, feature = <span class="string">&quot;parsing&quot;</span>))]
+</span><span class="kw">pub mod </span>rfc2822;
+<span class="attribute">#[cfg(any(feature = <span class="string">&quot;formatting&quot;</span>, feature = <span class="string">&quot;parsing&quot;</span>))]
+</span><span class="kw">pub mod </span>rfc3339;
+<span class="kw">pub mod </span>timestamp;
+<span class="kw">mod </span>visitor;
 
-<span class="kw">use</span> <span class="ident">core::marker::PhantomData</span>;
+<span class="kw">use </span>core::marker::PhantomData;
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde-human-readable&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">serde::ser::Error</span> <span class="kw">as</span> <span class="kw">_</span>;
-<span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Deserializer</span>, <span class="ident">Serialize</span>, <span class="ident">Serializer</span>};
-<span class="doccomment">/// Generate a custom serializer and deserializer from the provided string.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// The syntax accepted by this macro is the same as [`format_description::parse()`], which can</span>
-<span class="doccomment">/// be found in [the book](https://time-rs.github.io/book/api/format-description.html).</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Usage</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// Invoked as `serde::format_description!(mod_name, Date, &quot;&lt;format string&gt;&quot;)`. This puts a</span>
-<span class="doccomment">/// module named `mod_name` in the current scope that can be used to format `Date` structs. A</span>
-<span class="doccomment">/// submodule (`mod_name::option`) is also generated for `Option&lt;Date&gt;`. Both modules are only</span>
-<span class="doccomment">/// visible in the current scope.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// The returned `Option` will contain a deserialized value if present and `None` if the field</span>
-<span class="doccomment">/// is present but the value is `null` (or the equivalent in other formats). To return `None`</span>
-<span class="doccomment">/// when the field is not present, you should use `#[serde(default)]` on the field.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">/// # use time::OffsetDateTime;</span>
-<span class="doccomment">/// # use ::serde::{Serialize, Deserialize};</span>
-<span class="doccomment">/// use time::serde;</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// // Makes a module `mod my_format { ... }`.</span>
-<span class="doccomment">/// serde::format_description!(my_format, OffsetDateTime, &quot;hour=[hour], minute=[minute]&quot;);</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// #[derive(Serialize, Deserialize)]</span>
-<span class="doccomment">/// struct SerializesWithCustom {</span>
-<span class="doccomment">///     #[serde(with = &quot;my_format&quot;)]</span>
-<span class="doccomment">///     dt: OffsetDateTime,</span>
-<span class="doccomment">///     #[serde(with = &quot;my_format::option&quot;)]</span>
-<span class="doccomment">///     maybe_dt: Option&lt;OffsetDateTime&gt;,</span>
-<span class="doccomment">/// }</span>
-<span class="doccomment">/// #</span>
-<span class="doccomment">/// # // otherwise rustdoc tests don&#39;t work because we put a module in `main()`</span>
-<span class="doccomment">/// # fn main() {}</span>
-<span class="doccomment">/// ```</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// [`format_description::parse()`]: crate::format_description::parse()</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;macros&quot;</span>, <span class="ident">any</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;formatting&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;parsing&quot;</span>),))]</span>
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">time_macros::serde_format_description</span> <span class="kw">as</span> <span class="ident">format_description</span>;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;serde-human-readable&quot;</span>)]
+</span><span class="kw">use </span>serde::ser::Error <span class="kw">as _</span>;
+<span class="kw">use </span>serde::{Deserialize, Deserializer, Serialize, Serializer};
+<span class="doccomment">/// Generate a custom serializer and deserializer from the provided string.
+///
+/// The syntax accepted by this macro is the same as [`format_description::parse()`], which can
+/// be found in [the book](https://time-rs.github.io/book/api/format-description.html).
+///
+/// # Usage
+///
+/// Invoked as `serde::format_description!(mod_name, Date, &quot;&lt;format string&gt;&quot;)`. This puts a
+/// module named `mod_name` in the current scope that can be used to format `Date` structs. A
+/// submodule (`mod_name::option`) is also generated for `Option&lt;Date&gt;`. Both modules are only
+/// visible in the current scope.
+///
+/// The returned `Option` will contain a deserialized value if present and `None` if the field
+/// is present but the value is `null` (or the equivalent in other formats). To return `None`
+/// when the field is not present, you should use `#[serde(default)]` on the field.
+///
+/// # Examples
+///
+/// ```rust,no_run
+/// # use time::OffsetDateTime;
+</span><span class="attribute">#[cfg_attr(
+    all(feature = <span class="string">&quot;formatting&quot;</span>, feature = <span class="string">&quot;parsing&quot;</span>),
+    doc = <span class="string">&quot;use ::serde::{Serialize, Deserialize};&quot;
+</span>)]
+#[cfg_attr(
+    all(feature = <span class="string">&quot;formatting&quot;</span>, not(feature = <span class="string">&quot;parsing&quot;</span>)),
+    doc = <span class="string">&quot;use ::serde::Serialize;&quot;
+</span>)]
+#[cfg_attr(
+    all(not(feature = <span class="string">&quot;formatting&quot;</span>), feature = <span class="string">&quot;parsing&quot;</span>),
+    doc = <span class="string">&quot;use ::serde::Deserialize;&quot;
+</span>)]
+</span><span class="doccomment">/// use time::serde;
+///
+/// // Makes a module `mod my_format { ... }`.
+/// serde::format_description!(my_format, OffsetDateTime, &quot;hour=[hour], minute=[minute]&quot;);
+</span><span class="attribute">#[cfg_attr(
+    all(feature = <span class="string">&quot;formatting&quot;</span>, feature = <span class="string">&quot;parsing&quot;</span>),
+    doc = <span class="string">&quot;#[derive(Serialize, Deserialize)]&quot;
+</span>)]
+#[cfg_attr(
+    all(feature = <span class="string">&quot;formatting&quot;</span>, not(feature = <span class="string">&quot;parsing&quot;</span>)),
+    doc = <span class="string">&quot;#[derive(Serialize)]&quot;
+</span>)]
+#[cfg_attr(
+    all(not(feature = <span class="string">&quot;formatting&quot;</span>), feature = <span class="string">&quot;parsing&quot;</span>),
+    doc = <span class="string">&quot;#[derive(Deserialize)]&quot;
+</span>)]
+</span><span class="doccomment">/// # #[allow(dead_code)]
+/// struct SerializesWithCustom {
+///     #[serde(with = &quot;my_format&quot;)]
+///     dt: OffsetDateTime,
+///     #[serde(with = &quot;my_format::option&quot;)]
+///     maybe_dt: Option&lt;OffsetDateTime&gt;,
+/// }
+/// ```
+/// 
+/// [`format_description::parse()`]: crate::format_description::parse()
+</span><span class="attribute">#[cfg(all(feature = <span class="string">&quot;macros&quot;</span>, any(feature = <span class="string">&quot;formatting&quot;</span>, feature = <span class="string">&quot;parsing&quot;</span>),))]
+</span><span class="kw">pub use </span>time_macros::serde_format_description <span class="kw">as </span>format_description;
 
-<span class="kw">use</span> <span class="ident"><span class="self">self</span>::visitor::Visitor</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;parsing&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::format_description</span>::{<span class="ident">modifier</span>, <span class="ident">Component</span>, <span class="ident">FormatItem</span>};
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">Date</span>, <span class="ident">Duration</span>, <span class="ident">Month</span>, <span class="ident">OffsetDateTime</span>, <span class="ident">PrimitiveDateTime</span>, <span class="ident">Time</span>, <span class="ident">UtcOffset</span>, <span class="ident">Weekday</span>};
+<span class="kw">use </span><span class="self">self</span>::visitor::Visitor;
+<span class="attribute">#[cfg(feature = <span class="string">&quot;parsing&quot;</span>)]
+</span><span class="kw">use </span><span class="kw">crate</span>::format_description::{modifier, Component, FormatItem};
+<span class="kw">use crate</span>::{Date, Duration, Month, OffsetDateTime, PrimitiveDateTime, Time, UtcOffset, Weekday};
 
-<span class="comment">// region: Date</span>
-<span class="doccomment">/// The format used when serializing and deserializing a human-readable `Date`.</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;parsing&quot;</span>)]</span>
-<span class="kw">const</span> <span class="ident">DATE_FORMAT</span>: <span class="kw-2">&amp;</span>[<span class="ident">FormatItem</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>] <span class="op">=</span> <span class="kw-2">&amp;</span>[
-    <span class="ident">FormatItem::Component</span>(<span class="ident">Component::Year</span>(<span class="ident">modifier::Year::default</span>())),
-    <span class="ident">FormatItem::Literal</span>(<span class="string">b&quot;-&quot;</span>),
-    <span class="ident">FormatItem::Component</span>(<span class="ident">Component::Month</span>(<span class="ident">modifier::Month::default</span>())),
-    <span class="ident">FormatItem::Literal</span>(<span class="string">b&quot;-&quot;</span>),
-    <span class="ident">FormatItem::Component</span>(<span class="ident">Component::Day</span>(<span class="ident">modifier::Day::default</span>())),
+<span class="comment">// region: Date
+</span><span class="doccomment">/// The format used when serializing and deserializing a human-readable `Date`.
+</span><span class="attribute">#[cfg(feature = <span class="string">&quot;parsing&quot;</span>)]
+</span><span class="kw">const </span>DATE_FORMAT: <span class="kw-2">&amp;</span>[FormatItem&lt;<span class="lifetime">&#39;_</span>&gt;] = <span class="kw-2">&amp;</span>[
+    FormatItem::Component(Component::Year(modifier::Year::default())),
+    FormatItem::Literal(<span class="string">b&quot;-&quot;</span>),
+    FormatItem::Component(Component::Month(modifier::Month::default())),
+    FormatItem::Literal(<span class="string">b&quot;-&quot;</span>),
+    FormatItem::Component(Component::Day(modifier::Day::default())),
 ];
 
-<span class="kw">impl</span> <span class="ident">Serialize</span> <span class="kw">for</span> <span class="ident">Date</span> {
-    <span class="kw">fn</span> <span class="ident">serialize</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Serializer</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">serializer</span>: <span class="ident">S</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">S::Ok</span>, <span class="ident">S::Error</span><span class="op">&gt;</span> {
-        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde-human-readable&quot;</span>)]</span>
-        <span class="kw">if</span> <span class="ident">serializer</span>.<span class="ident">is_human_readable</span>() {
-            <span class="kw">return</span> <span class="ident">serializer</span>.<span class="ident">serialize_str</span>(<span class="kw-2">&amp;</span><span class="kw">match</span> <span class="self">self</span>.<span class="ident">format</span>(<span class="kw-2">&amp;</span><span class="ident">DATE_FORMAT</span>) {
-                <span class="prelude-val">Ok</span>(<span class="ident">s</span>) =&gt; <span class="ident">s</span>,
-                <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">S::Error::custom</span>(<span class="string">&quot;failed formatting `Date`&quot;</span>)),
+<span class="kw">impl </span>Serialize <span class="kw">for </span>Date {
+    <span class="kw">fn </span>serialize&lt;S: Serializer&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, serializer: S) -&gt; <span class="prelude-ty">Result</span>&lt;S::Ok, S::Error&gt; {
+        <span class="attribute">#[cfg(feature = <span class="string">&quot;serde-human-readable&quot;</span>)]
+        </span><span class="kw">if </span>serializer.is_human_readable() {
+            <span class="kw">return </span>serializer.serialize_str(<span class="kw-2">&amp;</span><span class="kw">match </span><span class="self">self</span>.format(<span class="kw-2">&amp;</span>DATE_FORMAT) {
+                <span class="prelude-val">Ok</span>(s) =&gt; s,
+                <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(S::Error::custom(<span class="string">&quot;failed formatting `Date`&quot;</span>)),
             });
         }
 
-        (<span class="self">self</span>.<span class="ident">year</span>(), <span class="self">self</span>.<span class="ident">ordinal</span>()).<span class="ident">serialize</span>(<span class="ident">serializer</span>)
+        (<span class="self">self</span>.year(), <span class="self">self</span>.ordinal()).serialize(serializer)
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Date</span> {
-    <span class="kw">fn</span> <span class="ident">deserialize</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">Deserializer</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">deserializer</span>: <span class="ident">D</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">D::Error</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="macro">cfg!</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde-human-readable&quot;</span>) <span class="op">&amp;&amp;</span> <span class="ident">deserializer</span>.<span class="ident">is_human_readable</span>() {
-            <span class="ident">deserializer</span>.<span class="ident">deserialize_any</span>(<span class="ident">Visitor</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>(<span class="ident">PhantomData</span>))
-        } <span class="kw">else</span> {
-            <span class="ident">deserializer</span>.<span class="ident">deserialize_tuple</span>(<span class="number">2</span>, <span class="ident">Visitor</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>(<span class="ident">PhantomData</span>))
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Deserialize&lt;<span class="lifetime">&#39;a</span>&gt; <span class="kw">for </span>Date {
+    <span class="kw">fn </span>deserialize&lt;D: Deserializer&lt;<span class="lifetime">&#39;a</span>&gt;&gt;(deserializer: D) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, D::Error&gt; {
+        <span class="kw">if </span><span class="macro">cfg!</span>(feature = <span class="string">&quot;serde-human-readable&quot;</span>) &amp;&amp; deserializer.is_human_readable() {
+            deserializer.deserialize_any(Visitor::&lt;<span class="self">Self</span>&gt;(PhantomData))
+        } <span class="kw">else </span>{
+            deserializer.deserialize_tuple(<span class="number">2</span>, Visitor::&lt;<span class="self">Self</span>&gt;(PhantomData))
         }
     }
 }
-<span class="comment">// endregion date</span>
+<span class="comment">// endregion date
 
-<span class="comment">// region: Duration</span>
-<span class="kw">impl</span> <span class="ident">Serialize</span> <span class="kw">for</span> <span class="ident">Duration</span> {
-    <span class="kw">fn</span> <span class="ident">serialize</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Serializer</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">serializer</span>: <span class="ident">S</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">S::Ok</span>, <span class="ident">S::Error</span><span class="op">&gt;</span> {
-        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde-human-readable&quot;</span>)]</span>
-        <span class="kw">if</span> <span class="ident">serializer</span>.<span class="ident">is_human_readable</span>() {
-            <span class="kw">return</span> <span class="ident">serializer</span>.<span class="ident">collect_str</span>(<span class="kw-2">&amp;</span><span class="macro">format_args!</span>(
+// region: Duration
+</span><span class="kw">impl </span>Serialize <span class="kw">for </span>Duration {
+    <span class="kw">fn </span>serialize&lt;S: Serializer&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, serializer: S) -&gt; <span class="prelude-ty">Result</span>&lt;S::Ok, S::Error&gt; {
+        <span class="attribute">#[cfg(feature = <span class="string">&quot;serde-human-readable&quot;</span>)]
+        </span><span class="kw">if </span>serializer.is_human_readable() {
+            <span class="kw">return </span>serializer.collect_str(<span class="kw-2">&amp;</span><span class="macro">format_args!</span>(
                 <span class="string">&quot;{}.{:&gt;09}&quot;</span>,
-                <span class="self">self</span>.<span class="ident">whole_seconds</span>(),
-                <span class="self">self</span>.<span class="ident">subsec_nanoseconds</span>().<span class="ident">abs</span>()
+                <span class="self">self</span>.whole_seconds(),
+                <span class="self">self</span>.subsec_nanoseconds().abs()
             ));
         }
 
-        (<span class="self">self</span>.<span class="ident">whole_seconds</span>(), <span class="self">self</span>.<span class="ident">subsec_nanoseconds</span>()).<span class="ident">serialize</span>(<span class="ident">serializer</span>)
+        (<span class="self">self</span>.whole_seconds(), <span class="self">self</span>.subsec_nanoseconds()).serialize(serializer)
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Duration</span> {
-    <span class="kw">fn</span> <span class="ident">deserialize</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">Deserializer</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">deserializer</span>: <span class="ident">D</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">D::Error</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="macro">cfg!</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde-human-readable&quot;</span>) <span class="op">&amp;&amp;</span> <span class="ident">deserializer</span>.<span class="ident">is_human_readable</span>() {
-            <span class="ident">deserializer</span>.<span class="ident">deserialize_any</span>(<span class="ident">Visitor</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>(<span class="ident">PhantomData</span>))
-        } <span class="kw">else</span> {
-            <span class="ident">deserializer</span>.<span class="ident">deserialize_tuple</span>(<span class="number">2</span>, <span class="ident">Visitor</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>(<span class="ident">PhantomData</span>))
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Deserialize&lt;<span class="lifetime">&#39;a</span>&gt; <span class="kw">for </span>Duration {
+    <span class="kw">fn </span>deserialize&lt;D: Deserializer&lt;<span class="lifetime">&#39;a</span>&gt;&gt;(deserializer: D) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, D::Error&gt; {
+        <span class="kw">if </span><span class="macro">cfg!</span>(feature = <span class="string">&quot;serde-human-readable&quot;</span>) &amp;&amp; deserializer.is_human_readable() {
+            deserializer.deserialize_any(Visitor::&lt;<span class="self">Self</span>&gt;(PhantomData))
+        } <span class="kw">else </span>{
+            deserializer.deserialize_tuple(<span class="number">2</span>, Visitor::&lt;<span class="self">Self</span>&gt;(PhantomData))
         }
     }
 }
-<span class="comment">// endregion Duration</span>
+<span class="comment">// endregion Duration
 
-<span class="comment">// region: OffsetDateTime</span>
-<span class="doccomment">/// The format used when serializing and deserializing a human-readable `OffsetDateTime`.</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;parsing&quot;</span>)]</span>
-<span class="kw">const</span> <span class="ident">OFFSET_DATE_TIME_FORMAT</span>: <span class="kw-2">&amp;</span>[<span class="ident">FormatItem</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>] <span class="op">=</span> <span class="kw-2">&amp;</span>[
-    <span class="ident">FormatItem::Compound</span>(<span class="ident">DATE_FORMAT</span>),
-    <span class="ident">FormatItem::Literal</span>(<span class="string">b&quot; &quot;</span>),
-    <span class="ident">FormatItem::Compound</span>(<span class="ident">TIME_FORMAT</span>),
-    <span class="ident">FormatItem::Literal</span>(<span class="string">b&quot; &quot;</span>),
-    <span class="ident">FormatItem::Compound</span>(<span class="ident">UTC_OFFSET_FORMAT</span>),
+// region: OffsetDateTime
+</span><span class="doccomment">/// The format used when serializing and deserializing a human-readable `OffsetDateTime`.
+</span><span class="attribute">#[cfg(feature = <span class="string">&quot;parsing&quot;</span>)]
+</span><span class="kw">const </span>OFFSET_DATE_TIME_FORMAT: <span class="kw-2">&amp;</span>[FormatItem&lt;<span class="lifetime">&#39;_</span>&gt;] = <span class="kw-2">&amp;</span>[
+    FormatItem::Compound(DATE_FORMAT),
+    FormatItem::Literal(<span class="string">b&quot; &quot;</span>),
+    FormatItem::Compound(TIME_FORMAT),
+    FormatItem::Literal(<span class="string">b&quot; &quot;</span>),
+    FormatItem::Compound(UTC_OFFSET_FORMAT),
 ];
 
-<span class="kw">impl</span> <span class="ident">Serialize</span> <span class="kw">for</span> <span class="ident">OffsetDateTime</span> {
-    <span class="kw">fn</span> <span class="ident">serialize</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Serializer</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">serializer</span>: <span class="ident">S</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">S::Ok</span>, <span class="ident">S::Error</span><span class="op">&gt;</span> {
-        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde-human-readable&quot;</span>)]</span>
-        <span class="kw">if</span> <span class="ident">serializer</span>.<span class="ident">is_human_readable</span>() {
-            <span class="kw">return</span> <span class="ident">serializer</span>.<span class="ident">serialize_str</span>(<span class="kw-2">&amp;</span><span class="kw">match</span> <span class="self">self</span>.<span class="ident">format</span>(<span class="kw-2">&amp;</span><span class="ident">OFFSET_DATE_TIME_FORMAT</span>) {
-                <span class="prelude-val">Ok</span>(<span class="ident">s</span>) =&gt; <span class="ident">s</span>,
-                <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">S::Error::custom</span>(<span class="string">&quot;failed formatting `OffsetDateTime`&quot;</span>)),
+<span class="kw">impl </span>Serialize <span class="kw">for </span>OffsetDateTime {
+    <span class="kw">fn </span>serialize&lt;S: Serializer&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, serializer: S) -&gt; <span class="prelude-ty">Result</span>&lt;S::Ok, S::Error&gt; {
+        <span class="attribute">#[cfg(feature = <span class="string">&quot;serde-human-readable&quot;</span>)]
+        </span><span class="kw">if </span>serializer.is_human_readable() {
+            <span class="kw">return </span>serializer.serialize_str(<span class="kw-2">&amp;</span><span class="kw">match </span><span class="self">self</span>.format(<span class="kw-2">&amp;</span>OFFSET_DATE_TIME_FORMAT) {
+                <span class="prelude-val">Ok</span>(s) =&gt; s,
+                <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(S::Error::custom(<span class="string">&quot;failed formatting `OffsetDateTime`&quot;</span>)),
             });
         }
 
         (
-            <span class="self">self</span>.<span class="ident">year</span>(),
-            <span class="self">self</span>.<span class="ident">ordinal</span>(),
-            <span class="self">self</span>.<span class="ident">hour</span>(),
-            <span class="self">self</span>.<span class="ident">minute</span>(),
-            <span class="self">self</span>.<span class="ident">second</span>(),
-            <span class="self">self</span>.<span class="ident">nanosecond</span>(),
-            <span class="self">self</span>.<span class="ident">offset</span>.<span class="ident">whole_hours</span>(),
-            <span class="self">self</span>.<span class="ident">offset</span>.<span class="ident">minutes_past_hour</span>(),
-            <span class="self">self</span>.<span class="ident">offset</span>.<span class="ident">seconds_past_minute</span>(),
+            <span class="self">self</span>.year(),
+            <span class="self">self</span>.ordinal(),
+            <span class="self">self</span>.hour(),
+            <span class="self">self</span>.minute(),
+            <span class="self">self</span>.second(),
+            <span class="self">self</span>.nanosecond(),
+            <span class="self">self</span>.offset.whole_hours(),
+            <span class="self">self</span>.offset.minutes_past_hour(),
+            <span class="self">self</span>.offset.seconds_past_minute(),
         )
-            .<span class="ident">serialize</span>(<span class="ident">serializer</span>)
+            .serialize(serializer)
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">OffsetDateTime</span> {
-    <span class="kw">fn</span> <span class="ident">deserialize</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">Deserializer</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">deserializer</span>: <span class="ident">D</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">D::Error</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="macro">cfg!</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde-human-readable&quot;</span>) <span class="op">&amp;&amp;</span> <span class="ident">deserializer</span>.<span class="ident">is_human_readable</span>() {
-            <span class="ident">deserializer</span>.<span class="ident">deserialize_any</span>(<span class="ident">Visitor</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>(<span class="ident">PhantomData</span>))
-        } <span class="kw">else</span> {
-            <span class="ident">deserializer</span>.<span class="ident">deserialize_tuple</span>(<span class="number">9</span>, <span class="ident">Visitor</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>(<span class="ident">PhantomData</span>))
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Deserialize&lt;<span class="lifetime">&#39;a</span>&gt; <span class="kw">for </span>OffsetDateTime {
+    <span class="kw">fn </span>deserialize&lt;D: Deserializer&lt;<span class="lifetime">&#39;a</span>&gt;&gt;(deserializer: D) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, D::Error&gt; {
+        <span class="kw">if </span><span class="macro">cfg!</span>(feature = <span class="string">&quot;serde-human-readable&quot;</span>) &amp;&amp; deserializer.is_human_readable() {
+            deserializer.deserialize_any(Visitor::&lt;<span class="self">Self</span>&gt;(PhantomData))
+        } <span class="kw">else </span>{
+            deserializer.deserialize_tuple(<span class="number">9</span>, Visitor::&lt;<span class="self">Self</span>&gt;(PhantomData))
         }
     }
 }
-<span class="comment">// endregion OffsetDateTime</span>
+<span class="comment">// endregion OffsetDateTime
 
-<span class="comment">// region: PrimitiveDateTime</span>
-<span class="doccomment">/// The format used when serializing and deserializing a human-readable `PrimitiveDateTime`.</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;parsing&quot;</span>)]</span>
-<span class="kw">const</span> <span class="ident">PRIMITIVE_DATE_TIME_FORMAT</span>: <span class="kw-2">&amp;</span>[<span class="ident">FormatItem</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>] <span class="op">=</span> <span class="kw-2">&amp;</span>[
-    <span class="ident">FormatItem::Compound</span>(<span class="ident">DATE_FORMAT</span>),
-    <span class="ident">FormatItem::Literal</span>(<span class="string">b&quot; &quot;</span>),
-    <span class="ident">FormatItem::Compound</span>(<span class="ident">TIME_FORMAT</span>),
+// region: PrimitiveDateTime
+</span><span class="doccomment">/// The format used when serializing and deserializing a human-readable `PrimitiveDateTime`.
+</span><span class="attribute">#[cfg(feature = <span class="string">&quot;parsing&quot;</span>)]
+</span><span class="kw">const </span>PRIMITIVE_DATE_TIME_FORMAT: <span class="kw-2">&amp;</span>[FormatItem&lt;<span class="lifetime">&#39;_</span>&gt;] = <span class="kw-2">&amp;</span>[
+    FormatItem::Compound(DATE_FORMAT),
+    FormatItem::Literal(<span class="string">b&quot; &quot;</span>),
+    FormatItem::Compound(TIME_FORMAT),
 ];
 
-<span class="kw">impl</span> <span class="ident">Serialize</span> <span class="kw">for</span> <span class="ident">PrimitiveDateTime</span> {
-    <span class="kw">fn</span> <span class="ident">serialize</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Serializer</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">serializer</span>: <span class="ident">S</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">S::Ok</span>, <span class="ident">S::Error</span><span class="op">&gt;</span> {
-        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde-human-readable&quot;</span>)]</span>
-        <span class="kw">if</span> <span class="ident">serializer</span>.<span class="ident">is_human_readable</span>() {
-            <span class="kw">return</span> <span class="ident">serializer</span>.<span class="ident">serialize_str</span>(<span class="kw-2">&amp;</span><span class="kw">match</span> <span class="self">self</span>.<span class="ident">format</span>(<span class="kw-2">&amp;</span><span class="ident">PRIMITIVE_DATE_TIME_FORMAT</span>) {
-                <span class="prelude-val">Ok</span>(<span class="ident">s</span>) =&gt; <span class="ident">s</span>,
-                <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="op">&lt;</span><span class="ident">S::Error</span><span class="op">&gt;</span><span class="ident">::custom</span>(<span class="string">&quot;failed formatting `PrimitiveDateTime`&quot;</span>)),
+<span class="kw">impl </span>Serialize <span class="kw">for </span>PrimitiveDateTime {
+    <span class="kw">fn </span>serialize&lt;S: Serializer&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, serializer: S) -&gt; <span class="prelude-ty">Result</span>&lt;S::Ok, S::Error&gt; {
+        <span class="attribute">#[cfg(feature = <span class="string">&quot;serde-human-readable&quot;</span>)]
+        </span><span class="kw">if </span>serializer.is_human_readable() {
+            <span class="kw">return </span>serializer.serialize_str(<span class="kw-2">&amp;</span><span class="kw">match </span><span class="self">self</span>.format(<span class="kw-2">&amp;</span>PRIMITIVE_DATE_TIME_FORMAT) {
+                <span class="prelude-val">Ok</span>(s) =&gt; s,
+                <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(&lt;S::Error&gt;::custom(<span class="string">&quot;failed formatting `PrimitiveDateTime`&quot;</span>)),
             });
         }
 
         (
-            <span class="self">self</span>.<span class="ident">year</span>(),
-            <span class="self">self</span>.<span class="ident">ordinal</span>(),
-            <span class="self">self</span>.<span class="ident">hour</span>(),
-            <span class="self">self</span>.<span class="ident">minute</span>(),
-            <span class="self">self</span>.<span class="ident">second</span>(),
-            <span class="self">self</span>.<span class="ident">nanosecond</span>(),
+            <span class="self">self</span>.year(),
+            <span class="self">self</span>.ordinal(),
+            <span class="self">self</span>.hour(),
+            <span class="self">self</span>.minute(),
+            <span class="self">self</span>.second(),
+            <span class="self">self</span>.nanosecond(),
         )
-            .<span class="ident">serialize</span>(<span class="ident">serializer</span>)
+            .serialize(serializer)
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">PrimitiveDateTime</span> {
-    <span class="kw">fn</span> <span class="ident">deserialize</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">Deserializer</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">deserializer</span>: <span class="ident">D</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">D::Error</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="macro">cfg!</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde-human-readable&quot;</span>) <span class="op">&amp;&amp;</span> <span class="ident">deserializer</span>.<span class="ident">is_human_readable</span>() {
-            <span class="ident">deserializer</span>.<span class="ident">deserialize_any</span>(<span class="ident">Visitor</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>(<span class="ident">PhantomData</span>))
-        } <span class="kw">else</span> {
-            <span class="ident">deserializer</span>.<span class="ident">deserialize_tuple</span>(<span class="number">6</span>, <span class="ident">Visitor</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>(<span class="ident">PhantomData</span>))
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Deserialize&lt;<span class="lifetime">&#39;a</span>&gt; <span class="kw">for </span>PrimitiveDateTime {
+    <span class="kw">fn </span>deserialize&lt;D: Deserializer&lt;<span class="lifetime">&#39;a</span>&gt;&gt;(deserializer: D) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, D::Error&gt; {
+        <span class="kw">if </span><span class="macro">cfg!</span>(feature = <span class="string">&quot;serde-human-readable&quot;</span>) &amp;&amp; deserializer.is_human_readable() {
+            deserializer.deserialize_any(Visitor::&lt;<span class="self">Self</span>&gt;(PhantomData))
+        } <span class="kw">else </span>{
+            deserializer.deserialize_tuple(<span class="number">6</span>, Visitor::&lt;<span class="self">Self</span>&gt;(PhantomData))
         }
     }
 }
-<span class="comment">// endregion PrimitiveDateTime</span>
+<span class="comment">// endregion PrimitiveDateTime
 
-<span class="comment">// region: Time</span>
-<span class="doccomment">/// The format used when serializing and deserializing a human-readable `Time`.</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;parsing&quot;</span>)]</span>
-<span class="kw">const</span> <span class="ident">TIME_FORMAT</span>: <span class="kw-2">&amp;</span>[<span class="ident">FormatItem</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>] <span class="op">=</span> <span class="kw-2">&amp;</span>[
-    <span class="ident">FormatItem::Component</span>(<span class="ident">Component::Hour</span>(<span class="op">&lt;</span><span class="ident">modifier::Hour</span><span class="op">&gt;</span><span class="ident">::default</span>())),
-    <span class="ident">FormatItem::Literal</span>(<span class="string">b&quot;:&quot;</span>),
-    <span class="ident">FormatItem::Component</span>(<span class="ident">Component::Minute</span>(<span class="op">&lt;</span><span class="ident">modifier::Minute</span><span class="op">&gt;</span><span class="ident">::default</span>())),
-    <span class="ident">FormatItem::Literal</span>(<span class="string">b&quot;:&quot;</span>),
-    <span class="ident">FormatItem::Component</span>(<span class="ident">Component::Second</span>(<span class="op">&lt;</span><span class="ident">modifier::Second</span><span class="op">&gt;</span><span class="ident">::default</span>())),
-    <span class="ident">FormatItem::Literal</span>(<span class="string">b&quot;.&quot;</span>),
-    <span class="ident">FormatItem::Component</span>(<span class="ident">Component::Subsecond</span>(<span class="op">&lt;</span><span class="ident">modifier::Subsecond</span><span class="op">&gt;</span><span class="ident">::default</span>())),
+// region: Time
+</span><span class="doccomment">/// The format used when serializing and deserializing a human-readable `Time`.
+</span><span class="attribute">#[cfg(feature = <span class="string">&quot;parsing&quot;</span>)]
+</span><span class="kw">const </span>TIME_FORMAT: <span class="kw-2">&amp;</span>[FormatItem&lt;<span class="lifetime">&#39;_</span>&gt;] = <span class="kw-2">&amp;</span>[
+    FormatItem::Component(Component::Hour(&lt;modifier::Hour&gt;::default())),
+    FormatItem::Literal(<span class="string">b&quot;:&quot;</span>),
+    FormatItem::Component(Component::Minute(&lt;modifier::Minute&gt;::default())),
+    FormatItem::Literal(<span class="string">b&quot;:&quot;</span>),
+    FormatItem::Component(Component::Second(&lt;modifier::Second&gt;::default())),
+    FormatItem::Literal(<span class="string">b&quot;.&quot;</span>),
+    FormatItem::Component(Component::Subsecond(&lt;modifier::Subsecond&gt;::default())),
 ];
 
-<span class="kw">impl</span> <span class="ident">Serialize</span> <span class="kw">for</span> <span class="ident">Time</span> {
-    <span class="kw">fn</span> <span class="ident">serialize</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Serializer</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">serializer</span>: <span class="ident">S</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">S::Ok</span>, <span class="ident">S::Error</span><span class="op">&gt;</span> {
-        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde-human-readable&quot;</span>)]</span>
-        <span class="kw">if</span> <span class="ident">serializer</span>.<span class="ident">is_human_readable</span>() {
-            <span class="kw">return</span> <span class="ident">serializer</span>.<span class="ident">serialize_str</span>(<span class="kw-2">&amp;</span><span class="kw">match</span> <span class="self">self</span>.<span class="ident">format</span>(<span class="kw-2">&amp;</span><span class="ident">TIME_FORMAT</span>) {
-                <span class="prelude-val">Ok</span>(<span class="ident">s</span>) =&gt; <span class="ident">s</span>,
-                <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">S::Error::custom</span>(<span class="string">&quot;failed formatting `Time`&quot;</span>)),
+<span class="kw">impl </span>Serialize <span class="kw">for </span>Time {
+    <span class="kw">fn </span>serialize&lt;S: Serializer&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, serializer: S) -&gt; <span class="prelude-ty">Result</span>&lt;S::Ok, S::Error&gt; {
+        <span class="attribute">#[cfg(feature = <span class="string">&quot;serde-human-readable&quot;</span>)]
+        </span><span class="kw">if </span>serializer.is_human_readable() {
+            <span class="kw">return </span>serializer.serialize_str(<span class="kw-2">&amp;</span><span class="kw">match </span><span class="self">self</span>.format(<span class="kw-2">&amp;</span>TIME_FORMAT) {
+                <span class="prelude-val">Ok</span>(s) =&gt; s,
+                <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(S::Error::custom(<span class="string">&quot;failed formatting `Time`&quot;</span>)),
             });
         }
 
-        (<span class="self">self</span>.<span class="ident">hour</span>(), <span class="self">self</span>.<span class="ident">minute</span>(), <span class="self">self</span>.<span class="ident">second</span>(), <span class="self">self</span>.<span class="ident">nanosecond</span>()).<span class="ident">serialize</span>(<span class="ident">serializer</span>)
+        (<span class="self">self</span>.hour(), <span class="self">self</span>.minute(), <span class="self">self</span>.second(), <span class="self">self</span>.nanosecond()).serialize(serializer)
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Time</span> {
-    <span class="kw">fn</span> <span class="ident">deserialize</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">Deserializer</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">deserializer</span>: <span class="ident">D</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">D::Error</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="macro">cfg!</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde-human-readable&quot;</span>) <span class="op">&amp;&amp;</span> <span class="ident">deserializer</span>.<span class="ident">is_human_readable</span>() {
-            <span class="ident">deserializer</span>.<span class="ident">deserialize_any</span>(<span class="ident">Visitor</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>(<span class="ident">PhantomData</span>))
-        } <span class="kw">else</span> {
-            <span class="ident">deserializer</span>.<span class="ident">deserialize_tuple</span>(<span class="number">4</span>, <span class="ident">Visitor</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>(<span class="ident">PhantomData</span>))
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Deserialize&lt;<span class="lifetime">&#39;a</span>&gt; <span class="kw">for </span>Time {
+    <span class="kw">fn </span>deserialize&lt;D: Deserializer&lt;<span class="lifetime">&#39;a</span>&gt;&gt;(deserializer: D) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, D::Error&gt; {
+        <span class="kw">if </span><span class="macro">cfg!</span>(feature = <span class="string">&quot;serde-human-readable&quot;</span>) &amp;&amp; deserializer.is_human_readable() {
+            deserializer.deserialize_any(Visitor::&lt;<span class="self">Self</span>&gt;(PhantomData))
+        } <span class="kw">else </span>{
+            deserializer.deserialize_tuple(<span class="number">4</span>, Visitor::&lt;<span class="self">Self</span>&gt;(PhantomData))
         }
     }
 }
-<span class="comment">// endregion Time</span>
+<span class="comment">// endregion Time
 
-<span class="comment">// region: UtcOffset</span>
-<span class="doccomment">/// The format used when serializing and deserializing a human-readable `UtcOffset`.</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;parsing&quot;</span>)]</span>
-<span class="kw">const</span> <span class="ident">UTC_OFFSET_FORMAT</span>: <span class="kw-2">&amp;</span>[<span class="ident">FormatItem</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>] <span class="op">=</span> <span class="kw-2">&amp;</span>[
-    <span class="ident">FormatItem::Component</span>(<span class="ident">Component::OffsetHour</span>(<span class="ident">modifier::OffsetHour::default</span>())),
-    <span class="ident">FormatItem::Literal</span>(<span class="string">b&quot;:&quot;</span>),
-    <span class="ident">FormatItem::Component</span>(<span class="ident">Component::OffsetMinute</span>(<span class="ident">modifier::OffsetMinute::default</span>())),
-    <span class="ident">FormatItem::Literal</span>(<span class="string">b&quot;:&quot;</span>),
-    <span class="ident">FormatItem::Component</span>(<span class="ident">Component::OffsetSecond</span>(<span class="ident">modifier::OffsetSecond::default</span>())),
+// region: UtcOffset
+</span><span class="doccomment">/// The format used when serializing and deserializing a human-readable `UtcOffset`.
+</span><span class="attribute">#[cfg(feature = <span class="string">&quot;parsing&quot;</span>)]
+</span><span class="kw">const </span>UTC_OFFSET_FORMAT: <span class="kw-2">&amp;</span>[FormatItem&lt;<span class="lifetime">&#39;_</span>&gt;] = <span class="kw-2">&amp;</span>[
+    FormatItem::Component(Component::OffsetHour(modifier::OffsetHour::default())),
+    FormatItem::Literal(<span class="string">b&quot;:&quot;</span>),
+    FormatItem::Component(Component::OffsetMinute(modifier::OffsetMinute::default())),
+    FormatItem::Literal(<span class="string">b&quot;:&quot;</span>),
+    FormatItem::Component(Component::OffsetSecond(modifier::OffsetSecond::default())),
 ];
 
-<span class="kw">impl</span> <span class="ident">Serialize</span> <span class="kw">for</span> <span class="ident">UtcOffset</span> {
-    <span class="kw">fn</span> <span class="ident">serialize</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Serializer</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">serializer</span>: <span class="ident">S</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">S::Ok</span>, <span class="ident">S::Error</span><span class="op">&gt;</span> {
-        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde-human-readable&quot;</span>)]</span>
-        <span class="kw">if</span> <span class="ident">serializer</span>.<span class="ident">is_human_readable</span>() {
-            <span class="kw">return</span> <span class="ident">serializer</span>.<span class="ident">serialize_str</span>(<span class="kw-2">&amp;</span><span class="kw">match</span> <span class="self">self</span>.<span class="ident">format</span>(<span class="kw-2">&amp;</span><span class="ident">UTC_OFFSET_FORMAT</span>) {
-                <span class="prelude-val">Ok</span>(<span class="ident">s</span>) =&gt; <span class="ident">s</span>,
-                <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">S::Error::custom</span>(<span class="string">&quot;failed formatting `UtcOffset`&quot;</span>)),
+<span class="kw">impl </span>Serialize <span class="kw">for </span>UtcOffset {
+    <span class="kw">fn </span>serialize&lt;S: Serializer&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, serializer: S) -&gt; <span class="prelude-ty">Result</span>&lt;S::Ok, S::Error&gt; {
+        <span class="attribute">#[cfg(feature = <span class="string">&quot;serde-human-readable&quot;</span>)]
+        </span><span class="kw">if </span>serializer.is_human_readable() {
+            <span class="kw">return </span>serializer.serialize_str(<span class="kw-2">&amp;</span><span class="kw">match </span><span class="self">self</span>.format(<span class="kw-2">&amp;</span>UTC_OFFSET_FORMAT) {
+                <span class="prelude-val">Ok</span>(s) =&gt; s,
+                <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(S::Error::custom(<span class="string">&quot;failed formatting `UtcOffset`&quot;</span>)),
             });
         }
 
         (
-            <span class="self">self</span>.<span class="ident">whole_hours</span>(),
-            <span class="self">self</span>.<span class="ident">minutes_past_hour</span>(),
-            <span class="self">self</span>.<span class="ident">seconds_past_minute</span>(),
+            <span class="self">self</span>.whole_hours(),
+            <span class="self">self</span>.minutes_past_hour(),
+            <span class="self">self</span>.seconds_past_minute(),
         )
-            .<span class="ident">serialize</span>(<span class="ident">serializer</span>)
+            .serialize(serializer)
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">UtcOffset</span> {
-    <span class="kw">fn</span> <span class="ident">deserialize</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">Deserializer</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">deserializer</span>: <span class="ident">D</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">D::Error</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="macro">cfg!</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde-human-readable&quot;</span>) <span class="op">&amp;&amp;</span> <span class="ident">deserializer</span>.<span class="ident">is_human_readable</span>() {
-            <span class="ident">deserializer</span>.<span class="ident">deserialize_any</span>(<span class="ident">Visitor</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>(<span class="ident">PhantomData</span>))
-        } <span class="kw">else</span> {
-            <span class="ident">deserializer</span>.<span class="ident">deserialize_tuple</span>(<span class="number">3</span>, <span class="ident">Visitor</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>(<span class="ident">PhantomData</span>))
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Deserialize&lt;<span class="lifetime">&#39;a</span>&gt; <span class="kw">for </span>UtcOffset {
+    <span class="kw">fn </span>deserialize&lt;D: Deserializer&lt;<span class="lifetime">&#39;a</span>&gt;&gt;(deserializer: D) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, D::Error&gt; {
+        <span class="kw">if </span><span class="macro">cfg!</span>(feature = <span class="string">&quot;serde-human-readable&quot;</span>) &amp;&amp; deserializer.is_human_readable() {
+            deserializer.deserialize_any(Visitor::&lt;<span class="self">Self</span>&gt;(PhantomData))
+        } <span class="kw">else </span>{
+            deserializer.deserialize_tuple(<span class="number">3</span>, Visitor::&lt;<span class="self">Self</span>&gt;(PhantomData))
         }
     }
 }
-<span class="comment">// endregion UtcOffset</span>
+<span class="comment">// endregion UtcOffset
 
-<span class="comment">// region: Weekday</span>
-<span class="kw">impl</span> <span class="ident">Serialize</span> <span class="kw">for</span> <span class="ident">Weekday</span> {
-    <span class="kw">fn</span> <span class="ident">serialize</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Serializer</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">serializer</span>: <span class="ident">S</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">S::Ok</span>, <span class="ident">S::Error</span><span class="op">&gt;</span> {
-        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde-human-readable&quot;</span>)]</span>
-        <span class="kw">if</span> <span class="ident">serializer</span>.<span class="ident">is_human_readable</span>() {
-            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>))]</span>
-            <span class="kw">use</span> <span class="ident">alloc::string::ToString</span>;
-            <span class="kw">return</span> <span class="self">self</span>.<span class="ident">to_string</span>().<span class="ident">serialize</span>(<span class="ident">serializer</span>);
+// region: Weekday
+</span><span class="kw">impl </span>Serialize <span class="kw">for </span>Weekday {
+    <span class="kw">fn </span>serialize&lt;S: Serializer&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, serializer: S) -&gt; <span class="prelude-ty">Result</span>&lt;S::Ok, S::Error&gt; {
+        <span class="attribute">#[cfg(feature = <span class="string">&quot;serde-human-readable&quot;</span>)]
+        </span><span class="kw">if </span>serializer.is_human_readable() {
+            <span class="attribute">#[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]
+            </span><span class="kw">use </span>alloc::string::ToString;
+            <span class="kw">return </span><span class="self">self</span>.to_string().serialize(serializer);
         }
 
-        <span class="self">self</span>.<span class="ident">number_from_monday</span>().<span class="ident">serialize</span>(<span class="ident">serializer</span>)
+        <span class="self">self</span>.number_from_monday().serialize(serializer)
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Weekday</span> {
-    <span class="kw">fn</span> <span class="ident">deserialize</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">Deserializer</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">deserializer</span>: <span class="ident">D</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">D::Error</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="macro">cfg!</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde-human-readable&quot;</span>) <span class="op">&amp;&amp;</span> <span class="ident">deserializer</span>.<span class="ident">is_human_readable</span>() {
-            <span class="ident">deserializer</span>.<span class="ident">deserialize_any</span>(<span class="ident">Visitor</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>(<span class="ident">PhantomData</span>))
-        } <span class="kw">else</span> {
-            <span class="ident">deserializer</span>.<span class="ident">deserialize_u8</span>(<span class="ident">Visitor</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>(<span class="ident">PhantomData</span>))
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Deserialize&lt;<span class="lifetime">&#39;a</span>&gt; <span class="kw">for </span>Weekday {
+    <span class="kw">fn </span>deserialize&lt;D: Deserializer&lt;<span class="lifetime">&#39;a</span>&gt;&gt;(deserializer: D) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, D::Error&gt; {
+        <span class="kw">if </span><span class="macro">cfg!</span>(feature = <span class="string">&quot;serde-human-readable&quot;</span>) &amp;&amp; deserializer.is_human_readable() {
+            deserializer.deserialize_any(Visitor::&lt;<span class="self">Self</span>&gt;(PhantomData))
+        } <span class="kw">else </span>{
+            deserializer.deserialize_u8(Visitor::&lt;<span class="self">Self</span>&gt;(PhantomData))
         }
     }
 }
-<span class="comment">// endregion Weekday</span>
+<span class="comment">// endregion Weekday
 
-<span class="comment">// region: Month</span>
-<span class="kw">impl</span> <span class="ident">Serialize</span> <span class="kw">for</span> <span class="ident">Month</span> {
-    <span class="kw">fn</span> <span class="ident">serialize</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Serializer</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">serializer</span>: <span class="ident">S</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">S::Ok</span>, <span class="ident">S::Error</span><span class="op">&gt;</span> {
-        <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde-human-readable&quot;</span>)]</span>
-        <span class="kw">if</span> <span class="ident">serializer</span>.<span class="ident">is_human_readable</span>() {
-            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>))]</span>
-            <span class="kw">use</span> <span class="ident">alloc::string::String</span>;
-            <span class="kw">return</span> <span class="self">self</span>.<span class="ident">to_string</span>().<span class="ident">serialize</span>(<span class="ident">serializer</span>);
+// region: Month
+</span><span class="kw">impl </span>Serialize <span class="kw">for </span>Month {
+    <span class="kw">fn </span>serialize&lt;S: Serializer&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, serializer: S) -&gt; <span class="prelude-ty">Result</span>&lt;S::Ok, S::Error&gt; {
+        <span class="attribute">#[cfg(feature = <span class="string">&quot;serde-human-readable&quot;</span>)]
+        </span><span class="kw">if </span>serializer.is_human_readable() {
+            <span class="attribute">#[cfg(not(feature = <span class="string">&quot;std&quot;</span>))]
+            </span><span class="kw">use </span>alloc::string::String;
+            <span class="kw">return </span><span class="self">self</span>.to_string().serialize(serializer);
         }
 
-        (<span class="kw-2">*</span><span class="self">self</span> <span class="kw">as</span> <span class="ident">u8</span>).<span class="ident">serialize</span>(<span class="ident">serializer</span>)
+        (<span class="kw-2">*</span><span class="self">self </span><span class="kw">as </span>u8).serialize(serializer)
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Month</span> {
-    <span class="kw">fn</span> <span class="ident">deserialize</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">Deserializer</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">deserializer</span>: <span class="ident">D</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">D::Error</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="macro">cfg!</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde-human-readable&quot;</span>) <span class="op">&amp;&amp;</span> <span class="ident">deserializer</span>.<span class="ident">is_human_readable</span>() {
-            <span class="ident">deserializer</span>.<span class="ident">deserialize_any</span>(<span class="ident">Visitor</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>(<span class="ident">PhantomData</span>))
-        } <span class="kw">else</span> {
-            <span class="ident">deserializer</span>.<span class="ident">deserialize_u8</span>(<span class="ident">Visitor</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>(<span class="ident">PhantomData</span>))
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>&gt; Deserialize&lt;<span class="lifetime">&#39;a</span>&gt; <span class="kw">for </span>Month {
+    <span class="kw">fn </span>deserialize&lt;D: Deserializer&lt;<span class="lifetime">&#39;a</span>&gt;&gt;(deserializer: D) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, D::Error&gt; {
+        <span class="kw">if </span><span class="macro">cfg!</span>(feature = <span class="string">&quot;serde-human-readable&quot;</span>) &amp;&amp; deserializer.is_human_readable() {
+            deserializer.deserialize_any(Visitor::&lt;<span class="self">Self</span>&gt;(PhantomData))
+        } <span class="kw">else </span>{
+            deserializer.deserialize_u8(Visitor::&lt;<span class="self">Self</span>&gt;(PhantomData))
         }
     }
 }
-<span class="comment">// endregion Month</span>
-</code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="time" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>
+<span class="comment">// endregion Month
+</span></code></pre></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="time" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>

@@ -69,12 +69,24 @@ jobs:
       - run: cargo test -- trybuild
   
   clippy:
+    strategy:
+      fail-fast: false
+      matrix:
+        rust:
+          - name: MSRV
+            toolchain: "1.58"
+            nightly: false
+          - name: Nightly
+            toolchain: nightly
+            nightly: true
     runs-on: ubuntu-latest
+    name: Clippy (Rust ${{matrix.rust.name}})
+    continue-on-error: ${{matrix.rust.nightly}}
     steps:
       - uses: actions/checkout@v3
       - uses: dtolnay/rust-toolchain@master
         with:
-          toolchain: "1.58"
+          toolchain: ${{matrix.rust.toolchain}}
           components: clippy
         id: rust-toolchain
       - uses: actions/cache@v3

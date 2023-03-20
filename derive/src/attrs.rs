@@ -1,12 +1,16 @@
 use crate::util::ExpectLit;
-use syn::{punctuated::Punctuated, spanned::Spanned as _, Attribute, LitStr, Meta, Token};
+use proc_macro2::TokenStream;
+use syn::{
+	parse::{Parse, ParseStream},
+	punctuated::Punctuated,
+	spanned::Spanned as _,
+	Attribute, LitStr, Meta, Token
+};
 
 pub(super) fn parse_doc_attr(input: &Attribute) -> syn::Result<Option<LitStr>> {
-	input.parse_meta().and_then(|meta| {
-		Ok(match meta {
-			Meta::NameValue(kv) => Some(kv.lit.expect_str()?),
-			_ => None
-		})
+	Ok(match &input.meta {
+		Meta::NameValue(kv) => Some(kv.value.clone().expect_str()?),
+		_ => None
 	})
 }
 
@@ -36,25 +40,33 @@ pub(super) struct ContainerAttributes {
 	pub(super) deny_unknown_fields: bool
 }
 
+struct ParseHelper(Punctuated<Meta, Token![,]>);
+
+impl Parse for ParseHelper {
+	fn parse(input: ParseStream<'_>) -> syn::Result<Self> {
+		Ok(Self(Punctuated::parse_terminated(input)?))
+	}
+}
+
 impl ContainerAttributes {
-	pub(super) fn parse_from(&mut self, input: &Attribute, error_on_unknown: bool) -> syn::Result<()> {
-		let tokens: Punctuated<Meta, Token![,]> = input.parse_args_with(Punctuated::parse_terminated)?;
+	pub(super) fn parse_from(&mut self, tokens: TokenStream, error_on_unknown: bool) -> syn::Result<()> {
+		let tokens = syn::parse2::<ParseHelper>(tokens)?.0;
 		for token in tokens {
 			match token {
 				Meta::NameValue(kv) if kv.path.is_ident("rename") => {
-					self.rename = Some(kv.lit.expect_str()?);
+					self.rename = Some(kv.value.expect_str()?);
 				},
 
 				Meta::NameValue(kv) if kv.path.is_ident("rename_all") => {
-					self.rename_all = Some(kv.lit.expect_str()?);
+					self.rename_all = Some(kv.value.expect_str()?);
 				},
 
 				Meta::NameValue(kv) if kv.path.is_ident("tag") => {
-					self.tag = Some(kv.lit.expect_str()?);
+					self.tag = Some(kv.value.expect_str()?);
 				},
 
 				Meta::NameValue(kv) if kv.path.is_ident("content") => {
-					self.content = Some(kv.lit.expect_str()?);
+					self.content = Some(kv.value.expect_str()?);
 				},
 
 				Meta::Path(path) if path.is_ident("untagged") => {
@@ -87,12 +99,12 @@ pub(super) struct FieldAttributes {
 }
 
 impl FieldAttributes {
-	pub(super) fn parse_from(&mut self, input: &Attribute, error_on_unknown: bool) -> syn::Result<()> {
-		let tokens: Punctuated<Meta, Token![,]> = input.parse_args_with(Punctuated::parse_terminated)?;
+	pub(super) fn parse_from(&mut self, tokens: TokenStream, error_on_unknown: bool) -> syn::Result<()> {
+		let tokens = syn::parse2::<ParseHelper>(tokens)?.0;
 		for token in tokens {
 			match token {
 				Meta::NameValue(kv) if kv.path.is_ident("rename") => {
-					self.rename = Some(kv.lit.expect_str()?);
+					self.rename = Some(kv.value.expect_str()?);
 				},
 
 				Meta::Path(path) if path.is_ident("default") => {

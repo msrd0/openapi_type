@@ -1,5 +1,5 @@
 use proc_macro2::{Ident, Span};
-use syn::{Lit, LitStr};
+use syn::{spanned::Spanned as _, Expr, Lit, LitStr};
 
 /// Convert [Ident], [String] and [&str] into a [LitStr].
 pub(super) trait ToLitStr {
@@ -33,6 +33,15 @@ impl ExpectLit for Lit {
 	fn expect_str(self) -> syn::Result<LitStr> {
 		match self {
 			Self::Str(str) => Ok(str),
+			_ => Err(syn::Error::new(self.span(), "Expected string literal"))
+		}
+	}
+}
+
+impl ExpectLit for Expr {
+	fn expect_str(self) -> syn::Result<LitStr> {
+		match self {
+			Expr::Lit(lit) => lit.lit.expect_str(),
 			_ => Err(syn::Error::new(self.span(), "Expected string literal"))
 		}
 	}

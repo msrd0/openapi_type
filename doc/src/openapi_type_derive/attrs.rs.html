@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `derive/src/attrs.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>attrs.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-1f7d512b176f0f72.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-124a1ca42af929b6.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-6827029ac823cab7.css" id="mainThemeStyle"><link rel="stylesheet" id="themeStyle" href="../../static.files/light-ebce58d0a40c3431.css"><link rel="stylesheet" disabled href="../../static.files/dark-f23faae4a2daf9a6.css"><link rel="stylesheet" disabled href="../../static.files/ayu-8af5e100b21cd173.css"><script id="default-settings" 
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `derive/src/attrs.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>attrs.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-1f7d512b176f0f72.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-124a1ca42af929b6.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-93196c7a1c3542a8.css" id="mainThemeStyle"><link rel="stylesheet" id="themeStyle" href="../../static.files/light-4743e13df3dfe8c4.css"><link rel="stylesheet" disabled href="../../static.files/dark-0e1b889528bd466b.css"><link rel="stylesheet" disabled href="../../static.files/ayu-65289d5d067c7c66.css"><script id="default-settings" 
         data-theme="ayu"
-        data-use_system_theme="false"></script><script src="../../static.files/storage-d43fa987303ecbbb.js"></script><script defer src="../../static.files/source-script-5cf2e01a42cc9858.js"></script><script defer src="../../source-files.js"></script><script defer src="../../static.files/main-c55e1eb52e1886b4.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../openapi_type_derive/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-5ec35bf9ca753509.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+        data-use_system_theme="false"></script><script src="../../static.files/storage-d43fa987303ecbbb.js"></script><script defer src="../../static.files/source-script-ea63cb6500f71309.js"></script><script defer src="../../source-files.js"></script><script defer src="../../static.files/main-3367e395607fafc1.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../openapi_type_derive/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-5ec35bf9ca753509.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -135,16 +135,32 @@
 <a href="#133" id="133">133</a>
 <a href="#134" id="134">134</a>
 <a href="#135" id="135">135</a>
+<a href="#136" id="136">136</a>
+<a href="#137" id="137">137</a>
+<a href="#138" id="138">138</a>
+<a href="#139" id="139">139</a>
+<a href="#140" id="140">140</a>
+<a href="#141" id="141">141</a>
+<a href="#142" id="142">142</a>
+<a href="#143" id="143">143</a>
+<a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::util::ExpectLit;
-<span class="kw">use </span>syn::{punctuated::Punctuated, spanned::Spanned <span class="kw">as _</span>, Attribute, LitStr, Meta, Token};
+<span class="kw">use </span>proc_macro2::TokenStream;
+<span class="kw">use </span>syn::{
+	parse::{Parse, ParseStream},
+	punctuated::Punctuated,
+	spanned::Spanned <span class="kw">as _</span>,
+	Attribute, LitStr, Meta, Token
+};
 
 <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>parse_doc_attr(input: <span class="kw-2">&amp;</span>Attribute) -&gt; syn::Result&lt;<span class="prelude-ty">Option</span>&lt;LitStr&gt;&gt; {
-	input.parse_meta().and_then(|meta| {
-		<span class="prelude-val">Ok</span>(<span class="kw">match </span>meta {
-			Meta::NameValue(kv) =&gt; <span class="prelude-val">Some</span>(kv.lit.expect_str()<span class="question-mark">?</span>),
-			<span class="kw">_ </span>=&gt; <span class="prelude-val">None
-		</span>})
-	})
+	<span class="prelude-val">Ok</span>(<span class="kw">match </span><span class="kw-2">&amp;</span>input.meta {
+		Meta::NameValue(kv) =&gt; <span class="prelude-val">Some</span>(kv.value.clone().expect_str()<span class="question-mark">?</span>),
+		<span class="kw">_ </span>=&gt; <span class="prelude-val">None
+	</span>})
 }
 
 <span class="kw">fn </span>unknown(meta: Meta, error_on_unknown: bool) -&gt; syn::Result&lt;()&gt; {
@@ -173,25 +189,33 @@
 	<span class="kw">pub</span>(<span class="kw">super</span>) deny_unknown_fields: bool
 }
 
+<span class="kw">struct </span>ParseHelper(Punctuated&lt;Meta, <span class="macro">Token!</span>[,]&gt;);
+
+<span class="kw">impl </span>Parse <span class="kw">for </span>ParseHelper {
+	<span class="kw">fn </span>parse(input: ParseStream&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; syn::Result&lt;<span class="self">Self</span>&gt; {
+		<span class="prelude-val">Ok</span>(<span class="self">Self</span>(Punctuated::parse_terminated(input)<span class="question-mark">?</span>))
+	}
+}
+
 <span class="kw">impl </span>ContainerAttributes {
-	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>parse_from(<span class="kw-2">&amp;mut </span><span class="self">self</span>, input: <span class="kw-2">&amp;</span>Attribute, error_on_unknown: bool) -&gt; syn::Result&lt;()&gt; {
-		<span class="kw">let </span>tokens: Punctuated&lt;Meta, <span class="macro">Token!</span>[,]&gt; = input.parse_args_with(Punctuated::parse_terminated)<span class="question-mark">?</span>;
+	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>parse_from(<span class="kw-2">&amp;mut </span><span class="self">self</span>, tokens: TokenStream, error_on_unknown: bool) -&gt; syn::Result&lt;()&gt; {
+		<span class="kw">let </span>tokens = syn::parse2::&lt;ParseHelper&gt;(tokens)<span class="question-mark">?</span>.<span class="number">0</span>;
 		<span class="kw">for </span>token <span class="kw">in </span>tokens {
 			<span class="kw">match </span>token {
 				Meta::NameValue(kv) <span class="kw">if </span>kv.path.is_ident(<span class="string">&quot;rename&quot;</span>) =&gt; {
-					<span class="self">self</span>.rename = <span class="prelude-val">Some</span>(kv.lit.expect_str()<span class="question-mark">?</span>);
+					<span class="self">self</span>.rename = <span class="prelude-val">Some</span>(kv.value.expect_str()<span class="question-mark">?</span>);
 				},
 
 				Meta::NameValue(kv) <span class="kw">if </span>kv.path.is_ident(<span class="string">&quot;rename_all&quot;</span>) =&gt; {
-					<span class="self">self</span>.rename_all = <span class="prelude-val">Some</span>(kv.lit.expect_str()<span class="question-mark">?</span>);
+					<span class="self">self</span>.rename_all = <span class="prelude-val">Some</span>(kv.value.expect_str()<span class="question-mark">?</span>);
 				},
 
 				Meta::NameValue(kv) <span class="kw">if </span>kv.path.is_ident(<span class="string">&quot;tag&quot;</span>) =&gt; {
-					<span class="self">self</span>.tag = <span class="prelude-val">Some</span>(kv.lit.expect_str()<span class="question-mark">?</span>);
+					<span class="self">self</span>.tag = <span class="prelude-val">Some</span>(kv.value.expect_str()<span class="question-mark">?</span>);
 				},
 
 				Meta::NameValue(kv) <span class="kw">if </span>kv.path.is_ident(<span class="string">&quot;content&quot;</span>) =&gt; {
-					<span class="self">self</span>.content = <span class="prelude-val">Some</span>(kv.lit.expect_str()<span class="question-mark">?</span>);
+					<span class="self">self</span>.content = <span class="prelude-val">Some</span>(kv.value.expect_str()<span class="question-mark">?</span>);
 				},
 
 				Meta::Path(path) <span class="kw">if </span>path.is_ident(<span class="string">&quot;untagged&quot;</span>) =&gt; {
@@ -224,12 +248,12 @@
 }
 
 <span class="kw">impl </span>FieldAttributes {
-	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>parse_from(<span class="kw-2">&amp;mut </span><span class="self">self</span>, input: <span class="kw-2">&amp;</span>Attribute, error_on_unknown: bool) -&gt; syn::Result&lt;()&gt; {
-		<span class="kw">let </span>tokens: Punctuated&lt;Meta, <span class="macro">Token!</span>[,]&gt; = input.parse_args_with(Punctuated::parse_terminated)<span class="question-mark">?</span>;
+	<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>parse_from(<span class="kw-2">&amp;mut </span><span class="self">self</span>, tokens: TokenStream, error_on_unknown: bool) -&gt; syn::Result&lt;()&gt; {
+		<span class="kw">let </span>tokens = syn::parse2::&lt;ParseHelper&gt;(tokens)<span class="question-mark">?</span>.<span class="number">0</span>;
 		<span class="kw">for </span>token <span class="kw">in </span>tokens {
 			<span class="kw">match </span>token {
 				Meta::NameValue(kv) <span class="kw">if </span>kv.path.is_ident(<span class="string">&quot;rename&quot;</span>) =&gt; {
-					<span class="self">self</span>.rename = <span class="prelude-val">Some</span>(kv.lit.expect_str()<span class="question-mark">?</span>);
+					<span class="self">self</span>.rename = <span class="prelude-val">Some</span>(kv.value.expect_str()<span class="question-mark">?</span>);
 				},
 
 				Meta::Path(path) <span class="kw">if </span>path.is_ident(<span class="string">&quot;default&quot;</span>) =&gt; {
@@ -271,4 +295,4 @@
 	}
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="openapi_type_derive" data-themes="" data-resource-suffix="" data-rustdoc-version="1.67.1 (d5a82bbd2 2023-02-07)" data-search-js="search-444266647c4dba98.js" data-settings-js="settings-bebeae96e00e4617.js" data-settings-css="settings-af96d9e2fc13e081.css" ></div></body></html>
+</section></main><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="openapi_type_derive" data-themes="" data-resource-suffix="" data-rustdoc-version="1.68.0 (2c8cc3432 2023-03-06)" data-search-js="search-98d53477a794af0b.js" data-settings-js="settings-c3c521c753752a1a.js" data-settings-css="settings-08ddfdda51b8ee2e.css" ></div></body></html>

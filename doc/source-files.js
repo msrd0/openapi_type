@@ -21,6 +21,6 @@ var sourcesIndex = JSON.parse('{\
 "time":["",[["error",[],["component_range.rs","conversion_range.rs","different_variant.rs","format.rs","invalid_format_description.rs","invalid_variant.rs","mod.rs","parse.rs","parse_from_description.rs","try_from_parsed.rs"]],["format_description",[["parse",[],["ast.rs","format_item.rs","lexer.rs","mod.rs"]],["well_known",[["iso8601",[],["adt_hack.rs"]]],["iso8601.rs","rfc2822.rs","rfc3339.rs"]]],["borrowed_format_item.rs","component.rs","mod.rs","modifier.rs","owned_format_item.rs"]],["formatting",[],["formattable.rs","iso8601.rs","mod.rs"]],["parsing",[["combinator",[["rfc",[],["iso8601.rs","mod.rs","rfc2234.rs","rfc2822.rs"]]],["mod.rs"]]],["component.rs","iso8601.rs","mod.rs","parsable.rs","parsed.rs","shim.rs"]],["serde",[],["iso8601.rs","mod.rs","rfc2822.rs","rfc3339.rs","timestamp.rs","visitor.rs"]],["sys",[],["mod.rs"]]],["date.rs","date_time.rs","duration.rs","ext.rs","instant.rs","lib.rs","month.rs","offset_date_time.rs","primitive_date_time.rs","shim.rs","time.rs","utc_offset.rs","util.rs","weekday.rs"]],\
 "time_core":["",[],["lib.rs","util.rs"]],\
 "unicode_ident":["",[],["lib.rs","tables.rs"]],\
-"uuid":["",[["adapter",[],["mod.rs"]],["builder",[],["error.rs","mod.rs"]],["parser",[],["error.rs","mod.rs"]]],["error.rs","lib.rs","prelude.rs"]]\
+"uuid":["",[],["builder.rs","error.rs","external.rs","fmt.rs","lib.rs","macros.rs","parser.rs","timestamp.rs"]]\
 }');
 createSourceSidebar();

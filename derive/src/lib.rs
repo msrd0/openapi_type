@@ -8,7 +8,7 @@
 use proc_macro::TokenStream;
 use proc_macro2::TokenStream as TokenStream2;
 use quote::quote;
-use syn::{parse_macro_input, Data, DeriveInput, TraitBound, TraitBoundModifier, TypeParamBound};
+use syn::{parse_macro_input, Data, DeriveInput, Meta, TraitBound, TraitBoundModifier, TypeParamBound};
 use syn_path::path;
 
 mod attrs;
@@ -28,25 +28,34 @@ pub fn derive_openapi_type(input: TokenStream) -> TokenStream {
 	expand_openapi_type(input).unwrap_or_else(|err| err.to_compile_error()).into()
 }
 
+fn filter_parse_attrs(
+	attrs: &mut ContainerAttributes,
+	input: &DeriveInput,
+	filter: &str,
+	error_on_unknown: bool
+) -> syn::Result<()> {
+	for attr in &input.attrs {
+		match &attr.meta {
+			Meta::List(meta) if meta.path.is_ident(filter) => {
+				attrs.parse_from(meta.tokens.clone(), error_on_unknown)?;
+			},
+			_ => {}
+		}
+	}
+	Ok(())
+}
+
 fn expand_openapi_type(mut input: DeriveInput) -> syn::Result<TokenStream2> {
 	let ident = &input.ident;
 
 	// parse #[serde] and #[openapi] attributes
 	let mut attrs = ContainerAttributes::default();
-	for attr in &input.attrs {
-		if attr.path.is_ident("serde") {
-			attrs.parse_from(attr, false)?;
-		}
-	}
-	for attr in &input.attrs {
-		if attr.path.is_ident("openapi") {
-			attrs.parse_from(attr, true)?;
-		}
-	}
+	filter_parse_attrs(&mut attrs, &input, "serde", false)?;
+	filter_parse_attrs(&mut attrs, &input, "openapi", true)?;
 
 	// parse #[doc] attributes
 	for attr in &input.attrs {
-		if attr.path.is_ident("doc") {
+		if attr.path().is_ident("doc") {
 			if let Some(lit) = parse_doc_attr(attr)? {
 				attrs.doc.push(lit.value());
 			}

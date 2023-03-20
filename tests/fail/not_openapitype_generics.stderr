@@ -15,11 +15,9 @@ error[E0599]: the function or associated item `schema` exists for struct `Foo<Ba
    |
    = note: trait bound `Bar: OpenapiType` was not satisfied
    = note: the following trait bounds were not satisfied:
-           `Bar: OpenapiType`
-           which is required by `Foo<Bar>: OpenapiType`
            `Foo<Bar>: OpenapiType`
            which is required by `&Foo<Bar>: OpenapiType`
-note: the following trait must be implemented
+note: the trait `OpenapiType` must be implemented
   --> src/lib.rs
    |
    | pub trait OpenapiType {

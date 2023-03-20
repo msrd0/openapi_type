@@ -5,8 +5,8 @@ use crate::{
 use proc_macro2::{Ident, Span};
 use serde_derive_internals::attr::RenameRule;
 use syn::{
-	punctuated::Punctuated, spanned::Spanned as _, AngleBracketedGenericArguments, DataEnum, DataStruct, DataUnion, Fields,
-	FieldsNamed, GenericArgument, LitStr, PathArguments, Type, TypePath
+	punctuated::Punctuated, spanned::Spanned as _, AngleBracketedGenericArguments, DataEnum, DataStruct, DataUnion, Field,
+	Fields, FieldsNamed, GenericArgument, LitStr, Meta, PathArguments, Type, TypePath
 };
 use syn_path::path;
 
@@ -43,21 +43,25 @@ pub(super) enum ParseDataType {
 	Unit
 }
 
+fn filter_parse_attrs(attrs: &mut FieldAttributes, input: &Field, filter: &str, error_on_unknown: bool) -> syn::Result<()> {
+	for attr in &input.attrs {
+		match &attr.meta {
+			Meta::List(meta) if meta.path.is_ident(filter) => {
+				attrs.parse_from(meta.tokens.clone(), error_on_unknown)?;
+			},
+			_ => {}
+		}
+	}
+	Ok(())
+}
+
 fn parse_named_fields(named_fields: &FieldsNamed, rename_all: Option<&LitStr>) -> syn::Result<Vec<ParseDataField>> {
 	let mut fields: Vec<ParseDataField> = Vec::new();
 	for f in &named_fields.named {
 		// parse #[serde] and #[openapi] attributes
 		let mut attrs = FieldAttributes::default();
-		for attr in &f.attrs {
-			if attr.path.is_ident("serde") {
-				attrs.parse_from(attr, false)?;
-			}
-		}
-		for attr in &f.attrs {
-			if attr.path.is_ident("openapi") {
-				attrs.parse_from(attr, true)?;
-			}
-		}
+		filter_parse_attrs(&mut attrs, f, "serde", false)?;
+		filter_parse_attrs(&mut attrs, f, "openapi", true)?;
 
 		// skip this field if desired
 		if attrs.skip_serializing && attrs.skip_deserializing {
@@ -67,7 +71,7 @@ fn parse_named_fields(named_fields: &FieldsNamed, rename_all: Option<&LitStr>) -
 		// parse #[doc] attributes
 		let mut doc = Vec::new();
 		for attr in &f.attrs {
-			if attr.path.is_ident("doc") {
+			if attr.path().is_ident("doc") {
 				if let Some(lit) = parse_doc_attr(attr)? {
 					doc.push(lit.value());
 				}
@@ -339,7 +343,7 @@ pub(super) fn parse_enum(ident: &Ident, inum: &DataEnum, attrs: &ContainerAttrib
 		},
 		// no variants
 		(None, None) => Err(syn::Error::new(
-			inum.brace_token.span,
+			inum.brace_token.span.span(),
 			"#[derive(OpenapiType)] does not support enums with no variants"
 		))
 	}

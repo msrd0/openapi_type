@@ -96,8 +96,8 @@ limitations under the License.
 ```
 
  [contributors]: https://github.com/msrd0/openapi_type/graphs/contributors
- [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEG9TdymoKQRaCG68Ymq0pT8CHGzS6Z4uLWSmLGwzzNog7vAuIYXKEGx-WnjBiXfMmG4V3M75ny0WUG3hGD9I-WPRHG94Lm2E6FONkYWSBgmxvcGVuYXBpX3R5cGVlMC40LjE
- [__link0]: https://docs.rs/openapi_type/0.4.1/openapi_type/trait.OpenapiType.html
- [__link1]: https://docs.rs/openapi_type/0.4.1/openapi_type/?search=OpenapiType::schema
- [__link2]: https://docs.rs/openapi_type/0.4.1/openapi_type/?search=OpenapiSchema
- [__link3]: https://docs.rs/openapi_type/0.4.1/openapi_type/?search=OpenapiSchema::dependencies
+ [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEG9TdymoKQRaCG68Ymq0pT8CHGzS6Z4uLWSmLGwzzNog7vAuIYXKEGx-WnjBiXfMmG4V3M75ny0WUG3hGD9I-WPRHG94Lm2E6FONkYWSBgmxvcGVuYXBpX3R5cGVlMC40LjI
+ [__link0]: https://docs.rs/openapi_type/0.4.2/openapi_type/trait.OpenapiType.html
+ [__link1]: https://docs.rs/openapi_type/0.4.2/openapi_type/?search=OpenapiType::schema
+ [__link2]: https://docs.rs/openapi_type/0.4.2/openapi_type/?search=OpenapiSchema
+ [__link3]: https://docs.rs/openapi_type/0.4.2/openapi_type/?search=OpenapiSchema::dependencies

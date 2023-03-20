@@ -119,6 +119,13 @@ impl OpenapiType for uuid08::Uuid {
 	}
 }
 
+#[cfg(feature = "uuid1")]
+impl OpenapiType for uuid1::Uuid {
+	fn visit_type<V: Visitor>(visitor: &mut V) {
+		visitor.visit_uuid();
+	}
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 #[cfg(any(feature = "time03", feature = "chrono04"))]

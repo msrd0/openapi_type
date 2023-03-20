@@ -165,6 +165,12 @@ test_type!(uuid08::Uuid = {
 	"format": "uuid"
 });
 
+#[cfg(feature = "uuid1")]
+test_type!(uuid1::Uuid = {
+	"type": "string",
+	"format": "uuid"
+});
+
 // ### date/time
 
 #[cfg(feature = "chrono04")]

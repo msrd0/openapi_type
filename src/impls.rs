@@ -251,6 +251,11 @@ map! {
 	IndexMap<K, V, S>(V);
 }
 
+#[cfg(feature = "indexmap2")]
+map! {
+	indexmap2::IndexMap<K, V, S>(V);
+}
+
 #[cfg(feature = "linked-hash-map05")]
 map! {
 	linked_hash_map05::LinkedHashMap<K, V, S>(V);

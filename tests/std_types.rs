@@ -226,6 +226,14 @@ test_type!(BTreeMap<isize, String>, HashMap<isize, String>, IndexMap<isize, Stri
 	}
 });
 
+#[cfg(feature = "indexmap2")]
+test_type!(indexmap2::IndexMap<isize, String> = {
+	"type": "object",
+	"additionalProperties": {
+		"type": "string"
+	}
+});
+
 #[cfg(feature = "linked-hash-map05")]
 test_type!(linked_hash_map05::LinkedHashMap<isize, String> = {
 	"type": "object",

@@ -1,7 +1,8 @@
 var sourcesIndex = JSON.parse('{\
 "chrono":["",[["datetime",[],["mod.rs"]],["format",[],["mod.rs","parse.rs","parsed.rs","scan.rs","strftime.rs"]],["naive",[["datetime",[],["mod.rs"]],["time",[],["mod.rs"]]],["date.rs","internals.rs","isoweek.rs","mod.rs"]],["offset",[],["fixed.rs","mod.rs","utc.rs"]]],["date.rs","lib.rs","month.rs","oldtime.rs","round.rs","traits.rs","weekday.rs"]],\
+"equivalent":["",[],["lib.rs"]],\
 "hashbrown":["",[["external_trait_impls",[],["mod.rs"]],["raw",[],["alloc.rs","bitmask.rs","mod.rs","sse2.rs"]]],["lib.rs","macros.rs","map.rs","scopeguard.rs","set.rs"]],\
-"indexmap":["",[["map",[["core",[],["raw.rs"]]],["core.rs"]]],["arbitrary.rs","equivalent.rs","lib.rs","macros.rs","map.rs","mutable_keys.rs","serde.rs","serde_seq.rs","set.rs","util.rs"]],\
+"indexmap":["",[["map",[["core",[],["raw.rs"]]],["core.rs","iter.rs","slice.rs"]],["set",[],["iter.rs","slice.rs"]]],["arbitrary.rs","lib.rs","macros.rs","map.rs","mutable_keys.rs","set.rs","util.rs"]],\
 "itoa":["",[],["lib.rs","udiv128.rs"]],\
 "linked_hash_map":["",[],["lib.rs"]],\
 "num_traits":["",[["ops",[],["checked.rs","euclid.rs","inv.rs","mod.rs","mul_add.rs","overflowing.rs","saturating.rs","wrapping.rs"]]],["bounds.rs","cast.rs","float.rs","identities.rs","int.rs","lib.rs","macros.rs","pow.rs","sign.rs"]],\

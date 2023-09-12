@@ -26,7 +26,7 @@ uuid = ["uuid08", "uuid1"]
 [dependencies]
 indexmap = "1.7"
 openapi_type_derive = { path = "./derive", version = "0.4.4" }
-openapiv3 = "1.0"
+openapiv3 = "=1.0.2"
 serde_json = "1.0"
 
 # optional dependencies / features

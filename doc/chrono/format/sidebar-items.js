@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["Fixed","Item","Numeric","Pad","ParseErrorKind"],"fn":["parse","parse_and_remainder"],"mod":["strftime"],"struct":["InternalFixed","InternalNumeric","ParseError","Parsed"],"type":["ParseResult"]};
+window.SIDEBAR_ITEMS = {"enum":["Colons","Fixed","Item","Numeric","OffsetPrecision","Pad","ParseErrorKind"],"fn":["parse","parse_and_remainder"],"mod":["strftime"],"struct":["InternalFixed","InternalNumeric","OffsetFormat","ParseError","Parsed"],"type":["ParseResult"]};

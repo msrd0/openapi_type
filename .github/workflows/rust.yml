@@ -37,7 +37,7 @@ jobs:
     name: Test (Rust ${{matrix.rust.name}})
     continue-on-error: ${{matrix.rust.nightly}}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{matrix.rust.toolchain}}
@@ -54,7 +54,7 @@ jobs:
   test-trybuild:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@master
         with:
           toolchain: "1.68"
@@ -83,7 +83,7 @@ jobs:
     name: Clippy (Rust ${{matrix.rust.name}})
     continue-on-error: ${{matrix.rust.nightly}}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{matrix.rust.toolchain}}
@@ -101,7 +101,7 @@ jobs:
   rustfmt:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@nightly
         with:
           components: rustfmt
@@ -111,7 +111,7 @@ jobs:
   readme:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: docker://ghcr.io/msrd0/cargo-doc2readme
         with:
           entrypoint: ./readme.sh
@@ -120,7 +120,7 @@ jobs:
   coverage:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
         id: rust-toolchain
       - name: Get Tarpaulin Version
@@ -159,7 +159,7 @@ jobs:
   doc:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
         id: rust-toolchain
       - uses: actions/cache@v3
@@ -181,7 +181,7 @@ jobs:
     needs: [coverage, doc]
     if: github.ref == 'refs/heads/main'
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: gh-pages
       - uses: actions/download-artifact@v3

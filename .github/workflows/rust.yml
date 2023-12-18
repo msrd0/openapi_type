@@ -149,7 +149,7 @@ jobs:
           	--ignore-panics --ignore-tests \
           	--out html --out json \
           	-- --skip trybuild
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: tarpaulin-report
           path: |
@@ -171,7 +171,7 @@ jobs:
           key: "${{runner.os}} Rust ${{steps.rust-toolchain.outputs.cachekey}} (rustdoc)"
       - run: cargo doc --workspace --all-features
       - run: tar cfJ rustdoc.tar.xz target/doc/
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: rustdoc
           path: rustdoc.tar.xz

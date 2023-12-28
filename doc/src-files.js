@@ -1,8 +1,8 @@
 var srcIndex = JSON.parse('{\
 "chrono":["",[["datetime",[],["mod.rs"]],["format",[],["formatting.rs","mod.rs","parse.rs","parsed.rs","scan.rs","strftime.rs"]],["naive",[["datetime",[],["mod.rs"]],["time",[],["mod.rs"]]],["date.rs","internals.rs","isoweek.rs","mod.rs"]],["offset",[],["fixed.rs","mod.rs","utc.rs"]]],["date.rs","duration.rs","lib.rs","month.rs","round.rs","traits.rs","weekday.rs"]],\
-"deranged":["",[],["lib.rs","traits.rs"]],\
+"deranged":["",[],["lib.rs","traits.rs","unsafe_wrapper.rs"]],\
 "equivalent":["",[],["lib.rs"]],\
-"hashbrown":["",[["external_trait_impls",[],["mod.rs"]],["raw",[],["alloc.rs","bitmask.rs","mod.rs","sse2.rs"]]],["lib.rs","macros.rs","map.rs","scopeguard.rs","set.rs"]],\
+"hashbrown":["",[["external_trait_impls",[],["mod.rs"]],["raw",[],["alloc.rs","bitmask.rs","mod.rs","sse2.rs"]]],["lib.rs","macros.rs","map.rs","scopeguard.rs","set.rs","table.rs"]],\
 "indexmap":["",[["map",[["core",[],["raw.rs"]]],["core.rs","iter.rs","slice.rs"]],["set",[],["iter.rs","slice.rs"]]],["arbitrary.rs","lib.rs","macros.rs","map.rs","mutable_keys.rs","set.rs","util.rs"]],\
 "itoa":["",[],["lib.rs","udiv128.rs"]],\
 "linked_hash_map":["",[],["lib.rs"]],\
@@ -10,6 +10,7 @@ var srcIndex = JSON.parse('{\
 "openapi_type":["",[["visitor",[],["mod.rs","never.rs","openapi.rs"]]],["impls.rs","lib.rs"]],\
 "openapi_type_derive":["",[],["attrs.rs","codegen.rs","lib.rs","parser.rs","util.rs"]],\
 "openapiv3":["",[],["callback.rs","components.rs","contact.rs","discriminator.rs","encoding.rs","example.rs","external_documentation.rs","header.rs","info.rs","lib.rs","license.rs","link.rs","media_type.rs","openapi.rs","operation.rs","parameter.rs","paths.rs","reference.rs","request_body.rs","responses.rs","schema.rs","security_requirement.rs","security_scheme.rs","server.rs","server_variable.rs","status_code.rs","tag.rs","util.rs","variant_or.rs"]],\
+"powerfmt":["",[],["buf.rs","ext.rs","lib.rs","smart_display.rs","smart_display_impls.rs"]],\
 "proc_macro2":["",[],["detection.rs","extra.rs","fallback.rs","lib.rs","marker.rs","parse.rs","rcvec.rs","wrapper.rs"]],\
 "quote":["",[],["ext.rs","format.rs","ident_fragment.rs","lib.rs","runtime.rs","spanned.rs","to_tokens.rs"]],\
 "ryu":["",[["buffer",[],["mod.rs"]],["pretty",[],["exponent.rs","mantissa.rs","mod.rs"]]],["common.rs","d2s.rs","d2s_full_table.rs","d2s_intrinsics.rs","digit_table.rs","f2s.rs","f2s_intrinsics.rs","lib.rs"]],\

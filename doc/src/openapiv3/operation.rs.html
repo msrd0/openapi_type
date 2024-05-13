@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/openapiv3-1.0.2/src/operation.rs`."><title>operation.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-e935ef01ae1c1829.css"><script id="default-settings" 
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/openapiv3-2.0.0/src/operation.rs`."><title>operation.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-e935ef01ae1c1829.css"><script id="default-settings" 
 data-theme="ayu"
 data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="openapiv3" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0 (9b00956e5 2024-04-29)" data-channel="1.78.0" data-search-js="search-42d8da7a6b9792c2.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-12cf3b4f4f9dc36d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
             <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
@@ -133,6 +133,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#129" id="129">129</a>
 <a href="#130" id="130">130</a>
 <a href="#131" id="131">131</a>
+<a href="#132" id="132">132</a>
+<a href="#133" id="133">133</a>
 </pre></div><pre class="rust"><code><span class="kw">use crate</span>::<span class="kw-2">*</span>;
 <span class="kw">use </span>indexmap::IndexMap;
 <span class="kw">use </span>serde::{Deserialize, Serialize};
@@ -144,8 +146,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     <span class="doccomment">/// A list of tags for API documentation control.
     /// Tags can be used for logical grouping of operations
     /// by resources or any other qualifier.
-    </span><span class="attr">#[serde(default)]
-    #[serde(skip_serializing_if = <span class="string">"Vec::is_empty"</span>)]
+    </span><span class="attr">#[serde(default, skip_serializing_if = <span class="string">"Vec::is_empty"</span>)]
     </span><span class="kw">pub </span>tags: Vec&lt;String&gt;,
     <span class="doccomment">/// A short summary of what the operation does.
     </span><span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
@@ -171,8 +172,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     /// parameter is defined by a combination of a name and location.
     /// The list can use the Reference Object to link to parameters
     /// that are defined at the OpenAPI Object's components/parameters.
-    </span><span class="attr">#[serde(default)]
-    #[serde(skip_serializing_if = <span class="string">"Vec::is_empty"</span>)]
+    </span><span class="attr">#[serde(default, skip_serializing_if = <span class="string">"Vec::is_empty"</span>)]
     </span><span class="kw">pub </span>parameters: Vec&lt;ReferenceOr&lt;Parameter&gt;&gt;,
     <span class="doccomment">/// The request body applicable for this operation.
     /// The requestBody is only supported in HTTP methods
@@ -184,6 +184,12 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     <span class="doccomment">/// REQUIRED. The list of possible responses as they are returned
     /// from executing this operation.
     </span><span class="kw">pub </span>responses: Responses,
+    <span class="doccomment">/// A map of possible out-of band callbacks related to the parent
+    /// operation. The key is a unique identifier for the Callback Object. Each
+    /// value in the map is a Callback Object that describes a request that may
+    /// be initiated by the API provider and the expected responses.
+    </span><span class="attr">#[serde(default, skip_serializing_if = <span class="string">"IndexMap::is_empty"</span>)]
+    </span><span class="kw">pub </span>callbacks: IndexMap&lt;String, Callback&gt;,
     <span class="doccomment">/// Declares this operation to be deprecated.Default value is false.
     </span><span class="attr">#[serde(default, skip_serializing_if = <span class="string">"is_false"</span>)]
     </span><span class="kw">pub </span>deprecated: bool,
@@ -192,14 +198,12 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     /// be used. Only one of the security requirement objects need to be satisfied to
     /// authorize a request. This definition overrides any declared top-level security.
     /// To remove a top-level security declaration, an empty array can be used.
-    </span><span class="attr">#[serde(default)]
-    #[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
+    </span><span class="attr">#[serde(default, skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>security: <span class="prelude-ty">Option</span>&lt;Vec&lt;SecurityRequirement&gt;&gt;,
     <span class="doccomment">/// An alternative server array to service this operation.
     /// If an alternative server object is specified at the
     /// Path Item Object or Root level, it will be overridden by this value.
-    </span><span class="attr">#[serde(default)]
-    #[serde(skip_serializing_if = <span class="string">"Vec::is_empty"</span>)]
+    </span><span class="attr">#[serde(default, skip_serializing_if = <span class="string">"Vec::is_empty"</span>)]
     </span><span class="kw">pub </span>servers: Vec&lt;Server&gt;,
     <span class="doccomment">/// Inline extensions to this object.
     </span><span class="attr">#[serde(flatten, deserialize_with = <span class="string">"crate::util::deserialize_extensions"</span>)]

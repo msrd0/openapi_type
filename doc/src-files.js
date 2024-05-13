@@ -3,7 +3,7 @@ var srcIndex = new Map(JSON.parse('[\
 ["deranged",["",[],["lib.rs","traits.rs","unsafe_wrapper.rs"]]],\
 ["equivalent",["",[],["lib.rs"]]],\
 ["hashbrown",["",[["external_trait_impls",[],["mod.rs"]],["raw",[],["alloc.rs","bitmask.rs","mod.rs","sse2.rs"]]],["lib.rs","macros.rs","map.rs","scopeguard.rs","set.rs","table.rs"]]],\
-["indexmap",["",[["map",[["core",[],["entry.rs","raw.rs","raw_entry_v1.rs"]]],["core.rs","iter.rs","mutable.rs","slice.rs"]],["set",[],["iter.rs","mutable.rs","slice.rs"]]],["arbitrary.rs","lib.rs","macros.rs","map.rs","set.rs","util.rs"]]],\
+["indexmap",["",[["map",[["core",[],["entry.rs","raw.rs","raw_entry_v1.rs"]]],["core.rs","iter.rs","mutable.rs","serde_seq.rs","slice.rs"]],["set",[],["iter.rs","mutable.rs","slice.rs"]]],["arbitrary.rs","lib.rs","macros.rs","map.rs","serde.rs","set.rs","util.rs"]]],\
 ["itoa",["",[],["lib.rs","udiv128.rs"]]],\
 ["linked_hash_map",["",[],["lib.rs"]]],\
 ["num_conv",["",[],["lib.rs"]]],\

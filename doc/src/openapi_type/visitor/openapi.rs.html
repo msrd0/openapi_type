@@ -721,8 +721,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 </pre></div><pre class="rust"><code><span class="kw">use super</span>::{never::Never, seal, AlternativesVisitor, ObjectVisitor, Visitor};
 <span class="kw">use </span>indexmap::{map::Entry, IndexMap};
 <span class="kw">use </span>openapiv3::{
-	AdditionalProperties, ArrayType, IntegerFormat, IntegerType, NumberFormat, NumberType, ObjectType, ReferenceOr, Schema,
-	SchemaData, SchemaKind, StringFormat, StringType, Type, VariantOrUnknownOrEmpty
+	AdditionalProperties, ArrayType, BooleanType, IntegerFormat, IntegerType, NumberFormat, NumberType, ObjectType,
+	ReferenceOr, Schema, SchemaData, SchemaKind, StringFormat, StringType, Type, VariantOrUnknownOrEmpty
 };
 <span class="kw">use </span>std::fmt::Display;
 
@@ -860,7 +860,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 			<span class="self">Self</span>::Bool =&gt; <span class="prelude-val">Some</span>(OpenapiSchema::new(Schema {
 				schema_data: Default::default(),
-				schema_kind: SchemaKind::Type(Type::Boolean {})
+				schema_kind: SchemaKind::Type(Type::Boolean(BooleanType::default()))
 			})),
 
 			<span class="self">Self</span>::Int { byte, minimum } =&gt; <span class="prelude-val">Some</span>(OpenapiSchema::new(Schema {

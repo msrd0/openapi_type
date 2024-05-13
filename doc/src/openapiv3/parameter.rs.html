@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/openapiv3-1.0.2/src/parameter.rs`."><title>parameter.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-e935ef01ae1c1829.css"><script id="default-settings" 
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/openapiv3-2.0.0/src/parameter.rs`."><title>parameter.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-e935ef01ae1c1829.css"><script id="default-settings" 
 data-theme="ayu"
 data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="openapiv3" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0 (9b00956e5 2024-04-29)" data-channel="1.78.0" data-search-js="search-42d8da7a6b9792c2.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-12cf3b4f4f9dc36d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
             <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
@@ -234,6 +234,25 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#230" id="230">230</a>
 <a href="#231" id="231">231</a>
 <a href="#232" id="232">232</a>
+<a href="#233" id="233">233</a>
+<a href="#234" id="234">234</a>
+<a href="#235" id="235">235</a>
+<a href="#236" id="236">236</a>
+<a href="#237" id="237">237</a>
+<a href="#238" id="238">238</a>
+<a href="#239" id="239">239</a>
+<a href="#240" id="240">240</a>
+<a href="#241" id="241">241</a>
+<a href="#242" id="242">242</a>
+<a href="#243" id="243">243</a>
+<a href="#244" id="244">244</a>
+<a href="#245" id="245">245</a>
+<a href="#246" id="246">246</a>
+<a href="#247" id="247">247</a>
+<a href="#248" id="248">248</a>
+<a href="#249" id="249">249</a>
+<a href="#250" id="250">250</a>
+<a href="#251" id="251">251</a>
 </pre></div><pre class="rust"><code><span class="kw">use crate</span>::<span class="kw-2">*</span>;
 <span class="kw">use </span>indexmap::IndexMap;
 <span class="kw">use </span>serde::{Deserialize, Serialize};
@@ -296,10 +315,13 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 <span class="kw">pub type </span>Content = IndexMap&lt;String, MediaType&gt;;
 
-<span class="attr">#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+<span class="doccomment">/// Describes a single operation parameter.
+</span><span class="attr">#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(tag = <span class="string">"in"</span>, rename_all = <span class="string">"camelCase"</span>)]
 </span><span class="kw">pub enum </span>Parameter {
-    <span class="attr">#[serde(rename_all = <span class="string">"camelCase"</span>)]
+    <span class="doccomment">/// Parameters that are appended to the URL. For example, in /items?id=###,
+    /// the query parameter is id.
+    </span><span class="attr">#[serde(rename_all = <span class="string">"camelCase"</span>)]
     </span>Query {
         <span class="attr">#[serde(flatten)]
         </span>parameter_data: ParameterData,
@@ -323,7 +345,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         </span><span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
         </span>allow_empty_value: <span class="prelude-ty">Option</span>&lt;bool&gt;,
     },
-    Header {
+    <span class="doccomment">/// Custom headers that are expected as part of the request. Note that
+    /// RFC7230 states header names are case insensitive.
+    </span>Header {
         <span class="attr">#[serde(flatten)]
         </span>parameter_data: ParameterData,
         <span class="doccomment">/// Describes how the parameter value will be serialized depending on
@@ -333,7 +357,11 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         </span><span class="attr">#[serde(default, skip_serializing_if = <span class="string">"SkipSerializeIfDefault::skip"</span>)]
         </span>style: HeaderStyle,
     },
-    Path {
+    <span class="doccomment">/// Used together with Path Templating, where the parameter value is
+    /// actually part of the operation's URL. This does not include the host or
+    /// base path of the API. For example, in /items/{itemId}, the path
+    /// parameter is itemId.
+    </span>Path {
         <span class="attr">#[serde(flatten)]
         </span>parameter_data: ParameterData,
         <span class="doccomment">/// Describes how the parameter value will be serialized depending on
@@ -343,7 +371,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         </span><span class="attr">#[serde(default, skip_serializing_if = <span class="string">"SkipSerializeIfDefault::skip"</span>)]
         </span>style: PathStyle,
     },
-    Cookie {
+    <span class="doccomment">/// Used to pass a specific cookie value to the API.
+    </span>Cookie {
         <span class="attr">#[serde(flatten)]
         </span>parameter_data: ParameterData,
         <span class="doccomment">/// Describes how the parameter value will be serialized depending on
@@ -420,9 +449,12 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <span class="attr">#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = <span class="string">"camelCase"</span>)]
 </span><span class="kw">pub enum </span>PathStyle {
-    Matrix,
-    Label,
-    Simple,
+    <span class="doccomment">/// Path-style parameters defined by RFC6570.
+    </span>Matrix,
+    <span class="doccomment">/// Label style parameters defined by RFC6570.
+    </span>Label,
+    <span class="doccomment">/// Simple style parameters defined by RFC6570.
+    </span>Simple,
 }
 
 <span class="kw">impl </span>Default <span class="kw">for </span>PathStyle {
@@ -433,10 +465,14 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <span class="attr">#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = <span class="string">"camelCase"</span>)]
 </span><span class="kw">pub enum </span>QueryStyle {
-    Form,
-    SpaceDelimited,
-    PipeDelimited,
-    DeepObject,
+    <span class="doccomment">/// Form style parameters defined by RFC6570.
+    </span>Form,
+    <span class="doccomment">/// Space separated array values.
+    </span>SpaceDelimited,
+    <span class="doccomment">/// Pipe separated array values.
+    </span>PipeDelimited,
+    <span class="doccomment">/// Provides a simple way of rendering nested objects using form parameters.
+    </span>DeepObject,
 }
 
 <span class="kw">impl </span>Default <span class="kw">for </span>QueryStyle {
@@ -447,7 +483,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <span class="attr">#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = <span class="string">"camelCase"</span>)]
 </span><span class="kw">pub enum </span>CookieStyle {
-    Form,
+    <span class="doccomment">/// Form style parameters defined by RFC6570.
+    </span>Form,
 }
 
 <span class="kw">impl </span>Default <span class="kw">for </span>CookieStyle {
@@ -458,7 +495,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <span class="attr">#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 #[serde(rename_all = <span class="string">"camelCase"</span>)]
 </span><span class="kw">pub enum </span>HeaderStyle {
-    Simple,
+    <span class="doccomment">/// Simple style parameters defined by RFC6570.
+    </span>Simple,
 }
 
 <span class="kw">impl </span>Default <span class="kw">for </span>HeaderStyle {

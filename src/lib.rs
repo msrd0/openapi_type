@@ -1,7 +1,7 @@
+#![allow(clippy::tabs_in_doc_comments)]
 #![warn(missing_debug_implementations, rust_2018_idioms)]
 #![deny(rustdoc::broken_intra_doc_links)]
 #![forbid(unsafe_code)]
-#![cfg_attr(feature = "cargo-clippy", allow(clippy::tabs_in_doc_comments))]
 #![doc = r##"
 This crate gives static type information for primitives and commonly used types from the standard
 library and other commonly used libraries `chrono`, `indexmap`, `linked-hash-map`, `time` and

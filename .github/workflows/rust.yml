@@ -22,7 +22,7 @@ jobs:
       matrix:
         rust:
           - name: MSRV
-            toolchain: "1.60"
+            toolchain: "1.70"
             nightly: false
           - name: Stable
             toolchain: stable
@@ -57,7 +57,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@master
         with:
-          toolchain: "1.68"
+          toolchain: "1.78"
         id: rust-toolchain
       - uses: actions/cache@v4
         with:
@@ -74,7 +74,7 @@ jobs:
       matrix:
         rust:
           - name: MSRV
-            toolchain: "1.60"
+            toolchain: "1.70"
             nightly: false
           - name: Nightly
             toolchain: nightly
@@ -144,7 +144,7 @@ jobs:
           	--workspace \
           	--all-features \
           	--exclude-files 'derive/*' \
-            --exclude-files 'serde/*' \
+          	--exclude-files 'serde/*' \
           	--exclude-files 'target/*' \
           	--ignore-panics --ignore-tests \
           	--out html --out json \

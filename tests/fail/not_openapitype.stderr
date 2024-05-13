@@ -5,12 +5,12 @@ error[E0277]: the trait bound `Bar: OpenapiType` is not satisfied
   |          ^^^ the trait `OpenapiType` is not implemented for `Bar`
   |
   = help: the following other types implement trait `OpenapiType`:
-            &'a T
-            ()
-            BTreeMap<K, V>
-            BTreeSet<T>
-            CStr
-            CString
-            Foo
-            HashMap<K, V, S>
+            bool
+            char
+            isize
+            i8
+            i16
+            i32
+            i64
+            i128
           and $N others

@@ -1,6 +1,8 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/openapiv3-1.0.2/src/operation.rs`."><title>operation.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-9ee3a5e31a2afa3e.css"><script id="default-settings" 
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/openapiv3-1.0.2/src/operation.rs`."><title>operation.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-e935ef01ae1c1829.css"><script id="default-settings" 
 data-theme="ayu"
-data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="openapiv3" data-themes="" data-resource-suffix="" data-rustdoc-version="1.75.0 (82e1608df 2023-12-21)" data-channel="1.75.0" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-9dd44ab47b99a0fb.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="openapiv3" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0 (9b00956e5 2024-04-29)" data-channel="1.78.0" data-search-js="search-42d8da7a6b9792c2.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-12cf3b4f4f9dc36d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
+            <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../openapiv3/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -137,30 +139,30 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 <span class="doccomment">/// Describes a single API operation on a path.
 </span><span class="attr">#[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]
-#[serde(rename_all = <span class="string">&quot;camelCase&quot;</span>)]
+#[serde(rename_all = <span class="string">"camelCase"</span>)]
 </span><span class="kw">pub struct </span>Operation {
     <span class="doccomment">/// A list of tags for API documentation control.
     /// Tags can be used for logical grouping of operations
     /// by resources or any other qualifier.
     </span><span class="attr">#[serde(default)]
-    #[serde(skip_serializing_if = <span class="string">&quot;Vec::is_empty&quot;</span>)]
+    #[serde(skip_serializing_if = <span class="string">"Vec::is_empty"</span>)]
     </span><span class="kw">pub </span>tags: Vec&lt;String&gt;,
     <span class="doccomment">/// A short summary of what the operation does.
-    </span><span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    </span><span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>summary: <span class="prelude-ty">Option</span>&lt;String&gt;,
     <span class="doccomment">/// A verbose explanation of the operation behavior.
     /// CommonMark syntax MAY be used for rich text representation.
-    </span><span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    </span><span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>description: <span class="prelude-ty">Option</span>&lt;String&gt;,
     <span class="doccomment">/// Additional external documentation for this operation.
-    </span><span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    </span><span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>external_docs: <span class="prelude-ty">Option</span>&lt;ExternalDocumentation&gt;,
     <span class="doccomment">/// Unique string used to identify the operation.
     /// The id MUST be unique among all operations described in the API.
     /// Tools and libraries MAY use the operationId to uniquely identify
     /// an operation, therefore, it is RECOMMENDED to follow common
     /// programming naming conventions.
-    </span><span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    </span><span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>operation_id: <span class="prelude-ty">Option</span>&lt;String&gt;,
     <span class="doccomment">/// A list of parameters that are applicable for this operation.
     /// If a parameter is already defined at the Path Item, the new
@@ -168,22 +170,22 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     /// The list MUST NOT include duplicated parameters. A unique
     /// parameter is defined by a combination of a name and location.
     /// The list can use the Reference Object to link to parameters
-    /// that are defined at the OpenAPI Object&#39;s components/parameters.
+    /// that are defined at the OpenAPI Object's components/parameters.
     </span><span class="attr">#[serde(default)]
-    #[serde(skip_serializing_if = <span class="string">&quot;Vec::is_empty&quot;</span>)]
+    #[serde(skip_serializing_if = <span class="string">"Vec::is_empty"</span>)]
     </span><span class="kw">pub </span>parameters: Vec&lt;ReferenceOr&lt;Parameter&gt;&gt;,
     <span class="doccomment">/// The request body applicable for this operation.
     /// The requestBody is only supported in HTTP methods
     /// where the HTTP 1.1 specification RFC7231 has explicitly
     /// defined semantics for request bodies. In other cases where
     /// the HTTP spec is vague, requestBody SHALL be ignored by consumers.
-    </span><span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    </span><span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>request_body: <span class="prelude-ty">Option</span>&lt;ReferenceOr&lt;RequestBody&gt;&gt;,
     <span class="doccomment">/// REQUIRED. The list of possible responses as they are returned
     /// from executing this operation.
     </span><span class="kw">pub </span>responses: Responses,
     <span class="doccomment">/// Declares this operation to be deprecated.Default value is false.
-    </span><span class="attr">#[serde(default, skip_serializing_if = <span class="string">&quot;is_false&quot;</span>)]
+    </span><span class="attr">#[serde(default, skip_serializing_if = <span class="string">"is_false"</span>)]
     </span><span class="kw">pub </span>deprecated: bool,
     <span class="doccomment">/// A declaration of which security mechanisms can be used for this operation.
     /// The list of values includes alternative security requirement objects that can
@@ -191,16 +193,16 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     /// authorize a request. This definition overrides any declared top-level security.
     /// To remove a top-level security declaration, an empty array can be used.
     </span><span class="attr">#[serde(default)]
-    #[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    #[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>security: <span class="prelude-ty">Option</span>&lt;Vec&lt;SecurityRequirement&gt;&gt;,
     <span class="doccomment">/// An alternative server array to service this operation.
     /// If an alternative server object is specified at the
     /// Path Item Object or Root level, it will be overridden by this value.
     </span><span class="attr">#[serde(default)]
-    #[serde(skip_serializing_if = <span class="string">&quot;Vec::is_empty&quot;</span>)]
+    #[serde(skip_serializing_if = <span class="string">"Vec::is_empty"</span>)]
     </span><span class="kw">pub </span>servers: Vec&lt;Server&gt;,
     <span class="doccomment">/// Inline extensions to this object.
-    </span><span class="attr">#[serde(flatten, deserialize_with = <span class="string">&quot;crate::util::deserialize_extensions&quot;</span>)]
+    </span><span class="attr">#[serde(flatten, deserialize_with = <span class="string">"crate::util::deserialize_extensions"</span>)]
     </span><span class="kw">pub </span>extensions: IndexMap&lt;String, serde_json::Value&gt;,
 }
 
@@ -218,14 +220,14 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
                     default: <span class="prelude-val">None</span>,
                     responses: {
                         <span class="kw">let </span><span class="kw-2">mut </span>map = IndexMap::new();
-                        map.insert(StatusCode::Code(<span class="number">200</span>), ReferenceOr::ref_(<span class="string">&quot;test&quot;</span>));
+                        map.insert(StatusCode::Code(<span class="number">200</span>), ReferenceOr::ref_(<span class="string">"test"</span>));
                         map
                     },
                     ..Default::default()
                 },
                 ..Default::default()
             },
-            from_str(<span class="string">&quot;{ responses: { 200: { $ref: &#39;test&#39; } } }&quot;</span>).unwrap(),
+            from_str(<span class="string">"{ responses: { 200: { $ref: 'test' } } }"</span>).unwrap(),
         );
 
         <span class="macro">assert_eq!</span>(
@@ -234,31 +236,31 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
                     default: <span class="prelude-val">None</span>,
                     responses: {
                         <span class="kw">let </span><span class="kw-2">mut </span>map = IndexMap::new();
-                        map.insert(StatusCode::Code(<span class="number">666</span>), ReferenceOr::ref_(<span class="string">&quot;demo&quot;</span>));
+                        map.insert(StatusCode::Code(<span class="number">666</span>), ReferenceOr::ref_(<span class="string">"demo"</span>));
                         map
                     },
                     ..Default::default()
                 },
                 ..Default::default()
             },
-            from_str(<span class="string">&quot;{ responses: { \&quot;666\&quot;: { $ref: &#39;demo&#39; } } }&quot;</span>).unwrap(),
+            from_str(<span class="string">"{ responses: { \"666\": { $ref: 'demo' } } }"</span>).unwrap(),
         );
 
         <span class="macro">assert_eq!</span>(
             Operation {
                 responses: Responses {
-                    default: <span class="prelude-val">Some</span>(ReferenceOr::ref_(<span class="string">&quot;def&quot;</span>)),
+                    default: <span class="prelude-val">Some</span>(ReferenceOr::ref_(<span class="string">"def"</span>)),
                     responses: {
                         <span class="kw">let </span><span class="kw-2">mut </span>map = IndexMap::new();
-                        map.insert(StatusCode::Code(<span class="number">666</span>), ReferenceOr::ref_(<span class="string">&quot;demo&quot;</span>));
-                        map.insert(StatusCode::Code(<span class="number">418</span>), ReferenceOr::ref_(<span class="string">&quot;demo&quot;</span>));
+                        map.insert(StatusCode::Code(<span class="number">666</span>), ReferenceOr::ref_(<span class="string">"demo"</span>));
+                        map.insert(StatusCode::Code(<span class="number">418</span>), ReferenceOr::ref_(<span class="string">"demo"</span>));
                         map
                     },
                     ..Default::default()
                 },
                 ..Default::default()
             },
-            from_str(<span class="string">&quot;{ responses: { default: { $ref: &#39;def&#39; }, \&quot;666\&quot;: { $ref: &#39;demo&#39; }, 418: { $ref: &#39;demo&#39; } } }&quot;</span>).unwrap(),
+            from_str(<span class="string">"{ responses: { default: { $ref: 'def' }, \"666\": { $ref: 'demo' }, 418: { $ref: 'demo' } } }"</span>).unwrap(),
         );
     }
 }

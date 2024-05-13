@@ -1,6 +1,8 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/openapiv3-1.0.2/src/parameter.rs`."><title>parameter.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-9ee3a5e31a2afa3e.css"><script id="default-settings" 
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/openapiv3-1.0.2/src/parameter.rs`."><title>parameter.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-e935ef01ae1c1829.css"><script id="default-settings" 
 data-theme="ayu"
-data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="openapiv3" data-themes="" data-resource-suffix="" data-rustdoc-version="1.75.0 (82e1608df 2023-12-21)" data-channel="1.75.0" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-9dd44ab47b99a0fb.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="openapiv3" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0 (9b00956e5 2024-04-29)" data-channel="1.78.0" data-search-js="search-42d8da7a6b9792c2.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-12cf3b4f4f9dc36d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
+            <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../openapiv3/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -242,12 +244,12 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 </span><span class="attr">#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 </span><span class="kw">pub struct </span>ParameterData {
     <span class="doccomment">/// REQUIRED. The name of the parameter. Parameter names are case sensitive.
-    /// If in is &quot;path&quot;, the name field MUST correspond to the associated path
+    /// If in is "path", the name field MUST correspond to the associated path
     /// segment from the path field in the Paths Object. See Path Templating for
     /// further information.
     ///
-    /// If in is &quot;header&quot; and the name field is &quot;Accept&quot;, &quot;Content-Type&quot; or
-    /// &quot;Authorization&quot;, the parameter definition SHALL be ignored.
+    /// If in is "header" and the name field is "Accept", "Content-Type" or
+    /// "Authorization", the parameter definition SHALL be ignored.
     ///
     /// For all other cases, the name corresponds to the parameter name
     /// used by the in property.
@@ -255,34 +257,34 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     <span class="doccomment">/// A brief description of the parameter. This could
     /// contain examples of use. CommonMark syntax MAY be
     /// used for rich text representation.
-    </span><span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    </span><span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>description: <span class="prelude-ty">Option</span>&lt;String&gt;,
     <span class="doccomment">/// Determines whether this parameter is mandatory.
-    /// If the parameter location is &quot;path&quot;, this property
+    /// If the parameter location is "path", this property
     /// is REQUIRED and its value MUST be true. Otherwise,
     /// the property MAY be included and its default value
     /// is false.
-    </span><span class="attr">#[serde(default, skip_serializing_if = <span class="string">&quot;is_false&quot;</span>)]
+    </span><span class="attr">#[serde(default, skip_serializing_if = <span class="string">"is_false"</span>)]
     </span><span class="kw">pub </span>required: bool,
     <span class="doccomment">/// Specifies that a parameter is deprecated and SHOULD
     /// be transitioned out of usage.
-    </span><span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    </span><span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>deprecated: <span class="prelude-ty">Option</span>&lt;bool&gt;,
     <span class="attr">#[serde(flatten)]
     </span><span class="kw">pub </span>format: ParameterSchemaOrContent,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>example: <span class="prelude-ty">Option</span>&lt;serde_json::Value&gt;,
-    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">&quot;IndexMap::is_empty&quot;</span>)]
+    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">"IndexMap::is_empty"</span>)]
     </span><span class="kw">pub </span>examples: IndexMap&lt;String, ReferenceOr&lt;Example&gt;&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>explode: <span class="prelude-ty">Option</span>&lt;bool&gt;,
     <span class="doccomment">/// Inline extensions to this object.
-    </span><span class="attr">#[serde(flatten, deserialize_with = <span class="string">&quot;crate::util::deserialize_extensions&quot;</span>)]
+    </span><span class="attr">#[serde(flatten, deserialize_with = <span class="string">"crate::util::deserialize_extensions"</span>)]
     </span><span class="kw">pub </span>extensions: IndexMap&lt;String, serde_json::Value&gt;,
 }
 
 <span class="attr">#[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
-#[serde(rename_all = <span class="string">&quot;camelCase&quot;</span>)]
+#[serde(rename_all = <span class="string">"camelCase"</span>)]
 </span><span class="kw">pub enum </span>ParameterSchemaOrContent {
     <span class="doccomment">/// The schema defining the type used for the parameter.
     </span>Schema(ReferenceOr&lt;Schema&gt;),
@@ -295,30 +297,30 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <span class="kw">pub type </span>Content = IndexMap&lt;String, MediaType&gt;;
 
 <span class="attr">#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-#[serde(tag = <span class="string">&quot;in&quot;</span>, rename_all = <span class="string">&quot;camelCase&quot;</span>)]
+#[serde(tag = <span class="string">"in"</span>, rename_all = <span class="string">"camelCase"</span>)]
 </span><span class="kw">pub enum </span>Parameter {
-    <span class="attr">#[serde(rename_all = <span class="string">&quot;camelCase&quot;</span>)]
+    <span class="attr">#[serde(rename_all = <span class="string">"camelCase"</span>)]
     </span>Query {
         <span class="attr">#[serde(flatten)]
         </span>parameter_data: ParameterData,
         <span class="doccomment">/// Determines whether the parameter value SHOULD allow reserved
-        /// characters, as defined by RFC3986 :/?#[]@!$&amp;&#39;()*+,;= to be included
+        /// characters, as defined by RFC3986 :/?#[]@!$&amp;'()*+,;= to be included
         /// without percent-encoding. This property only applies to parameters
         /// with an in value of query. The default value is false.
-        </span><span class="attr">#[serde(default, skip_serializing_if = <span class="string">&quot;is_false&quot;</span>)]
+        </span><span class="attr">#[serde(default, skip_serializing_if = <span class="string">"is_false"</span>)]
         </span>allow_reserved: bool,
         <span class="doccomment">/// Describes how the parameter value will be serialized depending on
         /// the type of the parameter value. Default values (based on value of
         /// in): for query - form; for path - simple; for header - simple; for
         /// cookie - form.
-        </span><span class="attr">#[serde(default, skip_serializing_if = <span class="string">&quot;SkipSerializeIfDefault::skip&quot;</span>)]
+        </span><span class="attr">#[serde(default, skip_serializing_if = <span class="string">"SkipSerializeIfDefault::skip"</span>)]
         </span>style: QueryStyle,
         <span class="doccomment">/// Sets the ability to pass empty-valued parameters. This is
         /// valid only for query parameters and allows sending a parameter
         /// with an empty value. Default value is false. If style is used,
         /// and if behavior is n/a (cannot be serialized), the value of
         /// allowEmptyValue SHALL be ignored.
-        </span><span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+        </span><span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
         </span>allow_empty_value: <span class="prelude-ty">Option</span>&lt;bool&gt;,
     },
     Header {
@@ -328,7 +330,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         /// the type of the parameter value. Default values (based on value of
         /// in): for query - form; for path - simple; for header - simple; for
         /// cookie - form.
-        </span><span class="attr">#[serde(default, skip_serializing_if = <span class="string">&quot;SkipSerializeIfDefault::skip&quot;</span>)]
+        </span><span class="attr">#[serde(default, skip_serializing_if = <span class="string">"SkipSerializeIfDefault::skip"</span>)]
         </span>style: HeaderStyle,
     },
     Path {
@@ -338,7 +340,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         /// the type of the parameter value. Default values (based on value of
         /// in): for query - form; for path - simple; for header - simple; for
         /// cookie - form.
-        </span><span class="attr">#[serde(default, skip_serializing_if = <span class="string">&quot;SkipSerializeIfDefault::skip&quot;</span>)]
+        </span><span class="attr">#[serde(default, skip_serializing_if = <span class="string">"SkipSerializeIfDefault::skip"</span>)]
         </span>style: PathStyle,
     },
     Cookie {
@@ -348,7 +350,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         /// the type of the parameter value. Default values (based on value of
         /// in): for query - form; for path - simple; for header - simple; for
         /// cookie - form.
-        </span><span class="attr">#[serde(default, skip_serializing_if = <span class="string">&quot;SkipSerializeIfDefault::skip&quot;</span>)]
+        </span><span class="attr">#[serde(default, skip_serializing_if = <span class="string">"SkipSerializeIfDefault::skip"</span>)]
         </span>style: CookieStyle,
     },
 }
@@ -405,18 +407,18 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 <span class="kw">struct </span>SkipSerializeIfDefault;
 <span class="kw">impl </span>SkipSerializeIfDefault {
-    <span class="attr">#[cfg(feature = <span class="string">&quot;skip_serializing_defaults&quot;</span>)]
+    <span class="attr">#[cfg(feature = <span class="string">"skip_serializing_defaults"</span>)]
     </span><span class="kw">fn </span>skip&lt;D: Default + std::cmp::PartialEq&gt;(value: <span class="kw-2">&amp;</span>D) -&gt; bool {
         value == <span class="kw-2">&amp;</span>Default::default()
     }
-    <span class="attr">#[cfg(not(feature = <span class="string">&quot;skip_serializing_defaults&quot;</span>))]
+    <span class="attr">#[cfg(not(feature = <span class="string">"skip_serializing_defaults"</span>))]
     </span><span class="kw">fn </span>skip&lt;D: Default + std::cmp::PartialEq&gt;(_value: <span class="kw-2">&amp;</span>D) -&gt; bool {
         <span class="bool-val">false
     </span>}
 }
 
 <span class="attr">#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = <span class="string">&quot;camelCase&quot;</span>)]
+#[serde(rename_all = <span class="string">"camelCase"</span>)]
 </span><span class="kw">pub enum </span>PathStyle {
     Matrix,
     Label,
@@ -429,7 +431,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 <span class="attr">#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = <span class="string">&quot;camelCase&quot;</span>)]
+#[serde(rename_all = <span class="string">"camelCase"</span>)]
 </span><span class="kw">pub enum </span>QueryStyle {
     Form,
     SpaceDelimited,
@@ -443,7 +445,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 <span class="attr">#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = <span class="string">&quot;camelCase&quot;</span>)]
+#[serde(rename_all = <span class="string">"camelCase"</span>)]
 </span><span class="kw">pub enum </span>CookieStyle {
     Form,
 }
@@ -454,7 +456,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 <span class="attr">#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-#[serde(rename_all = <span class="string">&quot;camelCase&quot;</span>)]
+#[serde(rename_all = <span class="string">"camelCase"</span>)]
 </span><span class="kw">pub enum </span>HeaderStyle {
     Simple,
 }

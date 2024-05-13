@@ -1,6 +1,8 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/time-0.3.31/src/internal_macros.rs`."><title>internal_macros.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-9ee3a5e31a2afa3e.css"><script id="default-settings" 
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/time-0.3.36/src/internal_macros.rs`."><title>internal_macros.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-e935ef01ae1c1829.css"><script id="default-settings" 
 data-theme="ayu"
-data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="time" data-themes="" data-resource-suffix="" data-rustdoc-version="1.75.0 (82e1608df 2023-12-21)" data-channel="1.75.0" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-9dd44ab47b99a0fb.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="icon" href="https://avatars0.githubusercontent.com/u/55999857"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../time/index.html"><img src="https://avatars0.githubusercontent.com/u/55999857" alt="time"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="time" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0 (9b00956e5 2024-04-29)" data-channel="1.78.0" data-search-js="search-42d8da7a6b9792c2.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-12cf3b4f4f9dc36d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://avatars0.githubusercontent.com/u/55999857"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
+            <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../time/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -197,10 +199,13 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#195" id="195">195</a>
 <a href="#196" id="196">196</a>
 <a href="#197" id="197">197</a>
+<a href="#198" id="198">198</a>
+<a href="#199" id="199">199</a>
+<a href="#200" id="200">200</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Macros for use within the library. They are not publicly available.
 
 /// Helper macro for easily implementing `OpAssign`.
-</span><span class="macro">macro_rules! </span>__impl_assign {
+</span><span class="macro">macro_rules!</span> __impl_assign {
     (<span class="macro-nonterminal">$sym</span>:tt <span class="macro-nonterminal">$op</span>:ident <span class="macro-nonterminal">$</span><span class="kw">fn</span>:<span class="macro-nonterminal">ident $target</span>:ty : $($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>:meta]</span>)* <span class="macro-nonterminal">$t</span>:ty),+) =&gt; {$(
         <span class="attr">#[allow(unused_qualifications)]
         </span>$(<span class="attr">#[<span class="macro-nonterminal">$attr</span>]</span>)*
@@ -213,7 +218,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 }
 
 <span class="doccomment">/// Implement `AddAssign` for the provided types.
-</span><span class="macro">macro_rules! </span>impl_add_assign {
+</span><span class="macro">macro_rules!</span> impl_add_assign {
     (<span class="macro-nonterminal">$target</span>:ty : $($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>:meta]</span>)* <span class="macro-nonterminal">$t</span>:ty),+ $(,)<span class="question-mark">?</span>) =&gt; {
         <span class="macro-nonterminal">$</span><span class="macro">crate::internal_macros::__impl_assign!</span>(
             + <span class="macro-nonterminal">AddAssign </span>add_assign <span class="macro-nonterminal">$target </span>: $($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>]</span>)* <span class="macro-nonterminal">$t</span>),+
@@ -222,7 +227,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 }
 
 <span class="doccomment">/// Implement `SubAssign` for the provided types.
-</span><span class="macro">macro_rules! </span>impl_sub_assign {
+</span><span class="macro">macro_rules!</span> impl_sub_assign {
     (<span class="macro-nonterminal">$target</span>:ty : $($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>:meta]</span>)* <span class="macro-nonterminal">$t</span>:ty),+ $(,)<span class="question-mark">?</span>) =&gt; {
         <span class="macro-nonterminal">$</span><span class="macro">crate::internal_macros::__impl_assign!</span>(
             - <span class="macro-nonterminal">SubAssign </span>sub_assign <span class="macro-nonterminal">$target </span>: $($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>]</span>)* <span class="macro-nonterminal">$t</span>),+
@@ -231,7 +236,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 }
 
 <span class="doccomment">/// Implement `MulAssign` for the provided types.
-</span><span class="macro">macro_rules! </span>impl_mul_assign {
+</span><span class="macro">macro_rules!</span> impl_mul_assign {
     (<span class="macro-nonterminal">$target</span>:ty : $($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>:meta]</span>)* <span class="macro-nonterminal">$t</span>:ty),+ $(,)<span class="question-mark">?</span>) =&gt; {
         <span class="macro-nonterminal">$</span><span class="macro">crate::internal_macros::__impl_assign!</span>(
             * <span class="macro-nonterminal">MulAssign </span>mul_assign <span class="macro-nonterminal">$target </span>: $($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>]</span>)* <span class="macro-nonterminal">$t</span>),+
@@ -240,7 +245,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 }
 
 <span class="doccomment">/// Implement `DivAssign` for the provided types.
-</span><span class="macro">macro_rules! </span>impl_div_assign {
+</span><span class="macro">macro_rules!</span> impl_div_assign {
     (<span class="macro-nonterminal">$target</span>:ty : $($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>:meta]</span>)* <span class="macro-nonterminal">$t</span>:ty),+ $(,)<span class="question-mark">?</span>) =&gt; {
         <span class="macro-nonterminal">$</span><span class="macro">crate::internal_macros::__impl_assign!</span>(
             / <span class="macro-nonterminal">DivAssign </span>div_assign <span class="macro-nonterminal">$target </span>: $($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>]</span>)* <span class="macro-nonterminal">$t</span>),+
@@ -249,7 +254,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 }
 
 <span class="doccomment">/// Division of integers, rounding the resulting value towards negative infinity.
-</span><span class="macro">macro_rules! </span>div_floor {
+</span><span class="macro">macro_rules!</span> div_floor {
     (<span class="macro-nonterminal">$a</span>:expr, <span class="macro-nonterminal">$b</span>:expr) =&gt; {{
         <span class="kw">let </span>_a = <span class="macro-nonterminal">$a</span>;
         <span class="kw">let </span>_b = <span class="macro-nonterminal">$b</span>;
@@ -265,11 +270,11 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 }
 
 <span class="doccomment">/// Cascade an out-of-bounds value.
-</span><span class="macro">macro_rules! </span>cascade {
+</span><span class="macro">macro_rules!</span> cascade {
     (@ordinal ordinal) =&gt; {};
     (@year year) =&gt; {};
 
-    <span class="comment">// Cascade an out-of-bounds value from &quot;from&quot; to &quot;to&quot;.
+    <span class="comment">// Cascade an out-of-bounds value from "from" to "to".
     </span>(<span class="macro-nonterminal">$from</span>:ident <span class="kw">in </span><span class="macro-nonterminal">$min</span>:literal.. <span class="macro-nonterminal">$max</span>:expr =&gt; <span class="macro-nonterminal">$to</span>:tt) =&gt; {
         <span class="attr">#[allow(unused_comparisons, unused_assignments)]
         </span><span class="kw">let </span>min = <span class="macro-nonterminal">$min</span>;
@@ -300,7 +305,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 }
 
 <span class="doccomment">/// Constructs a ranged integer, returning a `ComponentRange` error if the value is out of range.
-</span><span class="macro">macro_rules! </span>ensure_ranged {
+</span><span class="macro">macro_rules!</span> ensure_ranged {
     (<span class="macro-nonterminal">$</span><span class="kw">type</span>:<span class="macro-nonterminal">ident </span>: <span class="macro-nonterminal">$value</span>:ident) =&gt; {
         <span class="kw">match </span><span class="macro-nonterminal">$</span><span class="kw">type</span><span class="macro-nonterminal">::new</span>(<span class="macro-nonterminal">$value</span>) {
             <span class="prelude-val">Some</span>(val) =&gt; val,
@@ -349,7 +354,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 ///
 /// This is similar to the `?` operator, but does not perform `.into()`. Because of this, it is
 /// usable in `const` contexts.
-</span><span class="macro">macro_rules! </span>const_try {
+</span><span class="macro">macro_rules!</span> const_try {
     (<span class="macro-nonterminal">$e</span>:expr) =&gt; {
         <span class="kw">match </span><span class="macro-nonterminal">$e </span>{
             <span class="prelude-val">Ok</span>(value) =&gt; value,
@@ -361,7 +366,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <span class="doccomment">/// Try to unwrap an expression, returning if not possible.
 ///
 /// This is similar to the `?` operator, but is usable in `const` contexts.
-</span><span class="macro">macro_rules! </span>const_try_opt {
+</span><span class="macro">macro_rules!</span> const_try_opt {
     (<span class="macro-nonterminal">$e</span>:expr) =&gt; {
         <span class="kw">match </span><span class="macro-nonterminal">$e </span>{
             <span class="prelude-val">Some</span>(value) =&gt; value,
@@ -373,7 +378,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <span class="doccomment">/// Try to unwrap an expression, panicking if not possible.
 ///
 /// This is similar to `$e.expect($message)`, but is usable in `const` contexts.
-</span><span class="macro">macro_rules! </span>expect_opt {
+</span><span class="macro">macro_rules!</span> expect_opt {
     (<span class="macro-nonterminal">$e</span>:expr, <span class="macro-nonterminal">$message</span>:literal) =&gt; {
         <span class="kw">match </span><span class="macro-nonterminal">$e </span>{
             <span class="prelude-val">Some</span>(value) =&gt; value,
@@ -383,15 +388,18 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 }
 
 <span class="doccomment">/// `unreachable!()`, but better.
-</span><span class="macro">macro_rules! </span>bug {
-    () =&gt; { <span class="macro">compile_error!</span>(<span class="string">&quot;provide an error message to help fix a possible bug&quot;</span>) };
+</span><span class="attr">#[cfg(any(feature = <span class="string">"formatting"</span>, feature = <span class="string">"parsing"</span>))]
+</span><span class="macro">macro_rules!</span> bug {
+    () =&gt; { <span class="macro">compile_error!</span>(<span class="string">"provide an error message to help fix a possible bug"</span>) };
     (<span class="macro-nonterminal">$descr</span>:literal $(<span class="macro-nonterminal">$rest</span>:tt)<span class="question-mark">?</span>) =&gt; {
-        <span class="macro">panic!</span>(<span class="macro">concat!</span>(<span class="string">&quot;internal error: &quot;</span>, <span class="macro-nonterminal">$descr</span>) $(<span class="macro-nonterminal">$rest</span>)<span class="question-mark">?</span>)
+        <span class="macro">panic!</span>(<span class="macro">concat!</span>(<span class="string">"internal error: "</span>, <span class="macro-nonterminal">$descr</span>) $(<span class="macro-nonterminal">$rest</span>)<span class="question-mark">?</span>)
     }
 }
 
+<span class="attr">#[cfg(any(feature = <span class="string">"formatting"</span>, feature = <span class="string">"parsing"</span>))]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use </span>bug;
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use </span>{
-    __impl_assign, bug, cascade, const_try, const_try_opt, div_floor, ensure_ranged, expect_opt,
+    __impl_assign, cascade, const_try, const_try_opt, div_floor, ensure_ranged, expect_opt,
     impl_add_assign, impl_div_assign, impl_mul_assign, impl_sub_assign,
 };
 </code></pre></div></section></main></body></html>

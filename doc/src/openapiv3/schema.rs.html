@@ -1,6 +1,8 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/openapiv3-1.0.2/src/schema.rs`."><title>schema.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-9ee3a5e31a2afa3e.css"><script id="default-settings" 
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/openapiv3-1.0.2/src/schema.rs`."><title>schema.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-e935ef01ae1c1829.css"><script id="default-settings" 
 data-theme="ayu"
-data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="openapiv3" data-themes="" data-resource-suffix="" data-rustdoc-version="1.75.0 (82e1608df 2023-12-21)" data-channel="1.75.0" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-9dd44ab47b99a0fb.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="openapiv3" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0 (9b00956e5 2024-04-29)" data-channel="1.78.0" data-search-js="search-42d8da7a6b9792c2.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-12cf3b4f4f9dc36d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
+            <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../openapiv3/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -305,30 +307,30 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <span class="kw">use </span>serde::{Deserialize, Serialize};
 
 <span class="attr">#[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]
-#[serde(rename_all = <span class="string">&quot;camelCase&quot;</span>)]
+#[serde(rename_all = <span class="string">"camelCase"</span>)]
 </span><span class="kw">pub struct </span>SchemaData {
-    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">&quot;is_false&quot;</span>)]
+    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">"is_false"</span>)]
     </span><span class="kw">pub </span>nullable: bool,
-    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">&quot;is_false&quot;</span>)]
+    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">"is_false"</span>)]
     </span><span class="kw">pub </span>read_only: bool,
-    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">&quot;is_false&quot;</span>)]
+    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">"is_false"</span>)]
     </span><span class="kw">pub </span>write_only: bool,
-    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">&quot;is_false&quot;</span>)]
+    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">"is_false"</span>)]
     </span><span class="kw">pub </span>deprecated: bool,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>external_docs: <span class="prelude-ty">Option</span>&lt;ExternalDocumentation&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>example: <span class="prelude-ty">Option</span>&lt;serde_json::Value&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>title: <span class="prelude-ty">Option</span>&lt;String&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>description: <span class="prelude-ty">Option</span>&lt;String&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>discriminator: <span class="prelude-ty">Option</span>&lt;Discriminator&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>default: <span class="prelude-ty">Option</span>&lt;serde_json::Value&gt;,
     <span class="doccomment">/// Inline extensions to this object.
-    </span><span class="attr">#[serde(flatten, deserialize_with = <span class="string">&quot;crate::util::deserialize_extensions&quot;</span>)]
+    </span><span class="attr">#[serde(flatten, deserialize_with = <span class="string">"crate::util::deserialize_extensions"</span>)]
     </span><span class="kw">pub </span>extensions: IndexMap&lt;String, serde_json::Value&gt;,
 }
 
@@ -345,15 +347,15 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 </span><span class="kw">pub enum </span>SchemaKind {
     Type(Type),
     OneOf {
-        <span class="attr">#[serde(rename = <span class="string">&quot;oneOf&quot;</span>)]
+        <span class="attr">#[serde(rename = <span class="string">"oneOf"</span>)]
         </span>one_of: Vec&lt;ReferenceOr&lt;Schema&gt;&gt;,
     },
     AllOf {
-        <span class="attr">#[serde(rename = <span class="string">&quot;allOf&quot;</span>)]
+        <span class="attr">#[serde(rename = <span class="string">"allOf"</span>)]
         </span>all_of: Vec&lt;ReferenceOr&lt;Schema&gt;&gt;,
     },
     AnyOf {
-        <span class="attr">#[serde(rename = <span class="string">&quot;anyOf&quot;</span>)]
+        <span class="attr">#[serde(rename = <span class="string">"anyOf"</span>)]
         </span>any_of: Vec&lt;ReferenceOr&lt;Schema&gt;&gt;,
     },
     Not {
@@ -363,7 +365,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 }
 
 <span class="attr">#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-#[serde(tag = <span class="string">&quot;type&quot;</span>, rename_all = <span class="string">&quot;lowercase&quot;</span>)]
+#[serde(tag = <span class="string">"type"</span>, rename_all = <span class="string">"lowercase"</span>)]
 </span><span class="kw">pub enum </span>Type {
     String(StringType),
     Number(NumberType),
@@ -380,161 +382,161 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     Schema(Box&lt;ReferenceOr&lt;Schema&gt;&gt;),
 }
 
-<span class="doccomment">/// Catch-all for any combination of properties that doesn&#39;t correspond to one
+<span class="doccomment">/// Catch-all for any combination of properties that doesn't correspond to one
 /// of the predefined subsets.
 </span><span class="attr">#[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]
-#[serde(rename_all = <span class="string">&quot;camelCase&quot;</span>)]
+#[serde(rename_all = <span class="string">"camelCase"</span>)]
 </span><span class="kw">pub struct </span>AnySchema {
-    <span class="attr">#[serde(rename = <span class="string">&quot;type&quot;</span>, skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(rename = <span class="string">"type"</span>, skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>typ: <span class="prelude-ty">Option</span>&lt;String&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>pattern: <span class="prelude-ty">Option</span>&lt;String&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>multiple_of: <span class="prelude-ty">Option</span>&lt;f64&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>exclusive_minimum: <span class="prelude-ty">Option</span>&lt;bool&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>exclusive_maximum: <span class="prelude-ty">Option</span>&lt;bool&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>minimum: <span class="prelude-ty">Option</span>&lt;f64&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>maximum: <span class="prelude-ty">Option</span>&lt;f64&gt;,
-    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">&quot;IndexMap::is_empty&quot;</span>)]
+    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">"IndexMap::is_empty"</span>)]
     </span><span class="kw">pub </span>properties: IndexMap&lt;String, ReferenceOr&lt;Box&lt;Schema&gt;&gt;&gt;,
-    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">&quot;Vec::is_empty&quot;</span>)]
+    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">"Vec::is_empty"</span>)]
     </span><span class="kw">pub </span>required: Vec&lt;String&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>additional_properties: <span class="prelude-ty">Option</span>&lt;AdditionalProperties&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>min_properties: <span class="prelude-ty">Option</span>&lt;usize&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>max_properties: <span class="prelude-ty">Option</span>&lt;usize&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>items: <span class="prelude-ty">Option</span>&lt;ReferenceOr&lt;Box&lt;Schema&gt;&gt;&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>min_items: <span class="prelude-ty">Option</span>&lt;usize&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>max_items: <span class="prelude-ty">Option</span>&lt;usize&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>unique_items: <span class="prelude-ty">Option</span>&lt;bool&gt;,
-    <span class="attr">#[serde(rename = <span class="string">&quot;enum&quot;</span>, default, skip_serializing_if = <span class="string">&quot;Vec::is_empty&quot;</span>)]
+    <span class="attr">#[serde(rename = <span class="string">"enum"</span>, default, skip_serializing_if = <span class="string">"Vec::is_empty"</span>)]
     </span><span class="kw">pub </span>enumeration: Vec&lt;serde_json::Value&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>format: <span class="prelude-ty">Option</span>&lt;String&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>min_length: <span class="prelude-ty">Option</span>&lt;usize&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>max_length: <span class="prelude-ty">Option</span>&lt;usize&gt;,
-    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">&quot;Vec::is_empty&quot;</span>)]
+    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">"Vec::is_empty"</span>)]
     </span><span class="kw">pub </span>one_of: Vec&lt;ReferenceOr&lt;Schema&gt;&gt;,
-    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">&quot;Vec::is_empty&quot;</span>)]
+    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">"Vec::is_empty"</span>)]
     </span><span class="kw">pub </span>all_of: Vec&lt;ReferenceOr&lt;Schema&gt;&gt;,
-    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">&quot;Vec::is_empty&quot;</span>)]
+    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">"Vec::is_empty"</span>)]
     </span><span class="kw">pub </span>any_of: Vec&lt;ReferenceOr&lt;Schema&gt;&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>not: <span class="prelude-ty">Option</span>&lt;Box&lt;ReferenceOr&lt;Schema&gt;&gt;&gt;,
 }
 
 <span class="attr">#[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]
-#[serde(rename_all = <span class="string">&quot;camelCase&quot;</span>)]
+#[serde(rename_all = <span class="string">"camelCase"</span>)]
 </span><span class="kw">pub struct </span>StringType {
-    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">&quot;VariantOrUnknownOrEmpty::is_empty&quot;</span>)]
+    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">"VariantOrUnknownOrEmpty::is_empty"</span>)]
     </span><span class="kw">pub </span>format: VariantOrUnknownOrEmpty&lt;StringFormat&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>pattern: <span class="prelude-ty">Option</span>&lt;String&gt;,
-    <span class="attr">#[serde(rename = <span class="string">&quot;enum&quot;</span>, default, skip_serializing_if = <span class="string">&quot;Vec::is_empty&quot;</span>)]
+    <span class="attr">#[serde(rename = <span class="string">"enum"</span>, default, skip_serializing_if = <span class="string">"Vec::is_empty"</span>)]
     </span><span class="kw">pub </span>enumeration: Vec&lt;<span class="prelude-ty">Option</span>&lt;String&gt;&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>min_length: <span class="prelude-ty">Option</span>&lt;usize&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>max_length: <span class="prelude-ty">Option</span>&lt;usize&gt;,
 }
 
 <span class="attr">#[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]
-#[serde(rename_all = <span class="string">&quot;camelCase&quot;</span>)]
+#[serde(rename_all = <span class="string">"camelCase"</span>)]
 </span><span class="kw">pub struct </span>NumberType {
-    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">&quot;VariantOrUnknownOrEmpty::is_empty&quot;</span>)]
+    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">"VariantOrUnknownOrEmpty::is_empty"</span>)]
     </span><span class="kw">pub </span>format: VariantOrUnknownOrEmpty&lt;NumberFormat&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>multiple_of: <span class="prelude-ty">Option</span>&lt;f64&gt;,
-    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">&quot;is_false&quot;</span>)]
+    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">"is_false"</span>)]
     </span><span class="kw">pub </span>exclusive_minimum: bool,
-    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">&quot;is_false&quot;</span>)]
+    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">"is_false"</span>)]
     </span><span class="kw">pub </span>exclusive_maximum: bool,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>minimum: <span class="prelude-ty">Option</span>&lt;f64&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>maximum: <span class="prelude-ty">Option</span>&lt;f64&gt;,
-    <span class="attr">#[serde(rename = <span class="string">&quot;enum&quot;</span>, default, skip_serializing_if = <span class="string">&quot;Vec::is_empty&quot;</span>)]
+    <span class="attr">#[serde(rename = <span class="string">"enum"</span>, default, skip_serializing_if = <span class="string">"Vec::is_empty"</span>)]
     </span><span class="kw">pub </span>enumeration: Vec&lt;<span class="prelude-ty">Option</span>&lt;f64&gt;&gt;,
 }
 
 <span class="attr">#[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]
-#[serde(rename_all = <span class="string">&quot;camelCase&quot;</span>)]
+#[serde(rename_all = <span class="string">"camelCase"</span>)]
 </span><span class="kw">pub struct </span>IntegerType {
-    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">&quot;VariantOrUnknownOrEmpty::is_empty&quot;</span>)]
+    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">"VariantOrUnknownOrEmpty::is_empty"</span>)]
     </span><span class="kw">pub </span>format: VariantOrUnknownOrEmpty&lt;IntegerFormat&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>multiple_of: <span class="prelude-ty">Option</span>&lt;i64&gt;,
-    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">&quot;is_false&quot;</span>)]
+    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">"is_false"</span>)]
     </span><span class="kw">pub </span>exclusive_minimum: bool,
-    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">&quot;is_false&quot;</span>)]
+    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">"is_false"</span>)]
     </span><span class="kw">pub </span>exclusive_maximum: bool,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>minimum: <span class="prelude-ty">Option</span>&lt;i64&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>maximum: <span class="prelude-ty">Option</span>&lt;i64&gt;,
-    <span class="attr">#[serde(rename = <span class="string">&quot;enum&quot;</span>, default, skip_serializing_if = <span class="string">&quot;Vec::is_empty&quot;</span>)]
+    <span class="attr">#[serde(rename = <span class="string">"enum"</span>, default, skip_serializing_if = <span class="string">"Vec::is_empty"</span>)]
     </span><span class="kw">pub </span>enumeration: Vec&lt;<span class="prelude-ty">Option</span>&lt;i64&gt;&gt;,
 }
 
 <span class="attr">#[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]
-#[serde(rename_all = <span class="string">&quot;camelCase&quot;</span>)]
+#[serde(rename_all = <span class="string">"camelCase"</span>)]
 </span><span class="kw">pub struct </span>ObjectType {
-    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">&quot;IndexMap::is_empty&quot;</span>)]
+    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">"IndexMap::is_empty"</span>)]
     </span><span class="kw">pub </span>properties: IndexMap&lt;String, ReferenceOr&lt;Box&lt;Schema&gt;&gt;&gt;,
-    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">&quot;Vec::is_empty&quot;</span>)]
+    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">"Vec::is_empty"</span>)]
     </span><span class="kw">pub </span>required: Vec&lt;String&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>additional_properties: <span class="prelude-ty">Option</span>&lt;AdditionalProperties&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>min_properties: <span class="prelude-ty">Option</span>&lt;usize&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>max_properties: <span class="prelude-ty">Option</span>&lt;usize&gt;,
 }
 
 <span class="attr">#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-#[serde(rename_all = <span class="string">&quot;camelCase&quot;</span>)]
+#[serde(rename_all = <span class="string">"camelCase"</span>)]
 </span><span class="kw">pub struct </span>ArrayType {
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>items: <span class="prelude-ty">Option</span>&lt;ReferenceOr&lt;Box&lt;Schema&gt;&gt;&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>min_items: <span class="prelude-ty">Option</span>&lt;usize&gt;,
-    <span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    <span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>max_items: <span class="prelude-ty">Option</span>&lt;usize&gt;,
-    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">&quot;is_false&quot;</span>)]
+    <span class="attr">#[serde(default, skip_serializing_if = <span class="string">"is_false"</span>)]
     </span><span class="kw">pub </span>unique_items: bool,
 }
 
 <span class="attr">#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-#[serde(rename_all = <span class="string">&quot;lowercase&quot;</span>)]
+#[serde(rename_all = <span class="string">"lowercase"</span>)]
 </span><span class="kw">pub enum </span>NumberFormat {
     Float,
     Double,
 }
 
 <span class="attr">#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-#[serde(rename_all = <span class="string">&quot;lowercase&quot;</span>)]
+#[serde(rename_all = <span class="string">"lowercase"</span>)]
 </span><span class="kw">pub enum </span>IntegerFormat {
     Int32,
     Int64,
 }
 
 <span class="attr">#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-#[serde(rename_all = <span class="string">&quot;lowercase&quot;</span>)]
+#[serde(rename_all = <span class="string">"lowercase"</span>)]
 </span><span class="kw">pub enum </span>StringFormat {
     Date,
-    <span class="attr">#[serde(rename = <span class="string">&quot;date-time&quot;</span>)]
+    <span class="attr">#[serde(rename = <span class="string">"date-time"</span>)]
     </span>DateTime,
     Password,
     Byte,
@@ -550,30 +552,30 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test_schema_with_extensions() {
         <span class="kw">let </span>schema = serde_json::from_str::&lt;Schema&gt;(
-            <span class="string">r#&quot;{
-                &quot;type&quot;: &quot;boolean&quot;,
-                &quot;x-foo&quot;: &quot;bar&quot;
-            }&quot;#</span>,
+            <span class="string">r#"{
+                "type": "boolean",
+                "x-foo": "bar"
+            }"#</span>,
         )
         .unwrap();
 
         <span class="macro">assert_eq!</span>(
-            schema.schema_data.extensions.get(<span class="string">&quot;x-foo&quot;</span>),
-            <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="macro">json!</span>(<span class="string">&quot;bar&quot;</span>))
+            schema.schema_data.extensions.get(<span class="string">"x-foo"</span>),
+            <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="macro">json!</span>(<span class="string">"bar"</span>))
         );
     }
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test_any() {
-        <span class="kw">let </span>value = <span class="macro">json! </span>{ {} };
+        <span class="kw">let </span>value = <span class="macro">json!</span> { {} };
         serde_json::from_value::&lt;AnySchema&gt;(value).unwrap();
     }
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test_not() {
-        <span class="kw">let </span>value = <span class="macro">json! </span>{
+        <span class="kw">let </span>value = <span class="macro">json!</span> {
             {
-                <span class="string">&quot;not&quot;</span>: {}
+                <span class="string">"not"</span>: {}
             }
         };
 
@@ -583,10 +585,10 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test_null() {
-        <span class="kw">let </span>value = <span class="macro">json! </span>{
+        <span class="kw">let </span>value = <span class="macro">json!</span> {
             {
-                <span class="string">&quot;nullable&quot;</span>: <span class="bool-val">true</span>,
-                <span class="string">&quot;enum&quot;</span>: [ null ],
+                <span class="string">"nullable"</span>: <span class="bool-val">true</span>,
+                <span class="string">"enum"</span>: [ null ],
             }
         };
 

@@ -1,6 +1,8 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/syn-2.0.48/src/item.rs`."><title>item.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-9ee3a5e31a2afa3e.css"><script id="default-settings" 
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/syn-2.0.63/src/item.rs`."><title>item.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-e935ef01ae1c1829.css"><script id="default-settings" 
 data-theme="ayu"
-data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="syn" data-themes="" data-resource-suffix="" data-rustdoc-version="1.75.0 (82e1608df 2023-12-21)" data-channel="1.75.0" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-9dd44ab47b99a0fb.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="syn" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0 (9b00956e5 2024-04-29)" data-channel="1.78.0" data-search-js="search-42d8da7a6b9792c2.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-12cf3b4f4f9dc36d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
+            <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../syn/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -3404,23 +3406,80 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <a href="#3402" id="3402">3402</a>
 <a href="#3403" id="3403">3403</a>
 <a href="#3404" id="3404">3404</a>
-</pre></div><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
+<a href="#3405" id="3405">3405</a>
+<a href="#3406" id="3406">3406</a>
+<a href="#3407" id="3407">3407</a>
+<a href="#3408" id="3408">3408</a>
+<a href="#3409" id="3409">3409</a>
+<a href="#3410" id="3410">3410</a>
+<a href="#3411" id="3411">3411</a>
+<a href="#3412" id="3412">3412</a>
+<a href="#3413" id="3413">3413</a>
+<a href="#3414" id="3414">3414</a>
+<a href="#3415" id="3415">3415</a>
+<a href="#3416" id="3416">3416</a>
+<a href="#3417" id="3417">3417</a>
+<a href="#3418" id="3418">3418</a>
+<a href="#3419" id="3419">3419</a>
+<a href="#3420" id="3420">3420</a>
+<a href="#3421" id="3421">3421</a>
+<a href="#3422" id="3422">3422</a>
+<a href="#3423" id="3423">3423</a>
+<a href="#3424" id="3424">3424</a>
+<a href="#3425" id="3425">3425</a>
+<a href="#3426" id="3426">3426</a>
+<a href="#3427" id="3427">3427</a>
+<a href="#3428" id="3428">3428</a>
+<a href="#3429" id="3429">3429</a>
+<a href="#3430" id="3430">3430</a>
+<a href="#3431" id="3431">3431</a>
+<a href="#3432" id="3432">3432</a>
+<a href="#3433" id="3433">3433</a>
+<a href="#3434" id="3434">3434</a>
+<a href="#3435" id="3435">3435</a>
+<a href="#3436" id="3436">3436</a>
+<a href="#3437" id="3437">3437</a>
+<a href="#3438" id="3438">3438</a>
+<a href="#3439" id="3439">3439</a>
+<a href="#3440" id="3440">3440</a>
+<a href="#3441" id="3441">3441</a>
+<a href="#3442" id="3442">3442</a>
+<a href="#3443" id="3443">3443</a>
+<a href="#3444" id="3444">3444</a>
+<a href="#3445" id="3445">3445</a>
+<a href="#3446" id="3446">3446</a>
+<a href="#3447" id="3447">3447</a>
+<a href="#3448" id="3448">3448</a>
+<a href="#3449" id="3449">3449</a>
+<a href="#3450" id="3450">3450</a>
+</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::attr::Attribute;
+<span class="kw">use </span><span class="kw">crate</span>::data::{Fields, FieldsNamed, Variant};
 <span class="kw">use </span><span class="kw">crate</span>::derive::{Data, DataEnum, DataStruct, DataUnion, DeriveInput};
+<span class="kw">use </span><span class="kw">crate</span>::expr::Expr;
+<span class="kw">use </span><span class="kw">crate</span>::generics::{Generics, TypeParamBound};
+<span class="kw">use </span><span class="kw">crate</span>::ident::Ident;
+<span class="kw">use </span><span class="kw">crate</span>::lifetime::Lifetime;
+<span class="kw">use </span><span class="kw">crate</span>::mac::Macro;
+<span class="kw">use </span><span class="kw">crate</span>::pat::{Pat, PatType};
+<span class="kw">use </span><span class="kw">crate</span>::path::Path;
 <span class="kw">use </span><span class="kw">crate</span>::punctuated::Punctuated;
+<span class="kw">use </span><span class="kw">crate</span>::restriction::Visibility;
+<span class="kw">use </span><span class="kw">crate</span>::stmt::Block;
+<span class="kw">use </span><span class="kw">crate</span>::token;
+<span class="kw">use </span><span class="kw">crate</span>::ty::{Abi, ReturnType, Type};
 <span class="kw">use </span>proc_macro2::TokenStream;
-
-<span class="attr">#[cfg(feature = <span class="string">&quot;parsing&quot;</span>)]
+<span class="attr">#[cfg(feature = <span class="string">"parsing"</span>)]
 </span><span class="kw">use </span>std::mem;
 
-<span class="macro">ast_enum_of_structs! </span>{
+<span class="macro">ast_enum_of_structs!</span> {
     <span class="doccomment">/// Things that can appear directly inside of a module or scope.
     ///
     /// # Syntax tree enum
     ///
     /// This type is a [syntax tree enum].
     ///
-    /// [syntax tree enum]: Expr#syntax-tree-enums
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    /// [syntax tree enum]: crate::expr::Expr#syntax-tree-enums
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     #[non_exhaustive]
     </span><span class="kw">pub enum </span>Item {
         <span class="doccomment">/// A constant item: `const MAX: u16 = 65535`.
@@ -3436,7 +3495,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         /// }`.
         </span>Fn(ItemFn),
 
-        <span class="doccomment">/// A block of foreign items: `extern &quot;C&quot; { ... }`.
+        <span class="doccomment">/// A block of foreign items: `extern "C" { ... }`.
         </span>ForeignMod(ItemForeignMod),
 
         <span class="doccomment">/// An impl block providing trait or associated items: `impl&lt;A&gt; Trait
@@ -3486,16 +3545,16 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         //         _ =&gt; { /* some sane fallback */ }
         //     }
         //
-        // This way we fail your tests but don&#39;t break your library when adding
+        // This way we fail your tests but don't break your library when adding
         // a variant. You will be notified by a test failure when a variant is
         // added, so that you can add code to handle it, but your library will
         // continue to compile and work for downstream users in the interim.
     </span>}
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// A constant item: `const MAX: u16 = 65535`.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>ItemConst {
         <span class="kw">pub </span>attrs: Vec&lt;Attribute&gt;,
         <span class="kw">pub </span>vis: Visibility,
@@ -3510,9 +3569,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// An enum definition: `enum Foo&lt;A, B&gt; { A(A), B(B) }`.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>ItemEnum {
         <span class="kw">pub </span>attrs: Vec&lt;Attribute&gt;,
         <span class="kw">pub </span>vis: Visibility,
@@ -3524,9 +3583,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// An `extern crate` item: `extern crate serde`.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>ItemExternCrate {
         <span class="kw">pub </span>attrs: Vec&lt;Attribute&gt;,
         <span class="kw">pub </span>vis: Visibility,
@@ -3538,9 +3597,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// A free-standing function: `fn process(n: usize) -&gt; Result&lt;()&gt; { ... }`.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>ItemFn {
         <span class="kw">pub </span>attrs: Vec&lt;Attribute&gt;,
         <span class="kw">pub </span>vis: Visibility,
@@ -3549,9 +3608,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_struct! </span>{
-    <span class="doccomment">/// A block of foreign items: `extern &quot;C&quot; { ... }`.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+<span class="macro">ast_struct!</span> {
+    <span class="doccomment">/// A block of foreign items: `extern "C" { ... }`.
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>ItemForeignMod {
         <span class="kw">pub </span>attrs: Vec&lt;Attribute&gt;,
         <span class="kw">pub </span>unsafety: <span class="prelude-ty">Option</span>&lt;<span class="macro">Token!</span>[<span class="kw">unsafe</span>]&gt;,
@@ -3561,10 +3620,10 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// An impl block providing trait or associated items: `impl&lt;A&gt; Trait
     /// for Data&lt;A&gt; { ... }`.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>ItemImpl {
         <span class="kw">pub </span>attrs: Vec&lt;Attribute&gt;,
         <span class="kw">pub </span>defaultness: <span class="prelude-ty">Option</span>&lt;<span class="macro">Token!</span>[default]&gt;,
@@ -3580,9 +3639,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// A macro invocation, which includes `macro_rules!` definitions.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>ItemMacro {
         <span class="kw">pub </span>attrs: Vec&lt;Attribute&gt;,
         <span class="doccomment">/// The `example` in `macro_rules! example { ... }`.
@@ -3592,9 +3651,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// A module or module declaration: `mod m` or `mod m { ... }`.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>ItemMod {
         <span class="kw">pub </span>attrs: Vec&lt;Attribute&gt;,
         <span class="kw">pub </span>vis: Visibility,
@@ -3606,9 +3665,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// A static item: `static BIKE: Shed = Shed(42)`.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>ItemStatic {
         <span class="kw">pub </span>attrs: Vec&lt;Attribute&gt;,
         <span class="kw">pub </span>vis: Visibility,
@@ -3623,9 +3682,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// A struct definition: `struct Foo&lt;A&gt; { x: A }`.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>ItemStruct {
         <span class="kw">pub </span>attrs: Vec&lt;Attribute&gt;,
         <span class="kw">pub </span>vis: Visibility,
@@ -3637,9 +3696,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// A trait definition: `pub trait Iterator { ... }`.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>ItemTrait {
         <span class="kw">pub </span>attrs: Vec&lt;Attribute&gt;,
         <span class="kw">pub </span>vis: Visibility,
@@ -3656,9 +3715,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// A trait alias: `pub trait SharableIterator = Iterator + Sync`.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>ItemTraitAlias {
         <span class="kw">pub </span>attrs: Vec&lt;Attribute&gt;,
         <span class="kw">pub </span>vis: Visibility,
@@ -3671,9 +3730,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// A type alias: `type Result&lt;T&gt; = std::result::Result&lt;T, MyError&gt;`.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>ItemType {
         <span class="kw">pub </span>attrs: Vec&lt;Attribute&gt;,
         <span class="kw">pub </span>vis: Visibility,
@@ -3686,9 +3745,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// A union definition: `union Foo&lt;A, B&gt; { x: A, y: B }`.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>ItemUnion {
         <span class="kw">pub </span>attrs: Vec&lt;Attribute&gt;,
         <span class="kw">pub </span>vis: Visibility,
@@ -3699,9 +3758,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// A use declaration: `use std::collections::HashMap`.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>ItemUse {
         <span class="kw">pub </span>attrs: Vec&lt;Attribute&gt;,
         <span class="kw">pub </span>vis: Visibility,
@@ -3713,7 +3772,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 }
 
 <span class="kw">impl </span>Item {
-    <span class="attr">#[cfg(feature = <span class="string">&quot;parsing&quot;</span>)]
+    <span class="attr">#[cfg(feature = <span class="string">"parsing"</span>)]
     </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>replace_attrs(<span class="kw-2">&amp;mut </span><span class="self">self</span>, new: Vec&lt;Attribute&gt;) -&gt; Vec&lt;Attribute&gt; {
         <span class="kw">match </span><span class="self">self </span>{
             Item::Const(ItemConst { attrs, .. })
@@ -3816,15 +3875,15 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_enum_of_structs! </span>{
+<span class="macro">ast_enum_of_structs!</span> {
     <span class="doccomment">/// A suffix of an import tree in a `use` item: `Type as Renamed` or `*`.
     ///
     /// # Syntax tree enum
     ///
     /// This type is a [syntax tree enum].
     ///
-    /// [syntax tree enum]: Expr#syntax-tree-enums
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    /// [syntax tree enum]: crate::expr::Expr#syntax-tree-enums
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub enum </span>UseTree {
         <span class="doccomment">/// A path prefix of imports in a `use` item: `std::...`.
         </span>Path(UsePath),
@@ -3843,9 +3902,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// A path prefix of imports in a `use` item: `std::...`.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>UsePath {
         <span class="kw">pub </span>ident: Ident,
         <span class="kw">pub </span>colon2_token: <span class="macro">Token!</span>[::],
@@ -3853,17 +3912,17 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// An identifier imported by a `use` item: `HashMap`.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>UseName {
         <span class="kw">pub </span>ident: Ident,
     }
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// An renamed identifier imported by a `use` item: `HashMap as Map`.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>UseRename {
         <span class="kw">pub </span>ident: Ident,
         <span class="kw">pub </span>as_token: <span class="macro">Token!</span>[<span class="kw">as</span>],
@@ -3871,32 +3930,32 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// A glob import in a `use` item: `*`.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>UseGlob {
         <span class="kw">pub </span>star_token: <span class="macro">Token!</span>[<span class="kw-2">*</span>],
     }
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// A braced group of imports in a `use` item: `{A, B, C}`.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>UseGroup {
         <span class="kw">pub </span>brace_token: token::Brace,
         <span class="kw">pub </span>items: Punctuated&lt;UseTree, <span class="macro">Token!</span>[,]&gt;,
     }
 }
 
-<span class="macro">ast_enum_of_structs! </span>{
+<span class="macro">ast_enum_of_structs!</span> {
     <span class="doccomment">/// An item within an `extern` block.
     ///
     /// # Syntax tree enum
     ///
     /// This type is a [syntax tree enum].
     ///
-    /// [syntax tree enum]: Expr#syntax-tree-enums
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    /// [syntax tree enum]: crate::expr::Expr#syntax-tree-enums
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     #[non_exhaustive]
     </span><span class="kw">pub enum </span>ForeignItem {
         <span class="doccomment">/// A foreign function in an `extern` block.
@@ -3927,16 +3986,16 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         //         _ =&gt; { /* some sane fallback */ }
         //     }
         //
-        // This way we fail your tests but don&#39;t break your library when adding
+        // This way we fail your tests but don't break your library when adding
         // a variant. You will be notified by a test failure when a variant is
         // added, so that you can add code to handle it, but your library will
         // continue to compile and work for downstream users in the interim.
     </span>}
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// A foreign function in an `extern` block.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>ForeignItemFn {
         <span class="kw">pub </span>attrs: Vec&lt;Attribute&gt;,
         <span class="kw">pub </span>vis: Visibility,
@@ -3945,9 +4004,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// A foreign static item in an `extern` block: `static ext: u8`.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>ForeignItemStatic {
         <span class="kw">pub </span>attrs: Vec&lt;Attribute&gt;,
         <span class="kw">pub </span>vis: Visibility,
@@ -3960,9 +4019,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// A foreign type in an `extern` block: `type void`.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>ForeignItemType {
         <span class="kw">pub </span>attrs: Vec&lt;Attribute&gt;,
         <span class="kw">pub </span>vis: Visibility,
@@ -3973,9 +4032,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// A macro invocation within an extern block.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>ForeignItemMacro {
         <span class="kw">pub </span>attrs: Vec&lt;Attribute&gt;,
         <span class="kw">pub </span>mac: Macro,
@@ -3983,15 +4042,15 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_enum_of_structs! </span>{
+<span class="macro">ast_enum_of_structs!</span> {
     <span class="doccomment">/// An item declaration within the definition of a trait.
     ///
     /// # Syntax tree enum
     ///
     /// This type is a [syntax tree enum].
     ///
-    /// [syntax tree enum]: Expr#syntax-tree-enums
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    /// [syntax tree enum]: crate::expr::Expr#syntax-tree-enums
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     #[non_exhaustive]
     </span><span class="kw">pub enum </span>TraitItem {
         <span class="doccomment">/// An associated constant within the definition of a trait.
@@ -4022,16 +4081,16 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         //         _ =&gt; { /* some sane fallback */ }
         //     }
         //
-        // This way we fail your tests but don&#39;t break your library when adding
+        // This way we fail your tests but don't break your library when adding
         // a variant. You will be notified by a test failure when a variant is
         // added, so that you can add code to handle it, but your library will
         // continue to compile and work for downstream users in the interim.
     </span>}
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// An associated constant within the definition of a trait.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>TraitItemConst {
         <span class="kw">pub </span>attrs: Vec&lt;Attribute&gt;,
         <span class="kw">pub </span>const_token: <span class="macro">Token!</span>[<span class="kw">const</span>],
@@ -4044,9 +4103,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// An associated function within the definition of a trait.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>TraitItemFn {
         <span class="kw">pub </span>attrs: Vec&lt;Attribute&gt;,
         <span class="kw">pub </span>sig: Signature,
@@ -4055,9 +4114,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// An associated type within the definition of a trait.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>TraitItemType {
         <span class="kw">pub </span>attrs: Vec&lt;Attribute&gt;,
         <span class="kw">pub </span>type_token: <span class="macro">Token!</span>[<span class="kw">type</span>],
@@ -4070,9 +4129,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// A macro invocation within the definition of a trait.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>TraitItemMacro {
         <span class="kw">pub </span>attrs: Vec&lt;Attribute&gt;,
         <span class="kw">pub </span>mac: Macro,
@@ -4080,15 +4139,15 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_enum_of_structs! </span>{
+<span class="macro">ast_enum_of_structs!</span> {
     <span class="doccomment">/// An item within an impl block.
     ///
     /// # Syntax tree enum
     ///
     /// This type is a [syntax tree enum].
     ///
-    /// [syntax tree enum]: Expr#syntax-tree-enums
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    /// [syntax tree enum]: crate::expr::Expr#syntax-tree-enums
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     #[non_exhaustive]
     </span><span class="kw">pub enum </span>ImplItem {
         <span class="doccomment">/// An associated constant within an impl block.
@@ -4119,16 +4178,16 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         //         _ =&gt; { /* some sane fallback */ }
         //     }
         //
-        // This way we fail your tests but don&#39;t break your library when adding
+        // This way we fail your tests but don't break your library when adding
         // a variant. You will be notified by a test failure when a variant is
         // added, so that you can add code to handle it, but your library will
         // continue to compile and work for downstream users in the interim.
     </span>}
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// An associated constant within an impl block.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>ImplItemConst {
         <span class="kw">pub </span>attrs: Vec&lt;Attribute&gt;,
         <span class="kw">pub </span>vis: Visibility,
@@ -4144,9 +4203,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// An associated function within an impl block.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>ImplItemFn {
         <span class="kw">pub </span>attrs: Vec&lt;Attribute&gt;,
         <span class="kw">pub </span>vis: Visibility,
@@ -4156,9 +4215,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// An associated type within an impl block.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>ImplItemType {
         <span class="kw">pub </span>attrs: Vec&lt;Attribute&gt;,
         <span class="kw">pub </span>vis: Visibility,
@@ -4172,9 +4231,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// A macro invocation within an impl block.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>ImplItemMacro {
         <span class="kw">pub </span>attrs: Vec&lt;Attribute&gt;,
         <span class="kw">pub </span>mac: Macro,
@@ -4182,10 +4241,10 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// A function signature in a trait or implementation: `unsafe fn
     /// initialize(&amp;self)`.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>Signature {
         <span class="kw">pub </span>constness: <span class="prelude-ty">Option</span>&lt;<span class="macro">Token!</span>[<span class="kw">const</span>]&gt;,
         <span class="kw">pub </span>asyncness: <span class="prelude-ty">Option</span>&lt;<span class="macro">Token!</span>[<span class="kw">async</span>]&gt;,
@@ -4202,7 +4261,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 }
 
 <span class="kw">impl </span>Signature {
-    <span class="doccomment">/// A method&#39;s `self` receiver, such as `&amp;self` or `self: Box&lt;Self&gt;`.
+    <span class="doccomment">/// A method's `self` receiver, such as `&amp;self` or `self: Box&lt;Self&gt;`.
     </span><span class="kw">pub fn </span>receiver(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>Receiver&gt; {
         <span class="kw">let </span>arg = <span class="self">self</span>.inputs.first()<span class="question-mark">?</span>;
         <span class="kw">match </span>arg {
@@ -4212,9 +4271,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_enum_of_structs! </span>{
+<span class="macro">ast_enum_of_structs!</span> {
     <span class="doccomment">/// An argument in a function signature: the `n: usize` in `fn f(n: usize)`.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub enum </span>FnArg {
         <span class="doccomment">/// The `self` argument of an associated method.
         </span>Receiver(Receiver),
@@ -4224,7 +4283,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// The `self` argument of an associated method.
     ///
     /// If `colon_token` is present, the receiver is written with an explicit
@@ -4232,7 +4291,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     /// is written in shorthand such as `self` or `&amp;self` or `&amp;mut self`. In the
     /// shorthand case, the type in `ty` is reconstructed as one of `Self`,
     /// `&amp;Self`, or `&amp;mut Self`.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>Receiver {
         <span class="kw">pub </span>attrs: Vec&lt;Attribute&gt;,
         <span class="kw">pub </span>reference: <span class="prelude-ty">Option</span>&lt;(<span class="macro">Token!</span>[<span class="kw-2">&amp;</span>], <span class="prelude-ty">Option</span>&lt;Lifetime&gt;)&gt;,
@@ -4249,19 +4308,19 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_struct! </span>{
+<span class="macro">ast_struct!</span> {
     <span class="doccomment">/// The variadic argument of a foreign function.
     ///
     /// ```rust
     /// # struct c_char;
     /// # struct c_int;
     /// #
-    /// extern &quot;C&quot; {
+    /// extern "C" {
     ///     fn printf(format: *const c_char, ...) -&gt; c_int;
     ///     //                               ^^^
     /// }
     /// ```
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     </span><span class="kw">pub struct </span>Variadic {
         <span class="kw">pub </span>attrs: Vec&lt;Attribute&gt;,
         <span class="kw">pub </span>pat: <span class="prelude-ty">Option</span>&lt;(Box&lt;Pat&gt;, <span class="macro">Token!</span>[:])&gt;,
@@ -4270,9 +4329,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_enum! </span>{
+<span class="macro">ast_enum!</span> {
     <span class="doccomment">/// The mutability of an `Item::Static` or `ForeignItem::Static`.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     #[non_exhaustive]
     </span><span class="kw">pub enum </span>StaticMutability {
         Mut(<span class="macro">Token!</span>[<span class="kw-2">mut</span>]),
@@ -4280,9 +4339,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="macro">ast_enum! </span>{
+<span class="macro">ast_enum!</span> {
     <span class="doccomment">/// Unused, but reserved for RFC 3323 restrictions.
-    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;full&quot;</span>)))]
+    </span><span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"full"</span>)))]
     #[non_exhaustive]
     </span><span class="kw">pub enum </span>ImplRestriction {}
 
@@ -4297,14 +4356,39 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     // }
 </span>}
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;parsing&quot;</span>)]
+<span class="attr">#[cfg(feature = <span class="string">"parsing"</span>)]
 </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>parsing {
-    <span class="kw">use super</span>::<span class="kw-2">*</span>;
+    <span class="kw">use </span><span class="kw">crate</span>::attr::{<span class="self">self</span>, Attribute};
+    <span class="kw">use </span><span class="kw">crate</span>::derive;
+    <span class="kw">use </span><span class="kw">crate</span>::error::{Error, <span class="prelude-ty">Result</span>};
+    <span class="kw">use </span><span class="kw">crate</span>::expr::Expr;
     <span class="kw">use </span><span class="kw">crate</span>::ext::IdentExt <span class="kw">as _</span>;
+    <span class="kw">use </span><span class="kw">crate</span>::generics::{Generics, TypeParamBound};
+    <span class="kw">use </span><span class="kw">crate</span>::ident::Ident;
+    <span class="kw">use </span><span class="kw">crate</span>::item::{
+        FnArg, ForeignItem, ForeignItemFn, ForeignItemMacro, ForeignItemStatic, ForeignItemType,
+        ImplItem, ImplItemConst, ImplItemFn, ImplItemMacro, ImplItemType, Item, ItemConst,
+        ItemEnum, ItemExternCrate, ItemFn, ItemForeignMod, ItemImpl, ItemMacro, ItemMod,
+        ItemStatic, ItemStruct, ItemTrait, ItemTraitAlias, ItemType, ItemUnion, ItemUse, Receiver,
+        Signature, StaticMutability, TraitItem, TraitItemConst, TraitItemFn, TraitItemMacro,
+        TraitItemType, UseGlob, UseGroup, UseName, UsePath, UseRename, UseTree, Variadic,
+    };
+    <span class="kw">use </span><span class="kw">crate</span>::lifetime::Lifetime;
+    <span class="kw">use </span><span class="kw">crate</span>::lit::LitStr;
+    <span class="kw">use </span><span class="kw">crate</span>::mac::{<span class="self">self</span>, Macro, MacroDelimiter};
     <span class="kw">use </span><span class="kw">crate</span>::parse::discouraged::Speculative <span class="kw">as _</span>;
-    <span class="kw">use </span><span class="kw">crate</span>::parse::{Parse, ParseBuffer, ParseStream, <span class="prelude-ty">Result</span>};
+    <span class="kw">use </span><span class="kw">crate</span>::parse::{Parse, ParseBuffer, ParseStream};
+    <span class="kw">use </span><span class="kw">crate</span>::pat::{Pat, PatType, PatWild};
+    <span class="kw">use </span><span class="kw">crate</span>::path::Path;
+    <span class="kw">use </span><span class="kw">crate</span>::punctuated::Punctuated;
+    <span class="kw">use </span><span class="kw">crate</span>::restriction::Visibility;
+    <span class="kw">use </span><span class="kw">crate</span>::stmt::Block;
+    <span class="kw">use </span><span class="kw">crate</span>::token;
+    <span class="kw">use </span><span class="kw">crate</span>::ty::{Abi, ReturnType, Type, TypePath, TypeReference};
+    <span class="kw">use </span><span class="kw">crate</span>::verbatim;
+    <span class="kw">use </span>proc_macro2::TokenStream;
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>Item {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="kw">let </span>begin = input.fork();
@@ -4507,9 +4591,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 
     <span class="kw">enum </span>WhereClauseLocation {
-        <span class="comment">// type Ty&lt;T&gt; where T: &#39;static = T;
+        <span class="comment">// type Ty&lt;T&gt; where T: 'static = T;
         </span>BeforeEq,
-        <span class="comment">// type Ty&lt;T&gt; = T where T: &#39;static;
+        <span class="comment">// type Ty&lt;T&gt; = T where T: 'static;
         </span>AfterEq,
         <span class="comment">// TODO: goes away once the migration period on rust-lang/rust#89122 is over
         </span>Both,
@@ -4597,7 +4681,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>ItemMacro {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="kw">let </span>attrs = input.call(Attribute::parse_outer)<span class="question-mark">?</span>;
@@ -4651,7 +4735,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         <span class="prelude-val">Ok</span>(Item::Verbatim(verbatim::between(<span class="kw-2">&amp;</span>begin, input)))
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>ItemExternCrate {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="prelude-val">Ok</span>(ItemExternCrate {
@@ -4684,7 +4768,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>ItemUse {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="kw">let </span>allow_crate_root_in_path = <span class="bool-val">false</span>;
@@ -4718,7 +4802,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }))
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>UseTree {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;UseTree&gt; {
             <span class="kw">let </span>allow_crate_root_in_path = <span class="bool-val">false</span>;
@@ -4754,7 +4838,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
                         </span>} <span class="kw">else if </span>input.peek(<span class="macro">Token!</span>[<span class="kw">_</span>]) {
                             Ident::from(input.parse::&lt;<span class="macro">Token!</span>[<span class="kw">_</span>]&gt;()<span class="question-mark">?</span>)
                         } <span class="kw">else </span>{
-                            <span class="kw">return </span><span class="prelude-val">Err</span>(input.error(<span class="string">&quot;expected identifier or underscore&quot;</span>));
+                            <span class="kw">return </span><span class="prelude-val">Err</span>(input.error(<span class="string">"expected identifier or underscore"</span>));
                         }
                     },
                 })))
@@ -4800,7 +4884,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>ItemStatic {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="prelude-val">Ok</span>(ItemStatic {
@@ -4818,7 +4902,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>ItemConst {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="kw">let </span>attrs = input.call(Attribute::parse_outer)<span class="question-mark">?</span>;
@@ -4862,7 +4946,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
             &amp;&amp; fork.peek(<span class="macro">Token!</span>[<span class="kw">fn</span>])
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>Signature {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="kw">let </span>constness: <span class="prelude-ty">Option</span>&lt;<span class="macro">Token!</span>[<span class="kw">const</span>]&gt; = input.parse()<span class="question-mark">?</span>;
@@ -4896,7 +4980,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>ItemFn {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="kw">let </span>outer_attrs = input.call(Attribute::parse_outer)<span class="question-mark">?</span>;
@@ -4925,7 +5009,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         })
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>FnArg {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="kw">let </span>allow_variadic = <span class="bool-val">false</span>;
@@ -4992,7 +5076,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         })))
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>Receiver {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="kw">let </span>reference = <span class="kw">if </span>input.peek(<span class="macro">Token!</span>[<span class="kw-2">&amp;</span>]) {
@@ -5014,7 +5098,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
             </span>} <span class="kw">else </span>{
                 <span class="kw">let </span><span class="kw-2">mut </span>ty = Type::Path(TypePath {
                     qself: <span class="prelude-val">None</span>,
-                    path: Path::from(Ident::new(<span class="string">&quot;Self&quot;</span>, self_token.span)),
+                    path: Path::from(Ident::new(<span class="string">"Self"</span>, self_token.span)),
                 });
                 <span class="kw">if let </span><span class="prelude-val">Some</span>((ampersand, lifetime)) = reference.as_ref() {
                     ty = Type::Reference(TypeReference {
@@ -5081,13 +5165,13 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
                 FnArg::Receiver(receiver) <span class="kw">if </span>has_receiver =&gt; {
                     <span class="kw">return </span><span class="prelude-val">Err</span>(Error::new(
                         receiver.self_token.span,
-                        <span class="string">&quot;unexpected second method receiver&quot;</span>,
+                        <span class="string">"unexpected second method receiver"</span>,
                     ));
                 }
                 FnArg::Receiver(receiver) <span class="kw">if </span>!args.is_empty() =&gt; {
                     <span class="kw">return </span><span class="prelude-val">Err</span>(Error::new(
                         receiver.self_token.span,
-                        <span class="string">&quot;unexpected method receiver&quot;</span>,
+                        <span class="string">"unexpected method receiver"</span>,
                     ));
                 }
                 FnArg::Receiver(<span class="kw">_</span>) =&gt; has_receiver = <span class="bool-val">true</span>,
@@ -5106,7 +5190,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         <span class="prelude-val">Ok</span>((args, variadic))
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>ItemMod {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="kw">let </span><span class="kw-2">mut </span>attrs = input.call(Attribute::parse_outer)<span class="question-mark">?</span>;
@@ -5155,7 +5239,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>ItemForeignMod {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="kw">let </span><span class="kw-2">mut </span>attrs = input.call(Attribute::parse_outer)<span class="question-mark">?</span>;
@@ -5180,7 +5264,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>ForeignItem {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="kw">let </span>begin = input.fork();
@@ -5259,7 +5343,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>ForeignItemFn {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="kw">let </span>attrs = input.call(Attribute::parse_outer)<span class="question-mark">?</span>;
@@ -5275,7 +5359,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>ForeignItemStatic {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="prelude-val">Ok</span>(ForeignItemStatic {
@@ -5291,7 +5375,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>ForeignItemType {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="prelude-val">Ok</span>(ForeignItemType {
@@ -5340,7 +5424,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>ForeignItemMacro {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="kw">let </span>attrs = input.call(Attribute::parse_outer)<span class="question-mark">?</span>;
@@ -5358,7 +5442,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>ItemType {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="prelude-val">Ok</span>(ItemType {
@@ -5412,7 +5496,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }))
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>ItemStruct {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="kw">let </span>attrs = input.call(Attribute::parse_outer)<span class="question-mark">?</span>;
@@ -5436,7 +5520,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>ItemEnum {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="kw">let </span>attrs = input.call(Attribute::parse_outer)<span class="question-mark">?</span>;
@@ -5460,7 +5544,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>ItemUnion {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="kw">let </span>attrs = input.call(Attribute::parse_outer)<span class="question-mark">?</span>;
@@ -5511,7 +5595,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>ItemTrait {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="kw">let </span>outer_attrs = input.call(Attribute::parse_outer)<span class="question-mark">?</span>;
@@ -5586,7 +5670,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         })
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>ItemTraitAlias {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="kw">let </span>(attrs, vis, trait_token, ident, generics) = parse_start_of_trait_alias(input)<span class="question-mark">?</span>;
@@ -5642,7 +5726,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         })
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>TraitItem {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="kw">let </span>begin = input.fork();
@@ -5727,7 +5811,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>TraitItemConst {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="kw">let </span>attrs = input.call(Attribute::parse_outer)<span class="question-mark">?</span>;
@@ -5764,7 +5848,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>TraitItemFn {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="kw">let </span><span class="kw-2">mut </span>attrs = input.call(Attribute::parse_outer)<span class="question-mark">?</span>;
@@ -5793,7 +5877,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>TraitItemType {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="kw">let </span>attrs = input.call(Attribute::parse_outer)<span class="question-mark">?</span>;
@@ -5850,7 +5934,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>TraitItemMacro {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="kw">let </span>attrs = input.call(Attribute::parse_outer)<span class="question-mark">?</span>;
@@ -5868,7 +5952,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>ItemImpl {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="kw">let </span>allow_verbatim_impl = <span class="bool-val">false</span>;
@@ -5912,7 +5996,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
             <span class="prelude-val">None
         </span>};
 
-        <span class="attr">#[cfg(not(feature = <span class="string">&quot;printing&quot;</span>))]
+        <span class="attr">#[cfg(not(feature = <span class="string">"printing"</span>))]
         </span><span class="kw">let </span>first_ty_span = input.span();
         <span class="kw">let </span><span class="kw-2">mut </span>first_ty: Type = input.parse()<span class="question-mark">?</span>;
         <span class="kw">let </span>self_ty: Type;
@@ -5935,10 +6019,10 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
                     <span class="macro">unreachable!</span>();
                 }
             } <span class="kw">else if </span>!allow_verbatim_impl {
-                <span class="attr">#[cfg(feature = <span class="string">&quot;printing&quot;</span>)]
-                </span><span class="kw">return </span><span class="prelude-val">Err</span>(Error::new_spanned(first_ty_ref, <span class="string">&quot;expected trait path&quot;</span>));
-                <span class="attr">#[cfg(not(feature = <span class="string">&quot;printing&quot;</span>))]
-                </span><span class="kw">return </span><span class="prelude-val">Err</span>(Error::new(first_ty_span, <span class="string">&quot;expected trait path&quot;</span>));
+                <span class="attr">#[cfg(feature = <span class="string">"printing"</span>)]
+                </span><span class="kw">return </span><span class="prelude-val">Err</span>(Error::new_spanned(first_ty_ref, <span class="string">"expected trait path"</span>));
+                <span class="attr">#[cfg(not(feature = <span class="string">"printing"</span>))]
+                </span><span class="kw">return </span><span class="prelude-val">Err</span>(Error::new(first_ty_span, <span class="string">"expected trait path"</span>));
             } <span class="kw">else </span>{
                 trait_ = <span class="prelude-val">None</span>;
             }
@@ -5980,7 +6064,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>ImplItem {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="kw">let </span>begin = input.fork();
@@ -6075,7 +6159,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>ImplItemConst {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="kw">let </span>attrs = input.call(Attribute::parse_outer)<span class="question-mark">?</span>;
@@ -6112,7 +6196,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>ImplItemFn {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="kw">let </span>allow_omitted_body = <span class="bool-val">false</span>;
@@ -6129,7 +6213,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         <span class="kw">let </span>defaultness: <span class="prelude-ty">Option</span>&lt;<span class="macro">Token!</span>[default]&gt; = input.parse()<span class="question-mark">?</span>;
         <span class="kw">let </span>sig: Signature = input.parse()<span class="question-mark">?</span>;
 
-        <span class="comment">// Accept functions without a body in an impl block because rustc&#39;s
+        <span class="comment">// Accept functions without a body in an impl block because rustc's
         // *parser* does not reject them (the compilation error is emitted later
         // than parsing) and it can be useful for macro DSLs.
         </span><span class="kw">if </span>allow_omitted_body &amp;&amp; input.parse::&lt;<span class="prelude-ty">Option</span>&lt;<span class="macro">Token!</span>[;]&gt;&gt;()<span class="question-mark">?</span>.is_some() {
@@ -6153,7 +6237,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }))
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>ImplItemType {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="kw">let </span>attrs = input.call(Attribute::parse_outer)<span class="question-mark">?</span>;
@@ -6215,7 +6299,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }))
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>ImplItemMacro {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="kw">let </span>attrs = input.call(Attribute::parse_outer)<span class="question-mark">?</span>;
@@ -6251,7 +6335,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;parsing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"parsing"</span>)))]
     </span><span class="kw">impl </span>Parse <span class="kw">for </span>StaticMutability {
         <span class="kw">fn </span>parse(input: ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
             <span class="kw">let </span>mut_token: <span class="prelude-ty">Option</span>&lt;<span class="macro">Token!</span>[<span class="kw-2">mut</span>]&gt; = input.parse()<span class="question-mark">?</span>;
@@ -6260,15 +6344,25 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     }
 }
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;printing&quot;</span>)]
+<span class="attr">#[cfg(feature = <span class="string">"printing"</span>)]
 </span><span class="kw">mod </span>printing {
-    <span class="kw">use super</span>::<span class="kw-2">*</span>;
     <span class="kw">use </span><span class="kw">crate</span>::attr::FilterAttrs;
+    <span class="kw">use </span><span class="kw">crate</span>::data::Fields;
+    <span class="kw">use </span><span class="kw">crate</span>::item::{
+        ForeignItemFn, ForeignItemMacro, ForeignItemStatic, ForeignItemType, ImplItemConst,
+        ImplItemFn, ImplItemMacro, ImplItemType, ItemConst, ItemEnum, ItemExternCrate, ItemFn,
+        ItemForeignMod, ItemImpl, ItemMacro, ItemMod, ItemStatic, ItemStruct, ItemTrait,
+        ItemTraitAlias, ItemType, ItemUnion, ItemUse, Receiver, Signature, StaticMutability,
+        TraitItemConst, TraitItemFn, TraitItemMacro, TraitItemType, UseGlob, UseGroup, UseName,
+        UsePath, UseRename, Variadic,
+    };
+    <span class="kw">use </span><span class="kw">crate</span>::mac::MacroDelimiter;
     <span class="kw">use </span><span class="kw">crate</span>::print::TokensOrDefault;
+    <span class="kw">use </span><span class="kw">crate</span>::ty::Type;
     <span class="kw">use </span>proc_macro2::TokenStream;
     <span class="kw">use </span>quote::{ToTokens, TokenStreamExt};
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>ItemExternCrate {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             tokens.append_all(<span class="self">self</span>.attrs.outer());
@@ -6284,7 +6378,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>ItemUse {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             tokens.append_all(<span class="self">self</span>.attrs.outer());
@@ -6296,7 +6390,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>ItemStatic {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             tokens.append_all(<span class="self">self</span>.attrs.outer());
@@ -6312,7 +6406,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>ItemConst {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             tokens.append_all(<span class="self">self</span>.attrs.outer());
@@ -6327,7 +6421,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>ItemFn {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             tokens.append_all(<span class="self">self</span>.attrs.outer());
@@ -6340,7 +6434,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>ItemMod {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             tokens.append_all(<span class="self">self</span>.attrs.outer());
@@ -6359,7 +6453,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>ItemForeignMod {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             tokens.append_all(<span class="self">self</span>.attrs.outer());
@@ -6372,7 +6466,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>ItemType {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             tokens.append_all(<span class="self">self</span>.attrs.outer());
@@ -6387,7 +6481,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>ItemEnum {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             tokens.append_all(<span class="self">self</span>.attrs.outer());
@@ -6402,7 +6496,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>ItemStruct {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             tokens.append_all(<span class="self">self</span>.attrs.outer());
@@ -6428,7 +6522,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>ItemUnion {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             tokens.append_all(<span class="self">self</span>.attrs.outer());
@@ -6441,7 +6535,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>ItemTrait {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             tokens.append_all(<span class="self">self</span>.attrs.outer());
@@ -6463,7 +6557,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>ItemTraitAlias {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             tokens.append_all(<span class="self">self</span>.attrs.outer());
@@ -6478,7 +6572,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>ItemImpl {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             tokens.append_all(<span class="self">self</span>.attrs.outer());
@@ -6500,7 +6594,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>ItemMacro {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             tokens.append_all(<span class="self">self</span>.attrs.outer());
@@ -6522,7 +6616,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>UsePath {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             <span class="self">self</span>.ident.to_tokens(tokens);
@@ -6531,14 +6625,14 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>UseName {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             <span class="self">self</span>.ident.to_tokens(tokens);
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>UseRename {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             <span class="self">self</span>.ident.to_tokens(tokens);
@@ -6547,14 +6641,14 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>UseGlob {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             <span class="self">self</span>.star_token.to_tokens(tokens);
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>UseGroup {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             <span class="self">self</span>.brace_token.surround(tokens, |tokens| {
@@ -6563,7 +6657,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>TraitItemConst {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             tokens.append_all(<span class="self">self</span>.attrs.outer());
@@ -6579,7 +6673,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>TraitItemFn {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             tokens.append_all(<span class="self">self</span>.attrs.outer());
@@ -6598,7 +6692,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>TraitItemType {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             tokens.append_all(<span class="self">self</span>.attrs.outer());
@@ -6618,7 +6712,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>TraitItemMacro {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             tokens.append_all(<span class="self">self</span>.attrs.outer());
@@ -6627,7 +6721,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>ImplItemConst {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             tokens.append_all(<span class="self">self</span>.attrs.outer());
@@ -6643,7 +6737,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>ImplItemFn {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             tokens.append_all(<span class="self">self</span>.attrs.outer());
@@ -6657,7 +6751,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>ImplItemType {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             tokens.append_all(<span class="self">self</span>.attrs.outer());
@@ -6673,7 +6767,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>ImplItemMacro {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             tokens.append_all(<span class="self">self</span>.attrs.outer());
@@ -6682,7 +6776,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>ForeignItemFn {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             tokens.append_all(<span class="self">self</span>.attrs.outer());
@@ -6692,7 +6786,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>ForeignItemStatic {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             tokens.append_all(<span class="self">self</span>.attrs.outer());
@@ -6706,7 +6800,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>ForeignItemType {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             tokens.append_all(<span class="self">self</span>.attrs.outer());
@@ -6719,7 +6813,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>ForeignItemMacro {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             tokens.append_all(<span class="self">self</span>.attrs.outer());
@@ -6728,7 +6822,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>Signature {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             <span class="self">self</span>.constness.to_tokens(tokens);
@@ -6752,7 +6846,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>Receiver {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             tokens.append_all(<span class="self">self</span>.attrs.outer());
@@ -6770,11 +6864,11 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
                     (<span class="prelude-val">Some</span>(<span class="kw">_</span>), mutability, Type::Reference(ty)) =&gt; {
                         mutability.is_some() == ty.mutability.is_some()
                             &amp;&amp; <span class="kw">match </span><span class="kw-2">&amp;*</span>ty.elem {
-                                Type::Path(ty) =&gt; ty.qself.is_none() &amp;&amp; ty.path.is_ident(<span class="string">&quot;Self&quot;</span>),
+                                Type::Path(ty) =&gt; ty.qself.is_none() &amp;&amp; ty.path.is_ident(<span class="string">"Self"</span>),
                                 <span class="kw">_ </span>=&gt; <span class="bool-val">false</span>,
                             }
                     }
-                    (<span class="prelude-val">None</span>, <span class="kw">_</span>, Type::Path(ty)) =&gt; ty.qself.is_none() &amp;&amp; ty.path.is_ident(<span class="string">&quot;Self&quot;</span>),
+                    (<span class="prelude-val">None</span>, <span class="kw">_</span>, Type::Path(ty)) =&gt; ty.qself.is_none() &amp;&amp; ty.path.is_ident(<span class="string">"Self"</span>),
                     <span class="kw">_ </span>=&gt; <span class="bool-val">false</span>,
                 };
                 <span class="kw">if </span>!consistent {
@@ -6785,7 +6879,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>Variadic {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             tokens.append_all(<span class="self">self</span>.attrs.outer());
@@ -6798,7 +6892,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
         }
     }
 
-    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">&quot;printing&quot;</span>)))]
+    <span class="attr">#[cfg_attr(doc_cfg, doc(cfg(feature = <span class="string">"printing"</span>)))]
     </span><span class="kw">impl </span>ToTokens <span class="kw">for </span>StaticMutability {
         <span class="kw">fn </span>to_tokens(<span class="kw-2">&amp;</span><span class="self">self</span>, tokens: <span class="kw-2">&amp;mut </span>TokenStream) {
             <span class="kw">match </span><span class="self">self </span>{

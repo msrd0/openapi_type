@@ -1,6 +1,8 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/impls.rs`."><title>impls.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-9ee3a5e31a2afa3e.css"><script id="default-settings" 
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/impls.rs`."><title>impls.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-e935ef01ae1c1829.css"><script id="default-settings" 
 data-theme="ayu"
-data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="openapi_type" data-themes="" data-resource-suffix="" data-rustdoc-version="1.75.0 (82e1608df 2023-12-21)" data-channel="1.75.0" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-9dd44ab47b99a0fb.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="openapi_type" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0 (9b00956e5 2024-04-29)" data-channel="1.78.0" data-search-js="search-42d8da7a6b9792c2.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-12cf3b4f4f9dc36d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
+            <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../openapi_type/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -291,7 +293,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 <span class="comment">////////////////////////////////////////////////////////////////////////////////
 
-</span><span class="macro">macro_rules! </span>int {
+</span><span class="macro">macro_rules!</span> int {
 	($(<span class="macro-nonterminal">$ty</span>:ident(<span class="macro-nonterminal">$minimum</span>:expr, <span class="macro-nonterminal">$byte</span>:expr);)+) =&gt; {
 		$(
 			<span class="kw">impl </span>OpenapiType <span class="kw">for </span><span class="macro-nonterminal">$ty </span>{
@@ -303,7 +305,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	}
 }
 
-<span class="macro">int! </span>{
+<span class="macro">int!</span> {
 	isize(<span class="prelude-val">None</span>, <span class="prelude-val">None</span>);
 	i8(<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="number">1</span>));
 	i16(<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="number">2</span>));
@@ -328,7 +330,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 <span class="comment">////////////////////////////////////////////////////////////////////////////////
 
-</span><span class="macro">macro_rules! </span>number {
+</span><span class="macro">macro_rules!</span> number {
 	($(<span class="macro-nonterminal">$ty</span>:ident(<span class="macro-nonterminal">$byte</span>:expr);)+) =&gt; {
 		$(
 			<span class="kw">impl </span>OpenapiType <span class="kw">for </span><span class="macro-nonterminal">$ty </span>{
@@ -340,7 +342,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	}
 }
 
-<span class="macro">number! </span>{
+<span class="macro">number!</span> {
 	f32(<span class="prelude-val">Some</span>(<span class="number">4</span>));
 	f64(<span class="prelude-val">Some</span>(<span class="number">8</span>));
 }
@@ -355,7 +357,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 <span class="comment">////////////////////////////////////////////////////////////////////////////////
 
-</span><span class="macro">macro_rules! </span>string {
+</span><span class="macro">macro_rules!</span> string {
 	($(<span class="macro-nonterminal">$ty</span>:ident;)+) =&gt; {
 		$(
 			<span class="kw">impl </span>OpenapiType <span class="kw">for </span><span class="macro-nonterminal">$ty </span>{
@@ -367,7 +369,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	}
 }
 
-<span class="macro">string! </span>{
+<span class="macro">string!</span> {
 	String;
 	str;
 	CString;
@@ -376,14 +378,14 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 <span class="comment">////////////////////////////////////////////////////////////////////////////////
 
-</span><span class="attr">#[cfg(feature = <span class="string">&quot;uuid08&quot;</span>)]
+</span><span class="attr">#[cfg(feature = <span class="string">"uuid08"</span>)]
 </span><span class="kw">impl </span>OpenapiType <span class="kw">for </span>uuid08::Uuid {
 	<span class="kw">fn </span>visit_type&lt;V: Visitor&gt;(visitor: <span class="kw-2">&amp;mut </span>V) {
 		visitor.visit_uuid();
 	}
 }
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;uuid1&quot;</span>)]
+<span class="attr">#[cfg(feature = <span class="string">"uuid1"</span>)]
 </span><span class="kw">impl </span>OpenapiType <span class="kw">for </span>uuid1::Uuid {
 	<span class="kw">fn </span>visit_type&lt;V: Visitor&gt;(visitor: <span class="kw-2">&amp;mut </span>V) {
 		visitor.visit_uuid();
@@ -392,8 +394,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 <span class="comment">////////////////////////////////////////////////////////////////////////////////
 
-</span><span class="attr">#[cfg(any(feature = <span class="string">&quot;time03&quot;</span>, feature = <span class="string">&quot;chrono04&quot;</span>))]
-</span><span class="macro">macro_rules! </span>date {
+</span><span class="attr">#[cfg(any(feature = <span class="string">"time03"</span>, feature = <span class="string">"chrono04"</span>))]
+</span><span class="macro">macro_rules!</span> date {
 	($($(<span class="macro-nonterminal">$ty</span>:ident)::+ $(&lt;<span class="macro-nonterminal">$arg</span>:ident: <span class="macro-nonterminal">$bound</span>:path&gt;)<span class="question-mark">?</span>;)+) =&gt; {
 		$(
 			<span class="kw">impl</span>$(&lt;<span class="macro-nonterminal">$arg</span>: <span class="macro-nonterminal">$bound</span>&gt;)<span class="question-mark">? </span>OpenapiType <span class="kw">for </span>$(<span class="macro-nonterminal">$ty</span>)::+$(&lt;<span class="macro-nonterminal">$arg</span>&gt;)<span class="question-mark">? </span>{
@@ -405,21 +407,21 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	}
 }
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;time03&quot;</span>)]
-</span><span class="macro">date! </span>{
+<span class="attr">#[cfg(feature = <span class="string">"time03"</span>)]
+</span><span class="macro">date!</span> {
 	time03::Date;
 }
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;chrono04&quot;</span>)]
-</span><span class="macro">date! </span>{
+<span class="attr">#[cfg(feature = <span class="string">"chrono04"</span>)]
+</span><span class="macro">date!</span> {
 	chrono04::Date&lt;T: chrono04::TimeZone&gt;;
 	chrono04::NaiveDate;
 }
 
 <span class="comment">////////////////////////////////////////////////////////////////////////////////
 
-</span><span class="attr">#[cfg(any(feature = <span class="string">&quot;time03&quot;</span>, feature = <span class="string">&quot;chrono04&quot;</span>))]
-</span><span class="macro">macro_rules! </span>datetime {
+</span><span class="attr">#[cfg(any(feature = <span class="string">"time03"</span>, feature = <span class="string">"chrono04"</span>))]
+</span><span class="macro">macro_rules!</span> datetime {
 	($($(<span class="macro-nonterminal">$ty</span>:ident)::+ $(&lt;<span class="macro-nonterminal">$arg</span>:ident: <span class="macro-nonterminal">$bound</span>:path&gt;)<span class="question-mark">?</span>;)+) =&gt; {
 		$(
 			<span class="kw">impl</span>$(&lt;<span class="macro-nonterminal">$arg</span>: <span class="macro-nonterminal">$bound</span>&gt;)<span class="question-mark">? </span>OpenapiType <span class="kw">for </span>$(<span class="macro-nonterminal">$ty</span>)::+$(&lt;<span class="macro-nonterminal">$arg</span>&gt;)<span class="question-mark">? </span>{
@@ -431,14 +433,14 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	}
 }
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;time03&quot;</span>)]
-</span><span class="macro">datetime! </span>{
+<span class="attr">#[cfg(feature = <span class="string">"time03"</span>)]
+</span><span class="macro">datetime!</span> {
 	time03::OffsetDateTime;
 	time03::PrimitiveDateTime;
 }
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;chrono04&quot;</span>)]
-</span><span class="macro">datetime! </span>{
+<span class="attr">#[cfg(feature = <span class="string">"chrono04"</span>)]
+</span><span class="macro">datetime!</span> {
 	chrono04::DateTime&lt;T: chrono04::TimeZone&gt;;
 	chrono04::NaiveDateTime;
 }
@@ -454,7 +456,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 <span class="comment">////////////////////////////////////////////////////////////////////////////////
 
-</span><span class="macro">macro_rules! </span>array {
+</span><span class="macro">macro_rules!</span> array {
 	($($(<span class="macro-nonterminal">$ty</span>:ident)::+ $(&lt;$(<span class="macro-nonterminal">$arg</span>:ident),+&gt;)<span class="question-mark">? </span>(<span class="macro-nonterminal">$unique_items</span>:literal, <span class="macro-nonterminal">$inner</span>:ident);)+) =&gt; {
 		$(
 			<span class="kw">impl</span>$(&lt;$(<span class="macro-nonterminal">$arg</span>),+&gt;)<span class="question-mark">? </span>OpenapiType <span class="kw">for </span>$(<span class="macro-nonterminal">$ty</span>)::+$(&lt;$(<span class="macro-nonterminal">$arg</span>),+&gt;)<span class="question-mark">?
@@ -472,7 +474,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 <span class="kw">type </span>Array&lt;T&gt; = [T];
 
-<span class="macro">array! </span>{
+<span class="macro">array!</span> {
 	Array&lt;T&gt;(<span class="bool-val">false</span>, T);
 	LinkedList&lt;T&gt;(<span class="bool-val">false</span>, T);
 	Vec&lt;T&gt;(<span class="bool-val">false</span>, T);
@@ -492,7 +494,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 <span class="comment">////////////////////////////////////////////////////////////////////////////////
 
-</span><span class="macro">macro_rules! </span>map {
+</span><span class="macro">macro_rules!</span> map {
 	($($(<span class="macro-nonterminal">$ty</span>:ident)::+ $(&lt;$(<span class="macro-nonterminal">$arg</span>:ident$(: <span class="macro-nonterminal">$bound</span>:path)<span class="question-mark">?</span>),+&gt;)<span class="question-mark">? </span>(<span class="macro-nonterminal">$inner</span>:ident);)+) =&gt; {
 		$(
 			<span class="kw">impl</span>$(&lt;$(<span class="macro-nonterminal">$arg</span>$(: <span class="macro-nonterminal">$bound</span>)<span class="question-mark">?</span>),+&gt;)<span class="question-mark">? </span>OpenapiType <span class="kw">for </span>$(<span class="macro-nonterminal">$ty</span>)::+$(&lt;$(<span class="macro-nonterminal">$arg</span>),+&gt;)<span class="question-mark">?
@@ -509,19 +511,19 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	}
 }
 
-<span class="macro">map! </span>{
+<span class="macro">map!</span> {
 	BTreeMap&lt;K, V&gt;(V);
 	HashMap&lt;K, V, S&gt;(V);
 	IndexMap&lt;K, V, S&gt;(V);
 }
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;indexmap2&quot;</span>)]
-</span><span class="macro">map! </span>{
+<span class="attr">#[cfg(feature = <span class="string">"indexmap2"</span>)]
+</span><span class="macro">map!</span> {
 	indexmap2::IndexMap&lt;K, V, S&gt;(V);
 }
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;linked-hash-map05&quot;</span>)]
-</span><span class="macro">map! </span>{
+<span class="attr">#[cfg(feature = <span class="string">"linked-hash-map05"</span>)]
+</span><span class="macro">map!</span> {
 	linked_hash_map05::LinkedHashMap&lt;K, V, S&gt;(V);
 }
 </code></pre></div></section></main></body></html>

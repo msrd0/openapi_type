@@ -1,6 +1,8 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/visitor/openapi.rs`."><title>openapi.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-9ee3a5e31a2afa3e.css"><script id="default-settings" 
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/visitor/openapi.rs`."><title>openapi.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-e935ef01ae1c1829.css"><script id="default-settings" 
 data-theme="ayu"
-data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="openapi_type" data-themes="" data-resource-suffix="" data-rustdoc-version="1.75.0 (82e1608df 2023-12-21)" data-channel="1.75.0" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-9dd44ab47b99a0fb.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="openapi_type" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0 (9b00956e5 2024-04-29)" data-channel="1.78.0" data-search-js="search-42d8da7a6b9792c2.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-12cf3b4f4f9dc36d.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
+            <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../../openapi_type/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -812,8 +814,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	add_dependencies(dependencies, <span class="kw-2">&amp;mut </span>schema.dependencies);
 	<span class="kw">match </span>schema.schema.schema_data.title.as_deref() {
 		<span class="prelude-val">Some</span>(schema_name) =&gt; {
-			<span class="kw">let </span>ref_name = schema_name.replace(|c: char| !c.is_alphanumeric(), <span class="string">&quot;_&quot;</span>);
-			<span class="kw">let </span>reference = <span class="macro">format!</span>(<span class="string">&quot;#/components/schemas/{ref_name}&quot;</span>);
+			<span class="kw">let </span>ref_name = schema_name.replace(|c: char| !c.is_alphanumeric(), <span class="string">"_"</span>);
+			<span class="kw">let </span>reference = <span class="macro">format!</span>(<span class="string">"#/components/schemas/{ref_name}"</span>);
 			dependencies.insert(ref_name, schema);
 			ReferenceOr::Reference { reference }
 		},
@@ -868,7 +870,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 						<span class="prelude-val">None </span>=&gt; VariantOrUnknownOrEmpty::Empty,
 						<span class="prelude-val">Some</span>(<span class="number">4</span>) =&gt; VariantOrUnknownOrEmpty::Item(IntegerFormat::Int32),
 						<span class="prelude-val">Some</span>(<span class="number">8</span>) =&gt; VariantOrUnknownOrEmpty::Item(IntegerFormat::Int64),
-						<span class="prelude-val">Some</span>(byte) =&gt; VariantOrUnknownOrEmpty::Unknown(<span class="macro">format!</span>(<span class="string">&quot;int{}&quot;</span>, byte * <span class="number">8</span>))
+						<span class="prelude-val">Some</span>(byte) =&gt; VariantOrUnknownOrEmpty::Unknown(<span class="macro">format!</span>(<span class="string">"int{}"</span>, byte * <span class="number">8</span>))
 					},
 					minimum,
 					..Default::default()
@@ -882,7 +884,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 						<span class="prelude-val">None </span>=&gt; VariantOrUnknownOrEmpty::Empty,
 						<span class="prelude-val">Some</span>(<span class="number">4</span>) =&gt; VariantOrUnknownOrEmpty::Item(NumberFormat::Float),
 						<span class="prelude-val">Some</span>(<span class="number">8</span>) =&gt; VariantOrUnknownOrEmpty::Item(NumberFormat::Double),
-						<span class="prelude-val">Some</span>(byte) =&gt; VariantOrUnknownOrEmpty::Unknown(<span class="macro">format!</span>(<span class="string">&quot;f{}&quot;</span>, byte * <span class="number">8</span>))
+						<span class="prelude-val">Some</span>(byte) =&gt; VariantOrUnknownOrEmpty::Unknown(<span class="macro">format!</span>(<span class="string">"f{}"</span>, byte * <span class="number">8</span>))
 					},
 					..Default::default()
 				}))
@@ -905,7 +907,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			<span class="self">Self</span>::Uuid =&gt; <span class="prelude-val">Some</span>(OpenapiSchema::new(Schema {
 				schema_data: Default::default(),
 				schema_kind: SchemaKind::Type(Type::String(StringType {
-					format: VariantOrUnknownOrEmpty::Unknown(<span class="string">&quot;uuid&quot;</span>.into()),
+					format: VariantOrUnknownOrEmpty::Unknown(<span class="string">"uuid"</span>.into()),
 					..Default::default()
 				}))
 			})),
@@ -1004,7 +1006,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	<span class="attr">#[track_caller]
 	</span><span class="kw">fn </span>panic_if_non_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) {
 		<span class="kw">if </span>!<span class="macro">matches!</span>(<span class="self">self</span>, <span class="self">Self</span>::Empty) {
-			<span class="macro">panic!</span>(<span class="string">&quot;This visitor has been called before. You may only specify one type per visitor.&quot;</span>);
+			<span class="macro">panic!</span>(<span class="string">"This visitor has been called before. You may only specify one type per visitor."</span>);
 		}
 	}
 }
@@ -1162,12 +1164,12 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	<span class="kw">fn </span>fields(<span class="kw-2">mut </span>fields: IndexMap&lt;String, Field&gt;, flatten_fields: Vec&lt;Flatten&gt;) -&gt; IndexMap&lt;String, Field&gt; {
 		<span class="kw">for </span>obj <span class="kw">in </span>flatten_fields.into_iter().map(|f| f.obj) {
 			<span class="kw">if </span><span class="macro">matches!</span>(obj.additional, Additional::Schema(<span class="kw">_</span>)) {
-				<span class="macro">unimplemented!</span>(<span class="string">&quot;flatten for maps is not currently implemented&quot;</span>);
+				<span class="macro">unimplemented!</span>(<span class="string">"flatten for maps is not currently implemented"</span>);
 			}
 
 			<span class="kw">for </span>(name, schema) <span class="kw">in </span><span class="self">Self</span>::fields(obj.fields, obj.flatten_fields) {
 				<span class="kw">if </span>fields.contains_key(<span class="kw-2">&amp;</span>name) {
-					<span class="macro">panic!</span>(<span class="string">&quot;flatten produced multiple fields with name {name:?}&quot;</span>);
+					<span class="macro">panic!</span>(<span class="string">"flatten produced multiple fields with name {name:?}"</span>);
 				}
 				<span class="kw">let </span>old_value = fields.insert(name, schema);
 				<span class="macro">debug_assert!</span>(old_value.is_none());
@@ -1185,7 +1187,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			<span class="kw">let </span><span class="kw-2">mut </span>schema = field
 				.visitor
 				.into_schema()
-				.expect(<span class="string">&quot;Field {field_name:?} failed to call its type visitor&quot;</span>);
+				.expect(<span class="string">"Field {field_name:?} failed to call its type visitor"</span>);
 			<span class="kw">if </span>!schema.schema.schema_data.nullable {
 				required.push(field_name.clone());
 			}
@@ -1229,21 +1231,21 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 	<span class="kw">fn </span>visit_name(<span class="kw-2">&amp;mut </span><span class="self">self</span>, name: String) {
 		<span class="kw">if </span><span class="self">self</span>.name.is_some() {
-			<span class="macro">panic!</span>(<span class="string">&quot;You must only set the name of this object once&quot;</span>);
+			<span class="macro">panic!</span>(<span class="string">"You must only set the name of this object once"</span>);
 		}
 		<span class="self">self</span>.name = <span class="prelude-val">Some</span>(name);
 	}
 
 	<span class="kw">fn </span>visit_description(<span class="kw-2">&amp;mut </span><span class="self">self</span>, description: String) {
 		<span class="kw">if </span><span class="self">self</span>.description.is_some() {
-			<span class="macro">panic!</span>(<span class="string">&quot;You must only set the description of this object once&quot;</span>);
+			<span class="macro">panic!</span>(<span class="string">"You must only set the description of this object once"</span>);
 		}
 		<span class="self">self</span>.description = <span class="prelude-val">Some</span>(description);
 	}
 
 	<span class="kw">fn </span>visit_field(<span class="kw-2">&amp;mut </span><span class="self">self</span>, name: String, doc: <span class="prelude-ty">Option</span>&lt;String&gt;) -&gt; <span class="kw-2">&amp;mut </span><span class="self">Self</span>::FieldVisitor {
 		<span class="kw">match </span><span class="self">self</span>.fields.entry(name) {
-			Entry::Occupied(entry) =&gt; <span class="macro">panic!</span>(<span class="string">&quot;You must only visit the field with name {:?} once&quot;</span>, entry.key()),
+			Entry::Occupied(entry) =&gt; <span class="macro">panic!</span>(<span class="string">"You must only visit the field with name {:?} once"</span>, entry.key()),
 			Entry::Vacant(entry) =&gt; {
 				<span class="kw-2">&amp;mut </span>entry
 					.insert(Field {
@@ -1263,7 +1265,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	<span class="kw">fn </span>visit_deny_additional(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
 		<span class="kw">if </span>!<span class="macro">matches!</span>(<span class="self">self</span>.additional, Additional::Allow) {
 			<span class="macro">panic!</span>(
-				<span class="string">&quot;visit_additional or visit_deny_additional has been called before. You may only call this once per visitor.&quot;
+				<span class="string">"visit_additional or visit_deny_additional has been called before. You may only call this once per visitor."
 			</span>);
 		}
 		<span class="self">self</span>.additional = Additional::Deny;
@@ -1272,7 +1274,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	<span class="kw">fn </span>visit_additional(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span>OpenapiVisitor {
 		<span class="kw">if </span>!<span class="macro">matches!</span>(<span class="self">self</span>.additional, Additional::Allow) {
 			<span class="macro">panic!</span>(
-				<span class="string">&quot;visit_additional or visit_deny_additional has been called before. You may only call this once per visitor.&quot;
+				<span class="string">"visit_additional or visit_deny_additional has been called before. You may only call this once per visitor."
 			</span>);
 		}
 		<span class="self">self</span>.additional = Additional::Schema(Box::new(OpenapiVisitor::new()));
@@ -1291,7 +1293,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <span class="kw">impl </span>Flatten {
 	<span class="attr">#[track_caller]
 	</span><span class="kw">fn </span>panic&lt;T: Display&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, got: T) -&gt; ! {
-		<span class="macro">panic!</span>(<span class="string">&quot;can only flatten structs and maps (got {got})&quot;</span>)
+		<span class="macro">panic!</span>(<span class="string">"can only flatten structs and maps (got {got})"</span>)
 	}
 }
 
@@ -1304,66 +1306,66 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	<span class="kw">type </span>AlternativesVisitor = Never;
 
 	<span class="kw">fn </span>visit_unit(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-		<span class="self">self</span>.panic(<span class="string">&quot;a unit&quot;</span>)
+		<span class="self">self</span>.panic(<span class="string">"a unit"</span>)
 	}
 
 	<span class="kw">fn </span>visit_unit_struct(<span class="kw-2">&amp;mut </span><span class="self">self</span>, _name: <span class="prelude-ty">Option</span>&lt;String&gt;, _description: <span class="prelude-ty">Option</span>&lt;String&gt;) {
-		<span class="self">self</span>.panic(<span class="string">&quot;a unit struct&quot;</span>)
+		<span class="self">self</span>.panic(<span class="string">"a unit struct"</span>)
 	}
 
 	<span class="kw">fn </span>visit_any(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-		<span class="self">self</span>.panic(<span class="string">&quot;any&quot;</span>)
+		<span class="self">self</span>.panic(<span class="string">"any"</span>)
 	}
 
 	<span class="kw">fn </span>visit_bool(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-		<span class="self">self</span>.panic(<span class="string">&quot;a boolean&quot;</span>)
+		<span class="self">self</span>.panic(<span class="string">"a boolean"</span>)
 	}
 
 	<span class="kw">fn </span>visit_int(<span class="kw-2">&amp;mut </span><span class="self">self</span>, _byte: <span class="prelude-ty">Option</span>&lt;u32&gt;, _minimum: <span class="prelude-ty">Option</span>&lt;i64&gt;) {
-		<span class="self">self</span>.panic(<span class="string">&quot;an integer&quot;</span>)
+		<span class="self">self</span>.panic(<span class="string">"an integer"</span>)
 	}
 
 	<span class="kw">fn </span>visit_number(<span class="kw-2">&amp;mut </span><span class="self">self</span>, _byte: <span class="prelude-ty">Option</span>&lt;u32&gt;) {
-		<span class="self">self</span>.panic(<span class="string">&quot;a number&quot;</span>)
+		<span class="self">self</span>.panic(<span class="string">"a number"</span>)
 	}
 
 	<span class="kw">fn </span>visit_char(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-		<span class="self">self</span>.panic(<span class="string">&quot;a char&quot;</span>)
+		<span class="self">self</span>.panic(<span class="string">"a char"</span>)
 	}
 
 	<span class="kw">fn </span>visit_string(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-		<span class="self">self</span>.panic(<span class="string">&quot;a string&quot;</span>)
+		<span class="self">self</span>.panic(<span class="string">"a string"</span>)
 	}
 
 	<span class="kw">fn </span>visit_uuid(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-		<span class="self">self</span>.panic(<span class="string">&quot;a uuid&quot;</span>)
+		<span class="self">self</span>.panic(<span class="string">"a uuid"</span>)
 	}
 
 	<span class="kw">fn </span>visit_date(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-		<span class="self">self</span>.panic(<span class="string">&quot;a date&quot;</span>)
+		<span class="self">self</span>.panic(<span class="string">"a date"</span>)
 	}
 
 	<span class="kw">fn </span>visit_datetime(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-		<span class="self">self</span>.panic(<span class="string">&quot;a datetime&quot;</span>)
+		<span class="self">self</span>.panic(<span class="string">"a datetime"</span>)
 	}
 
 	<span class="kw">fn </span>visit_binary(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-		<span class="self">self</span>.panic(<span class="string">&quot;binary&quot;</span>)
+		<span class="self">self</span>.panic(<span class="string">"binary"</span>)
 	}
 
 	<span class="kw">fn </span>visit_option(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span>Never {
-		<span class="self">self</span>.panic(<span class="string">&quot;an option&quot;</span>)
+		<span class="self">self</span>.panic(<span class="string">"an option"</span>)
 	}
 
 	<span class="kw">fn </span>visit_enum&lt;I&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, _name: <span class="prelude-ty">Option</span>&lt;String&gt;, _description: <span class="prelude-ty">Option</span>&lt;String&gt;, _variants: I)
 	<span class="kw">where
 		</span>I: IntoIterator&lt;Item = String&gt;
 	{
-		<span class="self">self</span>.panic(<span class="string">&quot;an enum&quot;</span>)
+		<span class="self">self</span>.panic(<span class="string">"an enum"</span>)
 	}
 
 	<span class="kw">fn </span>visit_array(<span class="kw-2">&amp;mut </span><span class="self">self</span>, _len: <span class="prelude-ty">Option</span>&lt;usize&gt;, _unique_items: bool) -&gt; <span class="kw-2">&amp;mut </span>Never {
-		<span class="self">self</span>.panic(<span class="string">&quot;an array&quot;</span>)
+		<span class="self">self</span>.panic(<span class="string">"an array"</span>)
 	}
 
 	<span class="kw">fn </span>visit_object(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span>Object {
@@ -1371,7 +1373,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	}
 
 	<span class="kw">fn </span>visit_alternatives(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span>Never {
-		<span class="self">self</span>.panic(<span class="string">&quot;alternatives&quot;</span>)
+		<span class="self">self</span>.panic(<span class="string">"alternatives"</span>)
 	}
 }
 
@@ -1415,14 +1417,14 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
 	<span class="kw">fn </span>visit_name(<span class="kw-2">&amp;mut </span><span class="self">self</span>, name: String) {
 		<span class="kw">if </span><span class="self">self</span>.name.is_some() {
-			<span class="macro">panic!</span>(<span class="string">&quot;You must only set the name of this object once&quot;</span>);
+			<span class="macro">panic!</span>(<span class="string">"You must only set the name of this object once"</span>);
 		}
 		<span class="self">self</span>.name = <span class="prelude-val">Some</span>(name);
 	}
 
 	<span class="kw">fn </span>visit_description(<span class="kw-2">&amp;mut </span><span class="self">self</span>, description: String) {
 		<span class="kw">if </span><span class="self">self</span>.description.is_some() {
-			<span class="macro">panic!</span>(<span class="string">&quot;You must only set the description of this object once&quot;</span>);
+			<span class="macro">panic!</span>(<span class="string">"You must only set the description of this object once"</span>);
 		}
 		<span class="self">self</span>.description = <span class="prelude-val">Some</span>(description);
 	}

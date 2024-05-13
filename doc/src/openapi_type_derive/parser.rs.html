@@ -1,6 +1,8 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `derive/src/parser.rs`."><title>parser.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-9ee3a5e31a2afa3e.css"><script id="default-settings" 
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `derive/src/parser.rs`."><title>parser.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-e935ef01ae1c1829.css"><script id="default-settings" 
 data-theme="ayu"
-data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="openapi_type_derive" data-themes="" data-resource-suffix="" data-rustdoc-version="1.75.0 (82e1608df 2023-12-21)" data-channel="1.75.0" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-9dd44ab47b99a0fb.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="openapi_type_derive" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0 (9b00956e5 2024-04-29)" data-channel="1.78.0" data-search-js="search-42d8da7a6b9792c2.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-12cf3b4f4f9dc36d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
+            <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../openapi_type_derive/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -419,8 +421,8 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 	<span class="kw">for </span>f <span class="kw">in </span><span class="kw-2">&amp;</span>named_fields.named {
 		<span class="comment">// parse #[serde] and #[openapi] attributes
 		</span><span class="kw">let </span><span class="kw-2">mut </span>attrs = FieldAttributes::default();
-		filter_parse_attrs(<span class="kw-2">&amp;mut </span>attrs, f, <span class="string">&quot;serde&quot;</span>, <span class="bool-val">false</span>)<span class="question-mark">?</span>;
-		filter_parse_attrs(<span class="kw-2">&amp;mut </span>attrs, f, <span class="string">&quot;openapi&quot;</span>, <span class="bool-val">true</span>)<span class="question-mark">?</span>;
+		filter_parse_attrs(<span class="kw-2">&amp;mut </span>attrs, f, <span class="string">"serde"</span>, <span class="bool-val">false</span>)<span class="question-mark">?</span>;
+		filter_parse_attrs(<span class="kw-2">&amp;mut </span>attrs, f, <span class="string">"openapi"</span>, <span class="bool-val">true</span>)<span class="question-mark">?</span>;
 
 		<span class="comment">// skip this field if desired
 		</span><span class="kw">if </span>attrs.skip_serializing &amp;&amp; attrs.skip_deserializing {
@@ -430,7 +432,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="comment">// parse #[doc] attributes
 		</span><span class="kw">let </span><span class="kw-2">mut </span>doc = Vec::new();
 		<span class="kw">for </span>attr <span class="kw">in </span><span class="kw-2">&amp;</span>f.attrs {
-			<span class="kw">if </span>attr.path().is_ident(<span class="string">&quot;doc&quot;</span>) {
+			<span class="kw">if </span>attr.path().is_ident(<span class="string">"doc"</span>) {
 				<span class="kw">if let </span><span class="prelude-val">Some</span>(lit) = parse_doc_attr(attr)<span class="question-mark">? </span>{
 					doc.push(lit.value());
 				}
@@ -441,13 +443,13 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		</span><span class="kw">let </span>ident = f
 			.ident
 			.as_ref()
-			.ok_or_else(|| syn::Error::new(f.span(), <span class="string">&quot;#[derive(OpenapiType)] does not support fields without an ident&quot;</span>))<span class="question-mark">?</span>;
+			.ok_or_else(|| syn::Error::new(f.span(), <span class="string">"#[derive(OpenapiType)] does not support fields without an ident"</span>))<span class="question-mark">?</span>;
 		<span class="kw">let </span><span class="kw-2">mut </span>name = ident.to_lit_str();
 		<span class="kw">if let </span><span class="prelude-val">Some</span>(rename) = attrs.rename {
 			name = rename;
 		} <span class="kw">else if let </span><span class="prelude-val">Some</span>(rename_all) = rename_all {
 			<span class="kw">let </span>rule = RenameRule::from_str(<span class="kw-2">&amp;</span>rename_all.value())
-				.map_err(|<span class="kw">_</span>| syn::Error::new(rename_all.span(), <span class="string">&quot;Unknown rename_all rule&quot;</span>))<span class="question-mark">?</span>;
+				.map_err(|<span class="kw">_</span>| syn::Error::new(rename_all.span(), <span class="string">"Unknown rename_all rule"</span>))<span class="question-mark">?</span>;
 			<span class="kw">let </span>rename = rule.apply_to_field(<span class="kw-2">&amp;</span>name.value());
 			name = LitStr::new(<span class="kw-2">&amp;</span>rename, name.span());
 		}
@@ -494,7 +496,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		},
 		Fields::Unnamed(unnamed_fields) =&gt; <span class="prelude-val">Err</span>(syn::Error::new(
 			unnamed_fields.span(),
-			<span class="string">&quot;#[derive(OpenapiType)] does not support tuple structs&quot;
+			<span class="string">"#[derive(OpenapiType)] does not support tuple structs"
 		</span>)),
 		Fields::Unit =&gt; <span class="prelude-val">Ok</span>(ParseData {
 			name: <span class="prelude-val">Some</span>(name),
@@ -513,7 +515,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="kw">match </span><span class="kw-2">&amp;</span>v.fields {
 			Fields::Named(named_fields) =&gt; {
 				<span class="kw">let </span>fields = parse_named_fields(named_fields, attrs.rename_all.as_ref())<span class="question-mark">?</span>;
-				<span class="kw">let </span>struct_name = <span class="macro">format!</span>(<span class="string">&quot;{ident}::{}&quot;</span>, name.value());
+				<span class="kw">let </span>struct_name = <span class="macro">format!</span>(<span class="string">"{ident}::{}"</span>, name.value());
 				<span class="comment">// TODO add documentation here
 				</span>types.push((
 					name,
@@ -537,7 +539,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			Fields::Unnamed(unnamed_fields) =&gt; {
 				<span class="kw">return </span><span class="prelude-val">Err</span>(syn::Error::new(
 					unnamed_fields.span(),
-					<span class="string">&quot;#[derive(OpenapiType)] does not support tuple variants&quot;
+					<span class="string">"#[derive(OpenapiType)] does not support tuple variants"
 				</span>))
 			},
 			Fields::Unit =&gt; strings.push(name)
@@ -567,7 +569,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 			<span class="comment">// untagged
 			</span>(<span class="prelude-val">None</span>, <span class="prelude-val">None</span>, <span class="bool-val">true</span>) =&gt; ParseDataType::Unit,
 			<span class="comment">// unknown
-			</span><span class="kw">_ </span>=&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(syn::Error::new(Span::call_site(), <span class="string">&quot;Unknown enum representation&quot;</span>))
+			</span><span class="kw">_ </span>=&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(syn::Error::new(Span::call_site(), <span class="string">"Unknown enum representation"</span>))
 		})
 	};
 
@@ -584,7 +586,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 						<span class="prelude-val">Ok</span>(<span class="kw">match </span>(<span class="kw-2">&amp;</span>attrs.tag, <span class="kw-2">&amp;</span>attrs.content, attrs.untagged) {
 							<span class="comment">// externally tagged (default)
 							</span>(<span class="prelude-val">None</span>, <span class="prelude-val">None</span>, <span class="bool-val">false</span>) =&gt; {
-								<span class="kw">let </span>struct_name = <span class="macro">format!</span>(<span class="string">&quot;{ident}::{}::ExtTagWrapper&quot;</span>, name.value());
+								<span class="kw">let </span>struct_name = <span class="macro">format!</span>(<span class="string">"{ident}::{}::ExtTagWrapper"</span>, name.value());
 								TypeOrInline::Inline(ParseData {
 									name: <span class="prelude-val">Some</span>(struct_name.to_lit_str()),
 									doc: Vec::new(),
@@ -617,14 +619,14 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 									</span>}),
 									<span class="kw">_ </span>=&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(syn::Error::new(
 										tag.span(),
-										<span class="string">&quot;#[derive(OpenapiType)] does not support tuple variants on internally tagged enums&quot;
+										<span class="string">"#[derive(OpenapiType)] does not support tuple variants on internally tagged enums"
 									</span>))
 								};
 								data
 							},
 							<span class="comment">// adjacently tagged
 							</span>(<span class="prelude-val">Some</span>(tag), <span class="prelude-val">Some</span>(content), <span class="bool-val">false</span>) =&gt; {
-								<span class="kw">let </span>struct_name = <span class="macro">format!</span>(<span class="string">&quot;{ident}::{}::AdjTagWrapper&quot;</span>, name.value());
+								<span class="kw">let </span>struct_name = <span class="macro">format!</span>(<span class="string">"{ident}::{}::AdjTagWrapper"</span>, name.value());
 								TypeOrInline::Inline(ParseData {
 									name: <span class="prelude-val">Some</span>(struct_name.to_lit_str()),
 									doc: Vec::new(),
@@ -654,7 +656,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 							<span class="comment">// untagged
 							</span>(<span class="prelude-val">None</span>, <span class="prelude-val">None</span>, <span class="bool-val">true</span>) =&gt; data,
 							<span class="comment">// unknown
-							</span><span class="kw">_ </span>=&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(syn::Error::new(Span::call_site(), <span class="string">&quot;Unknown enum representation&quot;</span>))
+							</span><span class="kw">_ </span>=&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(syn::Error::new(Span::call_site(), <span class="string">"Unknown enum representation"</span>))
 						})
 					})
 					.collect::&lt;syn::Result&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;&gt;()<span class="question-mark">?
@@ -703,7 +705,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 		<span class="comment">// no variants
 		</span>(<span class="prelude-val">None</span>, <span class="prelude-val">None</span>) =&gt; <span class="prelude-val">Err</span>(syn::Error::new(
 			inum.brace_token.span.span(),
-			<span class="string">&quot;#[derive(OpenapiType)] does not support enums with no variants&quot;
+			<span class="string">"#[derive(OpenapiType)] does not support enums with no variants"
 		</span>))
 	}
 }
@@ -711,7 +713,7 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>parse_union(union: <span class="kw-2">&amp;</span>DataUnion) -&gt; syn::Result&lt;ParseData&gt; {
 	<span class="prelude-val">Err</span>(syn::Error::new(
 		union.union_token.span(),
-		<span class="string">&quot;#[derive(OpenapiType)] cannot be used on unions&quot;
+		<span class="string">"#[derive(OpenapiType)] cannot be used on unions"
 	</span>))
 }
 </code></pre></div></section></main></body></html>

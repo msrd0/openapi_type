@@ -1,6 +1,8 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/openapiv3-1.0.2/src/responses.rs`."><title>responses.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-9ee3a5e31a2afa3e.css"><script id="default-settings" 
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/index.crates.io-6f17d22bba15001f/openapiv3-1.0.2/src/responses.rs`."><title>responses.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-e935ef01ae1c1829.css"><script id="default-settings" 
 data-theme="ayu"
-data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="openapiv3" data-themes="" data-resource-suffix="" data-rustdoc-version="1.75.0 (82e1608df 2023-12-21)" data-channel="1.75.0" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-9dd44ab47b99a0fb.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="openapiv3" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0 (9b00956e5 2024-04-29)" data-channel="1.78.0" data-search-js="search-42d8da7a6b9792c2.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-12cf3b4f4f9dc36d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
+            <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../openapiv3/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -117,15 +119,15 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     <span class="doccomment">/// The documentation of responses other than the ones declared
     /// for specific HTTP response codes. Use this field to cover
     /// undeclared responses. A Reference Object can link to a response
-    /// that the OpenAPI Object&#39;s components/responses section defines.
-    </span><span class="attr">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]
+    /// that the OpenAPI Object's components/responses section defines.
+    </span><span class="attr">#[serde(skip_serializing_if = <span class="string">"Option::is_none"</span>)]
     </span><span class="kw">pub </span>default: <span class="prelude-ty">Option</span>&lt;ReferenceOr&lt;Response&gt;&gt;,
     <span class="doccomment">/// Any HTTP status code can be used as the property name,
     /// but only one property per code, to describe the expected
     /// response for that HTTP status code. A Reference Object
-    /// can link to a response that is defined in the OpenAPI Object&#39;s
+    /// can link to a response that is defined in the OpenAPI Object's
     /// components/responses section. This field MUST be enclosed in
-    /// quotation marks (for example, &quot;200&quot;) for compatibility between
+    /// quotation marks (for example, "200") for compatibility between
     /// JSON and YAML. To define a range of response codes, this field
     /// MAY contain the uppercase wildcard character X. For example,
     /// 2XX represents all response codes between [200-299]. The following
@@ -133,10 +135,10 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     /// If a response range is defined using an explicit code, the
     /// explicit code definition takes precedence over the range
     /// definition for that code.
-    </span><span class="attr">#[serde(flatten, deserialize_with = <span class="string">&quot;deserialize_responses&quot;</span>)]
+    </span><span class="attr">#[serde(flatten, deserialize_with = <span class="string">"deserialize_responses"</span>)]
     </span><span class="kw">pub </span>responses: IndexMap&lt;StatusCode, ReferenceOr&lt;Response&gt;&gt;,
     <span class="doccomment">/// Inline extensions to this object.
-    </span><span class="attr">#[serde(flatten, deserialize_with = <span class="string">&quot;crate::util::deserialize_extensions&quot;</span>)]
+    </span><span class="attr">#[serde(flatten, deserialize_with = <span class="string">"crate::util::deserialize_extensions"</span>)]
     </span><span class="kw">pub </span>extensions: IndexMap&lt;String, serde_json::Value&gt;,
 }
 
@@ -148,9 +150,9 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
 
     <span class="doccomment">/// Maps a header name to its definition.
     /// RFC7230 states header names are case insensitive.
-    /// If a response header is defined with the name &quot;Content-Type&quot;,
+    /// If a response header is defined with the name "Content-Type",
     /// it SHALL be ignored.
-    </span><span class="attr">#[serde(default, skip_serializing_if = <span class="string">&quot;IndexMap::is_empty&quot;</span>)]
+    </span><span class="attr">#[serde(default, skip_serializing_if = <span class="string">"IndexMap::is_empty"</span>)]
     </span><span class="kw">pub </span>headers: IndexMap&lt;String, ReferenceOr&lt;Header&gt;&gt;,
 
     <span class="doccomment">/// A map containing descriptions of potential response payloads.
@@ -158,25 +160,25 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     /// describes it. For responses that match multiple keys,
     /// only the most specific key is applicable. e.g. text/plain
     /// overrides text/*
-    </span><span class="attr">#[serde(default, skip_serializing_if = <span class="string">&quot;IndexMap::is_empty&quot;</span>)]
+    </span><span class="attr">#[serde(default, skip_serializing_if = <span class="string">"IndexMap::is_empty"</span>)]
     </span><span class="kw">pub </span>content: IndexMap&lt;String, MediaType&gt;,
 
     <span class="doccomment">/// A map of operations links that can be followed from the response.
     /// The key of the map is a short name for the link, following
     /// the naming constraints of the names for Component Objects.
-    </span><span class="attr">#[serde(default, skip_serializing_if = <span class="string">&quot;IndexMap::is_empty&quot;</span>)]
+    </span><span class="attr">#[serde(default, skip_serializing_if = <span class="string">"IndexMap::is_empty"</span>)]
     </span><span class="kw">pub </span>links: IndexMap&lt;String, ReferenceOr&lt;Link&gt;&gt;,
 
     <span class="doccomment">/// Inline extensions to this object.
-    </span><span class="attr">#[serde(flatten, deserialize_with = <span class="string">&quot;crate::util::deserialize_extensions&quot;</span>)]
+    </span><span class="attr">#[serde(flatten, deserialize_with = <span class="string">"crate::util::deserialize_extensions"</span>)]
     </span><span class="kw">pub </span>extensions: IndexMap&lt;String, serde_json::Value&gt;,
 }
 
-<span class="kw">fn </span>deserialize_responses&lt;<span class="lifetime">&#39;de</span>, D&gt;(
+<span class="kw">fn </span>deserialize_responses&lt;<span class="lifetime">'de</span>, D&gt;(
     deserializer: D,
 ) -&gt; <span class="prelude-ty">Result</span>&lt;IndexMap&lt;StatusCode, ReferenceOr&lt;Response&gt;&gt;, D::Error&gt;
 <span class="kw">where
-    </span>D: Deserializer&lt;<span class="lifetime">&#39;de</span>&gt;,
+    </span>D: Deserializer&lt;<span class="lifetime">'de</span>&gt;,
 {
     <span class="comment">// We rely on the result of StatusCode::deserialize to act as our
     // predicate; it will succeed only for status code.
@@ -192,24 +194,24 @@ data-use_system_theme="false"></script><meta name="rustdoc-vars" data-root-path=
     <span class="attr">#[test]
     </span><span class="kw">fn </span>test_responses() {
         <span class="kw">let </span>responses = serde_json::from_str::&lt;Responses&gt;(
-            <span class="string">r#&quot;{
-            &quot;404&quot;: {
-                &quot;description&quot;: &quot;xxx&quot;
+            <span class="string">r#"{
+            "404": {
+                "description": "xxx"
             },
-            &quot;x-foo&quot;: &quot;bar&quot;,
-            &quot;ignored&quot;: &quot;wat&quot;
-         }&quot;#</span>,
+            "x-foo": "bar",
+            "ignored": "wat"
+         }"#</span>,
         )
         .unwrap();
 
         <span class="macro">assert_eq!</span>(
             responses.responses.get(<span class="kw-2">&amp;</span>StatusCode::Code(<span class="number">404</span>)),
             <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>ReferenceOr::Item(Response {
-                description: <span class="string">&quot;xxx&quot;</span>.to_string(),
+                description: <span class="string">"xxx"</span>.to_string(),
                 ..Default::default()
             }))
         );
-        <span class="macro">assert_eq!</span>(responses.extensions.get(<span class="string">&quot;x-foo&quot;</span>), <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="macro">json!</span>(<span class="string">&quot;bar&quot;</span>)));
+        <span class="macro">assert_eq!</span>(responses.extensions.get(<span class="string">"x-foo"</span>), <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="macro">json!</span>(<span class="string">"bar"</span>)));
     }
 }
 </code></pre></div></section></main></body></html>

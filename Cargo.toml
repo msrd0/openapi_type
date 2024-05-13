@@ -5,7 +5,7 @@ members = [".", "./derive"]
 
 [package]
 name = "openapi_type"
-version = "0.4.3"
+version = "0.5.0"
 authors = ["Dominic Meiser <git@msrd0.de>"]
 edition = "2021"
 rust-version = "1.70"
@@ -25,7 +25,7 @@ uuid = ["uuid08", "uuid1"]
 
 [dependencies]
 indexmap = "2.0"
-openapi_type_derive = { path = "./derive", version = "0.4.4" }
+openapi_type_derive = { path = "./derive", version = "0.4.5" }
 openapiv3 = "=2.0.0"
 serde_json = "1.0"
 

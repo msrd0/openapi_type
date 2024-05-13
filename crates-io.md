@@ -56,7 +56,7 @@ the MSRV (minimum supported rust version) is not considered a breaking change.
 
 ## License
 
-Copyright (C) 2021-2023 Dominic Meiser and [contributors].
+Copyright (C) 2021-2024 Dominic Meiser and [contributors].
 
 ```
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -73,8 +73,8 @@ limitations under the License.
 ```
 
  [contributors]: https://github.com/msrd0/openapi_type/graphs/contributors
- [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEG08sBLszLNKMG1ienvOWfn_8G_o9NT-2LMz5G_3E1vsqLiEoYXKEGx-WnjBiXfMmG4V3M75ny0WUG3hGD9I-WPRHG94Lm2E6FONkYWSBgmxvcGVuYXBpX3R5cGVlMC40LjM
- [__link0]: https://docs.rs/openapi_type/0.4.3/openapi_type/trait.OpenapiType.html
- [__link1]: https://docs.rs/openapi_type/0.4.3/openapi_type/?search=OpenapiType::schema
- [__link2]: https://docs.rs/openapi_type/0.4.3/openapi_type/?search=OpenapiSchema
- [__link3]: https://docs.rs/openapi_type/0.4.3/openapi_type/?search=OpenapiSchema::dependencies
+ [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEG6VOsQ9P0GcNG4G8HUCRZ86gG0gOnYlzova_G2pEboxkDHNuYXKEGx-WnjBiXfMmG4V3M75ny0WUG3hGD9I-WPRHG94Lm2E6FONkYWSBgmxvcGVuYXBpX3R5cGVlMC41LjA
+ [__link0]: https://docs.rs/openapi_type/0.5.0/openapi_type/trait.OpenapiType.html
+ [__link1]: https://docs.rs/openapi_type/0.5.0/openapi_type/?search=OpenapiType::schema
+ [__link2]: https://docs.rs/openapi_type/0.5.0/openapi_type/?search=OpenapiSchema
+ [__link3]: https://docs.rs/openapi_type/0.5.0/openapi_type/?search=OpenapiSchema::dependencies

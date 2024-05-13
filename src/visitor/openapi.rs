@@ -1,8 +1,8 @@
 use super::{never::Never, seal, AlternativesVisitor, ObjectVisitor, Visitor};
 use indexmap::{map::Entry, IndexMap};
 use openapiv3::{
-	AdditionalProperties, ArrayType, IntegerFormat, IntegerType, NumberFormat, NumberType, ObjectType, ReferenceOr, Schema,
-	SchemaData, SchemaKind, StringFormat, StringType, Type, VariantOrUnknownOrEmpty
+	AdditionalProperties, ArrayType, BooleanType, IntegerFormat, IntegerType, NumberFormat, NumberType, ObjectType,
+	ReferenceOr, Schema, SchemaData, SchemaKind, StringFormat, StringType, Type, VariantOrUnknownOrEmpty
 };
 use std::fmt::Display;
 
@@ -140,7 +140,7 @@ impl OpenapiVisitor {
 
 			Self::Bool => Some(OpenapiSchema::new(Schema {
 				schema_data: Default::default(),
-				schema_kind: SchemaKind::Type(Type::Boolean {})
+				schema_kind: SchemaKind::Type(Type::Boolean(BooleanType::default()))
 			})),
 
 			Self::Int { byte, minimum } => Some(OpenapiSchema::new(Schema {

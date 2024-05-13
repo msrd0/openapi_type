@@ -251,9 +251,9 @@ map! {
 	IndexMap<K, V, S>(V);
 }
 
-#[cfg(feature = "indexmap2")]
+#[cfg(feature = "indexmap1")]
 map! {
-	indexmap2::IndexMap<K, V, S>(V);
+	indexmap1::IndexMap<K, V, S>(V);
 }
 
 #[cfg(feature = "linked-hash-map05")]

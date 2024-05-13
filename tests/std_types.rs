@@ -226,8 +226,8 @@ test_type!(BTreeMap<isize, String>, HashMap<isize, String>, IndexMap<isize, Stri
 	}
 });
 
-#[cfg(feature = "indexmap2")]
-test_type!(indexmap2::IndexMap<isize, String> = {
+#[cfg(feature = "indexmap1")]
+test_type!(indexmap1::IndexMap<isize, String> = {
 	"type": "object",
 	"additionalProperties": {
 		"type": "string"

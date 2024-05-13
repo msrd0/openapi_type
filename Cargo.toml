@@ -8,7 +8,7 @@ name = "openapi_type"
 version = "0.4.3"
 authors = ["Dominic Meiser <git@msrd0.de>"]
 edition = "2021"
-rust-version = "1.60"
+rust-version = "1.70"
 description = "OpenAPI type information for Rust structs and enums"
 keywords = ["openapi", "type"]
 license = "Apache-2.0"
@@ -41,4 +41,4 @@ uuid1 = { package = "uuid", version = "1", optional = true }
 paste = "1.0"
 pretty_assertions = "1.0"
 serde = { version = "1.0.158", features = ["derive"] }
-trybuild = "=1.0.85"
+trybuild = "=1.0.95"

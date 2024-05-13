@@ -2,10 +2,7 @@ error[E0599]: the function or associated item `schema` exists for struct `Foo<Ba
   --> tests/fail/not_openapitype_generics.rs:11:14
    |
 4  | struct Foo<T> {
-   | -------------
-   | |
-   | function or associated item `schema` not found for this struct
-   | doesn't satisfy `Foo<Bar>: OpenapiType`
+   | ------------- function or associated item `schema` not found for this struct because it doesn't satisfy `Foo<Bar>: OpenapiType`
 ...
 8  | struct Bar;
    | ---------- doesn't satisfy `Bar: OpenapiType`

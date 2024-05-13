@@ -1,14 +1,19 @@
-# openapi_type [![Rust 1.60+](https://img.shields.io/badge/rustc-1.60+-orange.svg)](https://blog.rust-lang.org/2022/04/07/Rust-1.60.0.html) [![License Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0) [![GitHub](https://img.shields.io/badge/Code-On%20Github-blue?logo=GitHub)](https://github.com/msrd0/openapi_type)
+# openapi_type [![Rust 1.70+](https://img.shields.io/badge/rustc-1.70+-orange.svg)](https://blog.rust-lang.org/2023/06/01/Rust-1.70.0.html) [![License Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0) [![GitHub](https://img.shields.io/badge/Code-On%20Github-blue?logo=GitHub)](https://github.com/msrd0/openapi_type)
 
-This crate gives static type information for primitives and commonly used types from the standard library and other commonly used libraries `chrono`, `indexmap`, `linked-hash-map`, `time` and `uuid` when the according feature is enabled. Also, it provides a derive macro for structs and enums to gain access to their static type information at runtime.
+This crate gives static type information for primitives and commonly used types from the standard
+library and other commonly used libraries `chrono`, `indexmap`, `linked-hash-map`, `time` and
+`uuid` when the according feature is enabled. Also, it provides a derive macro for structs and
+enums to gain access to their static type information at runtime.
 
-The core of this crate is the [`OpenapiType`][__link0] trait. It has one static function, [`schema`][__link1], which returns an [`OpenapiSchema`][__link2]. This assembles the static type information in a way that is convenient to use for a generated OpenAPI specification, but can also be utilized in other use cases as well.
-
+The core of this crate is the [`OpenapiType`][__link0] trait. It has one static function,
+[`schema`][__link1], which returns an [`OpenapiSchema`][__link2]. This assembles the static
+type information in a way that is convenient to use for a generated OpenAPI specification, but
+can also be utilized in other use cases as well.
 
 ## Custom Types
 
-To gain access to the static type information of your custom types at runtime, the easiest way is to use the derive macro:
-
+To gain access to the static type information of your custom types at runtime, the easiest way
+is to use the derive macro:
 
 ```rust
 #[derive(OpenapiType)]
@@ -18,11 +23,9 @@ struct FooBar {
 }
 ```
 
-
 ## OpenAPI specification
 
 Using above type, running `FooBar::schema().into_schema()` yields
-
 
 ```yaml
 type: object
@@ -39,8 +42,11 @@ required:
   - bar
 ```
 
-Note, however, that this is not sufficient for more complex types. If one of your structs fields is a type that has a name (that is, `Type::schema().name` is not `None`), above schema will contain a reference to that schema. Therefore, always remember to put the [`dependencies`][__link3] into the specification alongside the type you are interested in.
-
+Note, however, that this is not sufficient for more complex types. If one of your structs fields
+is a type that has a name (that is, `Type::schema().name` is not `None`), above schema will contain
+a reference to that schema. Therefore, always remember to put the
+[`dependencies`][__link3] into the specification alongside the type you are
+interested in.
 
 
 ## Versioning
@@ -67,7 +73,7 @@ limitations under the License.
 ```
 
  [contributors]: https://github.com/msrd0/openapi_type/graphs/contributors
- [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEG00blYWrE2YXG_rPohqkhF51G648HnGd6dB7G72lCqGVpeT8YXKEGx-WnjBiXfMmG4V3M75ny0WUG3hGD9I-WPRHG94Lm2E6FONkYWSBgmxvcGVuYXBpX3R5cGVlMC40LjM
+ [__cargo_doc2readme_dependencies_info]: ggGkYW0BYXSEG08sBLszLNKMG1ienvOWfn_8G_o9NT-2LMz5G_3E1vsqLiEoYXKEGx-WnjBiXfMmG4V3M75ny0WUG3hGD9I-WPRHG94Lm2E6FONkYWSBgmxvcGVuYXBpX3R5cGVlMC40LjM
  [__link0]: https://docs.rs/openapi_type/0.4.3/openapi_type/trait.OpenapiType.html
  [__link1]: https://docs.rs/openapi_type/0.4.3/openapi_type/?search=OpenapiType::schema
  [__link2]: https://docs.rs/openapi_type/0.4.3/openapi_type/?search=OpenapiSchema

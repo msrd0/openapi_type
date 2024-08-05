@@ -41,4 +41,4 @@ uuid1 = { package = "uuid", version = "1", optional = true }
 paste = "1.0"
 pretty_assertions = "1.0"
 serde = { version = "1.0.158", features = ["derive"] }
-trybuild = "=1.0.96"
+trybuild = "=1.0.99"

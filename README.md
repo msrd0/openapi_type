@@ -1,3 +1,5 @@
+# This repository has moved to Codeberg: <https://codeberg.org/msrd0/openapi_type>
+
 <br/>
 <div>
 	<a href="https://github.com/msrd0/openapi_type/actions/workflows/rust.yml">
